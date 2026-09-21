@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#06132e" />
+  <title>眠屿</title>
+  <style>
+    :root{color-scheme:dark;--deep:#020817;--night:#06132e;--surface:#0c2144;--surface2:#132b52;--line:#39547f;--blue:#4968ef;--blue2:#7997ff;--orange:#ff9e43;--orange2:#ff7240;--text:#f6f8ff;--muted:#b9c7e5;--safe-bottom:max(16px,env(safe-area-inset-bottom))}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#010614}body{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--text);display:grid;place-items:center;overflow:hidden}.phone{position:relative;width:min(100vw,430px);height:min(100dvh,900px);min-height:650px;overflow:hidden;background:var(--night);border:1px solid rgba(121,151,255,.38);border-radius:34px;box-shadow:0 28px 90px #000b,0 0 0 7px #09152f}.view{position:absolute;inset:0;display:none}.view.active{display:block}.scene-bg{position:absolute;inset:0;background:center/cover no-repeat;transition:background-image .25s ease}.scene-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,7,22,.44),rgba(1,7,22,.02) 36%,rgba(1,7,22,.32) 72%,rgba(1,7,22,.7))}
+    button,select,input{font:inherit}button{color:inherit;cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffd08a;outline-offset:3px}.brandbar,.editbar,.screenbar{position:absolute;z-index:5;left:20px;right:20px;top:max(18px,env(safe-area-inset-top));height:64px;display:flex;align-items:center;gap:12px}.brand-icon{width:52px;height:52px;border-radius:16px;object-fit:cover;box-shadow:0 9px 24px #0006}.brand-copy{min-width:0;flex:1}.brand-copy strong{display:block;font-size:23px;letter-spacing:1px}.brand-copy span{display:block;color:var(--muted);font-size:11px;margin-top:2px}.mode-pill{min-height:44px;padding:9px 14px;border:1px solid rgba(121,151,255,.8);border-radius:999px;background:rgba(8,23,52,.75);backdrop-filter:blur(12px);display:flex;align-items:center;gap:8px;font-size:13px}.mode-pill b{font-size:20px;color:var(--blue2)}
+    .topnav{position:absolute;z-index:5;top:94px;left:18px;right:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.topnav button{min-height:58px;border:0;border-radius:20px;background:rgba(5,17,42,.28);color:var(--muted);display:grid;place-content:center;gap:4px;font-size:11px;backdrop-filter:blur(7px)}.topnav button span{font-size:22px;line-height:1}.topnav button.active{background:linear-gradient(135deg,#5575ff,#3c56d7);color:#fff;box-shadow:0 10px 25px rgba(54,83,220,.36)}
+    .editbar,.screenbar{height:52px}.round-btn,.text-btn{min-width:48px;min-height:48px;border:0;background:transparent;border-radius:16px}.round-btn{font-size:27px}.editbar h1,.screenbar h1{font-size:21px;margin:0;flex:1;text-align:center}.text-btn{padding:0 13px;color:var(--muted)}.save-btn{min-height:46px;padding:0 18px;border:0;border-radius:18px;background:linear-gradient(135deg,#5275ff,#3655d9);font-weight:750;box-shadow:0 10px 24px rgba(54,84,220,.36)}.save-btn.saved{background:linear-gradient(135deg,#3f8d78,#28705f);box-shadow:0 10px 24px rgba(40,112,95,.28);cursor:default}
+    .placed-layer{position:absolute;z-index:2;inset:155px 0 344px;pointer-events:none}.placed{position:absolute;width:var(--entity-w,100px);height:var(--entity-h,100px);padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;filter:drop-shadow(0 12px 16px rgba(0,0,0,.28));pointer-events:auto;transition:filter .16s ease,scale .16s ease}.placed:hover,.placed:focus-visible{scale:1.03;filter:drop-shadow(0 14px 20px rgba(0,0,0,.38)) drop-shadow(0 0 10px rgba(255,190,106,.4));outline:none}.placed.selected{filter:drop-shadow(0 0 11px rgba(255,190,106,.78)) drop-shadow(0 14px 20px rgba(0,0,0,.38))}.placed.atmosphere{filter:drop-shadow(0 6px 14px rgba(87,142,255,.18))}.placed img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}.placed small{position:absolute;left:50%;top:calc(100% + 7px);translate:-50% 0;white-space:nowrap;padding:4px 8px;border:1px solid rgba(121,151,255,.42);border-radius:999px;background:rgba(2,8,23,.78);font-size:10px;opacity:.9}.placed.atmosphere small{opacity:.66}.placed.floor::after{content:"";position:absolute;left:18%;right:18%;bottom:-3%;height:9%;border-radius:50%;background:rgba(0,0,0,.28);filter:blur(8px);z-index:-1}.sound-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:10px;height:338px;padding:10px 16px calc(14px + var(--safe-bottom));border:1px solid rgba(83,115,172,.72);border-radius:30px;background:linear-gradient(180deg,rgba(13,35,72,.98),rgba(5,19,43,.99));box-shadow:0 -18px 50px rgba(0,0,0,.28);backdrop-filter:blur(20px);overflow:auto;scrollbar-width:none}.sound-sheet::-webkit-scrollbar{display:none}.handle{width:54px;height:4px;margin:0 auto 10px;border-radius:99px;background:#516a9d}.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.sheet-head h2{margin:0;font-size:22px}.sheet-head span{font-size:11px;color:var(--muted)}.categories{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}.categories button{min-height:44px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted)}.categories button.active{border-color:transparent;background:linear-gradient(135deg,#5575ff,#3d59d9);color:white}.sound-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.sound-card{position:relative;min-width:0;min-height:90px;padding:7px 4px 6px;border:1px solid var(--line);border-radius:17px;background:rgba(11,28,59,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.sound-card img{width:55px;height:55px;object-fit:contain}.sound-card span{max-width:100%;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sound-card.selected{border-color:#ffbd66;box-shadow:0 0 0 2px rgba(255,158,67,.2),0 0 24px rgba(255,158,67,.22)}.sound-card:disabled{opacity:.38;cursor:not-allowed}.sound-card .ban{position:absolute;right:5px;top:5px;padding:2px 5px;border-radius:999px;background:#703e51;font-size:8px}.drag-hint{text-align:center;color:var(--muted);font-size:11px;margin:7px 0 9px}.sheet-controls{display:grid;grid-template-columns:1.1fr 1.2fr auto;align-items:center;gap:8px;padding-top:9px;border-top:1px solid rgba(57,84,127,.65)}.room-select,.circle-control{min-height:50px;border:1px solid var(--line);border-radius:18px;background:rgba(9,24,54,.82)}.room-select{padding:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.start-btn{min-height:52px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-weight:800;font-size:16px;box-shadow:0 12px 28px rgba(255,114,64,.25)}.circle-control{width:50px;font-size:21px}.volume-row{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:center;color:var(--muted);font-size:12px}.volume-row input{width:100%;accent-color:var(--blue)}
+    .screen-panel{position:absolute;z-index:8;inset:0;padding:92px 18px 24px;background:linear-gradient(rgba(2,8,23,.76),rgba(2,8,23,.94)),url("assets/images/scenes/bedroom.png") center/cover;overflow:auto}.screenbar{position:fixed;max-width:390px;margin:auto}.panel-card{padding:16px;border:1px solid var(--line);border-radius:21px;background:rgba(13,35,72,.94);margin-bottom:12px}.panel-card h2,.panel-card h3{margin:0}.panel-card p{color:var(--muted);font-size:13px;line-height:1.6}.preset{width:100%;min-height:58px;margin-top:9px;padding:10px 13px;text-align:left;border:1px solid var(--line);border-radius:17px;background:#102a52;font-size:13px}.preset:hover{border-color:var(--blue2)}.tag{display:inline-flex;padding:5px 8px;border-radius:999px;background:#172f59;color:#cbd6ed;font-size:10px}.list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(57,84,127,.58)}.list-row:last-child{border-bottom:0}.list-row img{width:48px;height:48px;object-fit:contain;border-radius:14px;background:#06132e;padding:5px}.list-row div{flex:1}.list-row strong{display:block;font-size:14px}.list-row small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.switch{width:48px;height:28px;border:0;border-radius:99px;background:#2b426b;padding:3px}.switch:before{content:"";display:block;width:22px;height:22px;border-radius:50%;background:white;transition:.18s}.switch.on{background:var(--blue)}.switch.on:before{translate:20px 0}.about-logo{width:66px;height:66px;border-radius:50%;object-fit:cover}
+    .sleep-view{background:center/cover no-repeat}.sleep-view:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(2,8,23,.25),rgba(2,8,23,.12) 55%,rgba(2,8,23,.65));pointer-events:none}.sleep-title{position:absolute;z-index:3;top:max(24px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:21px;font-weight:750}.sleep-status{position:absolute;z-index:3;left:0;right:0;top:44%;translate:0 -50%;text-align:center}.sleep-status small{color:var(--muted)}.sleep-status strong{display:block;font-size:56px;font-weight:300;letter-spacing:2px;margin-top:10px;font-variant-numeric:tabular-nums}.sleep-controls{position:absolute;z-index:3;left:14px;right:14px;bottom:calc(16px + var(--safe-bottom));min-height:112px;padding:15px;border:1px solid var(--line);border-radius:29px;background:rgba(5,19,43,.92);display:grid;grid-template-columns:auto 1fr 1.3fr auto;align-items:center;gap:9px;backdrop-filter:blur(18px)}.pause-btn{width:68px;height:68px;border-radius:50%;border:2px solid #6688ed;background:#10264c;font-size:26px;box-shadow:0 0 20px rgba(92,124,250,.3)}.time-select{height:50px;border:0;background:transparent;color:var(--text);text-align:center}.sleep-volume{display:flex;align-items:center;gap:6px}.sleep-volume input{min-width:0;width:100%;accent-color:var(--blue)}.exit-btn{width:48px;height:48px;border:1px solid var(--line);border-radius:16px;background:#0d2549;font-size:20px}.toast{position:absolute;z-index:20;left:50%;bottom:26px;translate:-50% 18px;max-width:calc(100% - 40px);padding:11px 15px;border:1px solid var(--line);border-radius:999px;background:#142d55;font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;translate:-50% 0}.hidden{display:none!important}
+    @media(max-width:470px){body{display:block}.phone{width:100vw;height:100dvh;min-height:620px;border:0;border-radius:0;box-shadow:none}.sound-sheet{left:0;right:0;bottom:0;border-radius:30px 30px 0 0;border-left:0;border-right:0;border-bottom:0}.screenbar{max-width:none}}
+    @media(max-height:720px){.sound-sheet{height:320px}.placed-layer{bottom:322px}.brandbar{top:10px}.topnav{top:79px}.sound-card{min-height:82px}.sound-card img{width:48px;height:48px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+    .screen-panel .screenbar{position:absolute;max-width:none}body{overflow:auto}.sound-grid{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:calc((100% - 24px)/4);overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none}.sound-grid::-webkit-scrollbar{display:none}.sound-card{scroll-snap-align:start}
+    .sound-card{touch-action:none}.drag-overlay{position:absolute;z-index:4;inset:155px 0 344px;display:none;pointer-events:none;overflow:visible}.drag-overlay.active{display:block}.drag-guide{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.drag-guide path{fill:none;stroke:rgba(255,210,148,.72);stroke-width:1.5;stroke-dasharray:5 7;stroke-linecap:round;animation:dash-flow 1.6s linear infinite}.drag-preview{position:absolute;width:var(--ghost-w,150px);height:var(--ghost-h,150px);translate:-50% -50%;display:grid;place-items:center;filter:drop-shadow(0 10px 18px rgba(255,168,82,.22));animation:ghost-float 1.8s ease-in-out infinite}.drag-preview::before,.drag-preview::after{content:"";position:absolute;inset:-18%;border:1px dashed rgba(255,213,158,.7);border-radius:50%;animation:ghost-ring 1.9s ease-out infinite}.drag-preview::after{inset:-34%;opacity:.42;animation-delay:.35s}.drag-preview img.entity-ghost{display:block;width:100%;height:100%;object-fit:contain;opacity:.28;filter:saturate(.85) brightness(1.25)}.drag-chip{position:absolute;left:50%;top:50%;translate:-50% -100%;width:54px;height:54px;padding:8px;border:1px solid #ffd08a;border-radius:16px;background:rgba(9,25,55,.92);box-shadow:0 10px 24px rgba(0,0,0,.35);animation:chip-pulse 1.4s ease-in-out infinite;transition:left .08s linear,top .08s linear}.drag-chip img{width:100%;height:100%;object-fit:contain}.drag-preview-label{position:absolute;left:50%;top:calc(100% + 24px);translate:-50% 0;padding:5px 10px;border:1px solid rgba(255,208,138,.55);border-radius:999px;background:rgba(4,15,36,.78);color:#ffe2bb;font-size:11px;white-space:nowrap}.placed.settle{animation:entity-settle .48s cubic-bezier(.2,.9,.3,1.25)}
+    @keyframes ghost-float{0%,100%{translate:-50% -50%}50%{translate:-50% calc(-50% - 7px)}}@keyframes ghost-ring{0%{transform:scale(.86);opacity:.78}100%{transform:scale(1.16);opacity:0}}@keyframes chip-pulse{0%,100%{scale:1;box-shadow:0 10px 24px rgba(0,0,0,.35)}50%{scale:1.06;box-shadow:0 0 0 6px rgba(255,179,92,.1),0 12px 28px rgba(0,0,0,.4)}}@keyframes dash-flow{to{stroke-dashoffset:-24}}@keyframes entity-settle{0%{opacity:.35;scale:1.08;filter:drop-shadow(0 0 16px rgba(255,203,122,.95))}65%{opacity:1;scale:.96}100%{opacity:1;scale:1}}
+    .drag-overlay.active{z-index:7;pointer-events:auto}.drag-overlay.active .sound-sheet{opacity:.38}.drag-guide,.drag-preview{pointer-events:none}.drag-chip{pointer-events:auto;cursor:grab;z-index:9}.drag-chip:active{cursor:grabbing}.phone.dragging .sound-sheet{opacity:.38;background:linear-gradient(180deg,rgba(13,35,72,.42),rgba(5,19,43,.5));backdrop-filter:blur(8px)}.phone.dragging .sound-card{opacity:.56}.sound-sheet{transition:transform .28s ease,opacity .2s ease,background .2s ease}.sound-sheet.sheet-hidden{transform:translateY(calc(100% - 42px));opacity:.96}.sound-sheet.sheet-hidden .sound-grid,.sound-sheet.sheet-hidden .categories,.sound-sheet.sheet-hidden .sheet-head,.sound-sheet.sheet-hidden .drag-hint,.sound-sheet.sheet-hidden .sheet-controls{visibility:hidden}
+    /* interaction overrides */
+    .categories{grid-template-columns:repeat(2,1fr)}
+    .handle{touch-action:none;cursor:ns-resize}
+    .drag-overlay{inset:0}
+    .sound-grid{scrollbar-width:thin;scrollbar-color:rgba(121,151,255,.78) rgba(10,26,54,.72);padding-bottom:6px}
+    .sound-grid::-webkit-scrollbar{height:5px;display:block}
+    .sound-grid::-webkit-scrollbar-track{background:rgba(10,26,54,.72);border-radius:99px}
+    .sound-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#607dff,#ffb45f);border-radius:99px}
+    .grid-scrollbar{height:4px;margin:1px 5px 5px;border-radius:99px;background:rgba(10,26,54,.72);overflow:hidden}
+    .grid-scrollbar span{display:block;height:100%;width:34%;border-radius:99px;background:linear-gradient(90deg,#607dff,#ffb45f);transform:translateX(0);transition:transform .12s ease,width .12s ease}
+  </style>
+  <link rel="stylesheet" href="app_pages.css?v=59" />
+</head>
+<body>
+  <main class="phone" id="app" aria-label="眠屿移动端应用">
+    <section class="view active" id="sceneView">
+      <div class="scene-bg" id="sceneBg"></div>
+      <header class="brandbar" id="brandbar">
+        <img class="brand-icon" src="assets/images/brand/app_icon.png" alt="眠屿图标" />
+        <div class="brand-copy"><strong>眠屿</strong><span>在声音里，遇见更好的自己</span></div>
+        <button class="mode-pill" id="modeButton" type="button"><b>☾</b><span>夜晚</span><span>⌄</span></button>
+      </header>
+      <header class="editbar hidden" id="editbar">
+        <button class="round-btn" id="backEdit" aria-label="返回">‹</button>
+        <h1>编辑场景</h1>
+        <button class="text-btn" id="undoButton">撤销</button>
+        <button class="save-btn" id="saveButton">保存</button>
+      </header>
+      <nav class="topnav" id="topnav" aria-label="主要页面">
+        <button class="active" data-panel="scene"><span>⌂</span>场景</button>
+        <button data-panel="plan"><span>☆</span>我的方案</button>
+        <button data-panel="favorite"><span>♡</span>收藏</button>
+        <button data-panel="settings"><span>⚙</span>设置</button>
+      </nav>
+      <div class="placed-layer" id="dropZone" aria-label="可放置声音的场景"></div>
+      <div class="drag-overlay" id="dragOverlay" aria-hidden="true">
+        <svg class="drag-guide" id="dragGuide" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="dragGuidePath" d=""></path></svg>
+        <div class="drag-preview" id="dragPreview">
+          <img class="entity-ghost" id="dragGhostImage" alt="" />
+        </div>
+        <div class="drag-chip" id="dragChip" draggable="false"><img id="dragChipImage" alt="" /></div>
+      </div>
+      <section class="sound-sheet" aria-label="声音盒">
+        <div class="handle" id="sheetHandle" role="button" aria-label="向下拖动隐藏声音盒"></div>
+        <div class="sheet-head"><h2>声音盒</h2><span id="soundCount">6 个室内声音</span></div>
+        <div class="categories" id="categories">
+          <button class="active" data-category="indoor" aria-pressed="true">室内</button>
+          <button data-category="outdoor" aria-pressed="false">户外</button>
+        </div>
+        <div class="sound-grid" id="soundGrid" aria-label="横向滑动查看全部声音素材"></div>
+        <div class="grid-scrollbar" id="gridScrollbar" aria-hidden="true"><span id="gridScrollThumb"></span></div>
+        <div class="sheet-controls">
+          <button class="room-select" id="roomButton">▥&nbsp; 我的睡前小屋⌄</button>
+          <button class="start-btn" id="startButton">▶&nbsp; 开始睡眠</button>
+          <button class="circle-control" id="timerButton" aria-label="设置时间">◷</button>
+          <label class="volume-row">🔊 <input id="masterVolume" type="range" min="0" max="100" value="62" aria-label="总音量" /></label>
+        </div>
+      </section>
+    </section>
+
+    <section class="view sleep-view" id="sleepView">
+      <div class="sleep-title">睡眠模式</div>
+      <div class="sleep-status"><small id="sleepMessage">声音正在陪着你</small><strong id="clock">30:00</strong></div>
+      <div class="sleep-controls">
+        <button class="pause-btn" id="pauseButton" aria-label="暂停">Ⅱ</button>
+        <select class="time-select" id="timeSelect" aria-label="播放时长"><option value="15">15 分钟</option><option value="30" selected>30 分钟</option><option value="45">45 分钟</option><option value="60">60 分钟</option></select>
+        <label class="sleep-volume">🔊 <input id="sleepVolume" type="range" min="0" max="100" value="62" aria-label="睡眠模式音量" /></label>
+        <button class="exit-btn" id="exitSleep" aria-label="退出睡眠模式">×</button>
+      </div>
+    </section>
+
+    <section class="view" id="panelView">
+      <div class="screen-panel">
+        <header class="screenbar"><button class="round-btn" id="closePanel" aria-label="返回场景">‹</button><h1 id="panelTitle">我的方案</h1><span style="width:48px"></span></header>
+        <div id="panelContent"></div>
+      </div>
+    </section>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const sounds=[
+      {id:'A01',name:'小雨',category:'outdoor',icon:'rain_light',space:'outdoor'},
+      {id:'A02',name:'雨打窗户',category:'indoor',icon:'rain_window',space:'indoor'},
+      {id:'A03',name:'壁炉',category:'indoor',icon:'fireplace',space:'indoor'},
+      {id:'A04',name:'翻书声',category:'indoor',icon:'page_turn',space:'indoor'},
+      {id:'A05',name:'微风',category:'outdoor',icon:'wind_soft',space:'outdoor'},
+      {id:'A06',name:'水流声',category:'outdoor',icon:'stream',space:'outdoor'},
+      {id:'A07',name:'室内底噪',category:'indoor',icon:'room_tone',space:'indoor'},
+      {id:'A08',name:'柴火燃烧',category:'outdoor',icon:'wood_fire',space:'outdoor'},
+      {id:'A09',name:'夜晚森林',category:'outdoor',icon:'forest_night',space:'outdoor'},
+      {id:'A10',name:'轻键盘',category:'indoor',icon:'keyboard',space:'indoor'},
+      {id:'A11',name:'被子摩擦',category:'indoor',icon:'blanket',space:'indoor'},
+      {id:'A12',name:'远雷',category:'outdoor',icon:'thunder',space:'outdoor',safety:true}
+    ];
+    const indoorFeatured=['A02','A03','A04','A07','A10','A11'];
+    const visualSpecs={
+      A01:{w:'min(82vw,320px)',h:'min(76vh,430px)',x:50,y:46,atmosphere:true},
+      A02:{w:'min(70vw,280px)',h:'min(48vh,270px)',x:72,y:38,atmosphere:true},
+      A03:{w:'min(54vw,230px)',h:'min(52vh,245px)',x:26,y:78,floor:true},
+      A04:{w:'min(33vw,142px)',h:'min(23vh,124px)',x:76,y:69,floor:true},
+      A05:{w:'min(38vw,158px)',h:'min(28vh,150px)',x:28,y:42,atmosphere:true},
+      A06:{w:'min(52vw,215px)',h:'min(27vh,145px)',x:68,y:76,floor:true},
+      A07:{w:'min(34vw,144px)',h:'min(25vh,132px)',x:48,y:40,atmosphere:true},
+      A08:{w:'min(47vw,198px)',h:'min(43vh,228px)',x:73,y:77,floor:true},
+      A09:{w:'min(54vw,225px)',h:'min(39vh,205px)',x:52,y:44,atmosphere:true},
+      A10:{w:'min(50vw,210px)',h:'min(26vh,138px)',x:70,y:79,floor:true},
+      A11:{w:'min(53vw,222px)',h:'min(36vh,190px)',x:55,y:77,floor:true},
+      A12:{w:'min(40vw,168px)',h:'min(30vh,158px)',x:55,y:33,atmosphere:true}
+    };
+    let category='indoor',outdoor=false,editing=false,placed=[],paused=false,secondsLeft=1800,timer=null,pointerDrag={item:null,id:null,moved:false,startX:0,startY:0},skipNextClick=false,activeDragItem=null,sheetDrag={id:null,startY:0,moved:false};
+    const $=id=>document.getElementById(id),app=$('app'),sceneBg=$('sceneBg'),soundGrid=$('soundGrid'),dropZone=$('dropZone'),toast=$('toast'),dragOverlay=$('dragOverlay'),dragPreview=$('dragPreview'),dragChip=$('dragChip'),dragGhostImage=$('dragGhostImage'),dragChipImage=$('dragChipImage'),dragGuidePath=$('dragGuidePath'),soundSheet=document.querySelector('.sound-sheet'),sheetHandle=$('sheetHandle');
+    let toastTimer;
+    function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1800)}
+    function iconPath(item,type='svg'){return `assets/images/${type==='svg'?'icons':'sounds'}/${item.icon}.${type==='svg'?'svg':'png'}`}
+    function setBackground(){const path=outdoor?'assets/images/scenes/rain_courtyard.png':'assets/images/scenes/bedroom.png';sceneBg.style.backgroundImage=`url("${path}")`;$('sleepView').style.backgroundImage=`url("${path}")`;}
+    function setEditing(value){editing=value;$('brandbar').classList.toggle('hidden',value);$('topnav').classList.toggle('hidden',value);$('editbar').classList.toggle('hidden',!value);if(typeof renderPlaced==='function')renderPlaced()}
+    function updateDragGuide(chipX,chipY){const rect=dragOverlay.getBoundingClientRect();const spec=dragPreview.getBoundingClientRect();const ghostX=(spec.left+spec.width/2-rect.left)/rect.width*100,ghostY=(spec.top+spec.height/2-rect.top)/rect.height*100;const px=rect.width*chipX/100,py=rect.height*chipY/100,gx=rect.width*ghostX/100,gy=rect.height*ghostY/100;dragGuidePath.setAttribute('d',`M ${px} ${py} C ${px} ${py*.72+gy*.28}, ${gx} ${gy*.72+py*.28}, ${gx} ${gy}`)}
+    function showDragPreview(item,x,y){const spec=visualSpecs[item.id]||{},sceneRect=dropZone.getBoundingClientRect(),overlayRect=dragOverlay.getBoundingClientRect();const ghostX=((sceneRect.left+sceneRect.width*(spec.x??50)/100-overlayRect.left)/overlayRect.width)*100,ghostY=((sceneRect.top+sceneRect.height*(spec.y??50)/100-overlayRect.top)/overlayRect.height)*100,chipX=Number.isFinite(x)?x:ghostX,chipY=Number.isFinite(y)?y:ghostY;activeDragItem=item;dragGhostImage.src=iconPath(item,'png');dragGhostImage.alt=`${item.name}推荐放置虚像`;dragChipImage.src=iconPath(item);dragChipImage.alt=item.name;dragPreview.style.setProperty('--ghost-w',spec.w||'140px');dragPreview.style.setProperty('--ghost-h',spec.h||'140px');dragPreview.style.left=`${ghostX}%`;dragPreview.style.top=`${ghostY}%`;dragOverlay.classList.add('active');app.classList.add('dragging');dragChip.style.setProperty('left',`${chipX}%`);dragChip.style.setProperty('top',`${chipY}%`);requestAnimationFrame(()=>updateDragGuide(chipX,chipY))}
+    function hideDragPreview(){dragOverlay.classList.remove('active');app.classList.remove('dragging');dragGuidePath.setAttribute('d','');activeDragItem=null}
+    function moveDragPreview(event){const rect=dragOverlay.getBoundingClientRect();const x=Math.min(96,Math.max(4,(event.clientX-rect.left)/rect.width*100));const y=Math.min(96,Math.max(4,(event.clientY-rect.top)/rect.height*100));dragChip.style.left=`${x}%`;dragChip.style.top=`${y}%`;updateDragGuide(x,y)}
+    function showCardPickup(item,button){const overlayRect=dragOverlay.getBoundingClientRect(),cardRect=button.getBoundingClientRect();const x=(cardRect.left+cardRect.width/2-overlayRect.left)/overlayRect.width*100;const y=(cardRect.top+cardRect.height/2-overlayRect.top)/overlayRect.height*100;setEditing(true);showDragPreview(item,x,y);}
+    function beginPointerDrag(item,event){if(item.disabled)return;pointerDrag={item,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY};event.currentTarget?.setPointerCapture?.(event.pointerId);const rect=dragOverlay.getBoundingClientRect();showDragPreview(item,(event.clientX-rect.left)/rect.width*100,(event.clientY-rect.top)/rect.height*100);}
+    function movePointerDrag(event){if(!pointerDrag.item||event.pointerId!==pointerDrag.id)return;const distance=Math.hypot(event.clientX-pointerDrag.startX,event.clientY-pointerDrag.startY);if(distance>8)pointerDrag.moved=true;if(pointerDrag.moved){event.preventDefault();setEditing(true);moveDragPreview(event)}}
+    function endPointerDrag(event){if(!pointerDrag.item||event.pointerId!==pointerDrag.id)return;const item=pointerDrag.item,moved=pointerDrag.moved;const rect=dropZone.getBoundingClientRect();const inside=event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;if(event.currentTarget?.hasPointerCapture?.(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);pointerDrag={item:null,id:null,moved:false,startX:0,startY:0};if(moved){event.preventDefault();skipNextClick=true;if(inside)addSound(item,(event.clientX-rect.left)/rect.width*100,(event.clientY-rect.top)/rect.height*100);else{hideDragPreview();showToast('请松手在场景区域内放置素材')}}else hideDragPreview();}
+    function activeItems(){if(category==='indoor')return indoorFeatured.map(id=>sounds.find(s=>s.id===id));return sounds.filter(s=>s.category===category)}
+    function renderGrid(){const items=activeItems();soundGrid.innerHTML='';$('soundCount').textContent=`${items.length} 个${category==='outdoor'?'户外':'室内'}声音`;items.forEach(item=>{const button=document.createElement('button');button.className='sound-card'+(placed.some(p=>p.id===item.id)?' selected':'');button.type='button';button.draggable=!item.disabled;button.disabled=!!item.disabled;button.innerHTML=`<img src="${iconPath(item)}" alt=""><span>${item.name}</span>${item.disabled?'<i class="ban">禁忌验证</i>':''}`;button.addEventListener('click',()=>{if(skipNextClick){skipNextClick=false;return}if(item.disabled){showToast('远雷只用于“不要打雷”禁忌验证');return}showCardPickup(item,button)});button.addEventListener('pointerdown',event=>beginPointerDrag(item,event));button.addEventListener('pointermove',movePointerDrag);button.addEventListener('pointerup',endPointerDrag);button.addEventListener('pointercancel',event=>{if(pointerDrag.id===event.pointerId){pointerDrag={item:null,id:null,moved:false,startX:0,startY:0};hideDragPreview()}});button.addEventListener('dragstart',event=>{event.dataTransfer.setData('text/plain',item.id);event.dataTransfer.effectAllowed='copy';setEditing(true);const rect=dropZone.getBoundingClientRect();showDragPreview(item,(event.clientX-rect.left)/rect.width*100,(event.clientY-rect.top)/rect.height*100);});button.addEventListener('dragend',hideDragPreview);soundGrid.appendChild(button)})}
+    function switchSpace(useOutdoor,announce=true){hideDragPreview();outdoor=useOutdoor;category=outdoor?'outdoor':'indoor';document.querySelectorAll('[data-category]').forEach(button=>{const active=button.dataset.category===category;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active))});setBackground();renderPlaced();renderGrid();$('roomButton').innerHTML=outdoor?'☂&nbsp; 雨夜小院⌄':'▥&nbsp; 我的睡前小屋⌄';if(announce)showToast(outdoor?'已进入户外声景':'已进入室内声景')}
+    function addSound(item,x,y){setEditing(true);const shouldBeOutdoor=item.space==='outdoor';if(outdoor!==shouldBeOutdoor)switchSpace(shouldBeOutdoor,false);const spec=visualSpecs[item.id]||{};const index=placed.length;const entry={id:item.id,x:x??(spec.x??(24+(index%3)*26)),y:y??(spec.y??(24+Math.floor(index/3)*28)),settle:true};placed.push(entry);hideDragPreview();renderPlaced();renderGrid();setTimeout(()=>{entry.settle=false;renderPlaced()},520);showToast(`${item.name} 已加入${shouldBeOutdoor?'雨夜小院':'睡前小屋'}`)}
+    function renderPlaced(){dropZone.innerHTML='';const activeSpace=outdoor?'outdoor':'indoor';placed.forEach((entry,index)=>{const item=sounds.find(s=>s.id===entry.id);if(!item||item.space!==activeSpace)return;const spec=visualSpecs[item.id]||{};const el=document.createElement('button');el.className=`placed${spec.floor?' floor':''}${spec.atmosphere?' atmosphere':''}${entry.settle?' settle':''}${editing&&index===placed.length-1?' selected':''}`;el.type='button';el.setAttribute('aria-label',`${item.name}实体，点击移除`);el.style.setProperty('--entity-w',spec.w||'120px');el.style.setProperty('--entity-h',spec.h||'120px');el.style.left=`${Math.min(94,Math.max(6,entry.x))}%`;el.style.top=`${Math.min(90,Math.max(8,entry.y))}%`;el.style.translate='-50% -50%';el.innerHTML=`<img src="${iconPath(item,'png')}" alt="${item.name}"><small>${item.name}</small>`;el.addEventListener('click',()=>{placed.splice(index,1);renderPlaced();renderGrid();showToast(`${item.name} 已移除`)});dropZone.appendChild(el)})}
+    function handleSceneDragOver(event){event.preventDefault();const item=sounds.find(s=>s.id===event.dataTransfer.getData('text/plain'));if(item&&!item.disabled){if(!dragOverlay.classList.contains('active'))showDragPreview(item);moveDragPreview(event)}}
+    function handleSceneDrop(event){event.preventDefault();const item=sounds.find(s=>s.id===event.dataTransfer.getData('text/plain'));if(!item||item.disabled){hideDragPreview();return}const rect=dropZone.getBoundingClientRect();addSound(item,(event.clientX-rect.left)/rect.width*100,(event.clientY-rect.top)/rect.height*100)}
+    dropZone.addEventListener('dragover',handleSceneDragOver);dropZone.addEventListener('drop',handleSceneDrop);dragOverlay.addEventListener('dragover',handleSceneDragOver);dragOverlay.addEventListener('drop',handleSceneDrop);dropZone.addEventListener('dragleave',event=>{if(!dropZone.contains(event.relatedTarget))hideDragPreview()});
+    document.addEventListener('dragend',hideDragPreview);
+    dragChip.addEventListener('dragstart',event=>{if(!activeDragItem){event.preventDefault();return}event.dataTransfer.setData('text/plain',activeDragItem.id);event.dataTransfer.effectAllowed='copy'});dragChip.addEventListener('dragend',hideDragPreview);dragChip.addEventListener('pointerdown',event=>{if(!activeDragItem)return;pointerDrag={item:activeDragItem,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY};if(event.pointerType!=='mouse')dragChip.setPointerCapture?.(event.pointerId)});dragChip.addEventListener('pointermove',movePointerDrag);dragChip.addEventListener('pointerup',endPointerDrag);dragChip.addEventListener('pointercancel',event=>{if(pointerDrag.id===event.pointerId){pointerDrag={item:null,id:null,moved:false,startX:0,startY:0};hideDragPreview()}});
+    sheetHandle.addEventListener('pointerdown',event=>{sheetDrag={id:event.pointerId,startY:event.clientY,moved:false};sheetHandle.setPointerCapture?.(event.pointerId)});sheetHandle.addEventListener('pointermove',event=>{if(sheetDrag.id!==event.pointerId)return;if(event.clientY-sheetDrag.startY>28){sheetDrag.moved=true;soundSheet.classList.add('sheet-hidden')}});sheetHandle.addEventListener('pointerup',event=>{if(sheetDrag.id!==event.pointerId)return;if(!sheetDrag.moved&&soundSheet.classList.contains('sheet-hidden'))soundSheet.classList.remove('sheet-hidden');sheetHandle.releasePointerCapture?.(event.pointerId);sheetDrag={id:null,startY:0,moved:false}});sheetHandle.addEventListener('pointercancel',()=>{sheetDrag={id:null,startY:0,moved:false}});
+    document.querySelectorAll('[data-category]').forEach(button=>button.addEventListener('click',()=>switchSpace(button.dataset.category==='outdoor')));
+    $('roomButton').addEventListener('click',()=>switchSpace(!outdoor));
+    $('modeButton').addEventListener('click',()=>showToast('已保持夜晚低光模式'));
+    $('timerButton').addEventListener('click',()=>{const next=secondsLeft===1800?2700:1800;secondsLeft=next;showToast(`睡眠时间已设为 ${next/60} 分钟`)});
+    $('masterVolume').addEventListener('input',event=>$('sleepVolume').value=event.target.value);$('sleepVolume').addEventListener('input',event=>$('masterVolume').value=event.target.value);
+    function leaveEditor(){setEditing(false);if(typeof window.navigateMianyu==='function'){window.navigateMianyu('homeView',false)}else{showView('sceneView')}}
+    function confirmSaved(){const button=$('saveButton');button.textContent='已保存';button.classList.add('saved');button.disabled=true;showToast('场景已保存，可以开始睡眠');setTimeout(()=>{button.textContent='保存';button.classList.remove('saved');button.disabled=false},1400)}
+    $('undoButton').addEventListener('click',()=>{if(!placed.length){showToast('没有可以撤销的操作');return}placed.pop();renderPlaced();renderGrid();showToast('已撤销上一步')});$('backEdit').addEventListener('click',leaveEditor);$('saveButton').addEventListener('click',()=>{if($('saveButton').disabled)return;renderPlaced();confirmSaved()});
+    function showView(id){document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view.id===id))}
+    function startSleep(){if(!placed.length){['A03','A01','A04'].forEach((id,index)=>{const item=sounds.find(s=>s.id===id);placed.push({id,x:22+index*26,y:35})});renderPlaced()}showView('sleepView');paused=false;$('pauseButton').textContent='Ⅱ';$('sleepMessage').textContent='声音正在陪着你';startTimer()}
+    function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(!paused&&secondsLeft>0){secondsLeft--;renderClock()}},1000);renderClock()}
+    function renderClock(){const min=Math.floor(secondsLeft/60),sec=secondsLeft%60;$('clock').textContent=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
+    $('startButton').addEventListener('click',startSleep);$('pauseButton').addEventListener('click',()=>{paused=!paused;$('pauseButton').textContent=paused?'▶':'Ⅱ';$('sleepMessage').textContent=paused?'已暂停':'声音正在陪着你'});$('timeSelect').addEventListener('change',event=>{secondsLeft=Number(event.target.value)*60;renderClock()});$('exitSleep').addEventListener('click',()=>{clearInterval(timer);showView('sceneView');showToast('已结束本次播放')});
+    const presets=['赶作业，想听雨，不要打雷。','明天考试，只剩十五分钟。','不要人声。','心情不好，想有人陪一会儿。'];
+    function planPanel(){return `<div class="panel-card"><h2>今晚想怎么被陪伴？</h2><p>选一句最接近现在状态的话，方案会说明理由，也可以继续修改。</p>${presets.map((text,index)=>`<button class="preset" data-preset="${index}">${text}</button>`).join('')}</div><div class="panel-card"><div style="display:flex;justify-content:space-between;gap:10px"><h3>当前方案</h3><span class="tag">规则建议</span></div><p id="planReason">室内暖声搭配窗外小雨，层次清楚但不过度刺激。</p><div class="tag">30 分钟 · 最后 5 分钟渐弱</div></div>`}
+    function favoritePanel(){return `<div class="panel-card"><h2>收藏</h2><p>收藏只保存你主动选择的内容。</p>${['A01','A03','A04','A09'].map(id=>{const item=sounds.find(s=>s.id===id);return `<div class="list-row"><img src="${iconPath(item)}" alt=""><div><strong>${item.name}</strong><small>已审核 · 可加入睡前小屋</small></div><button class="text-btn">加入</button></div>`}).join('')}</div>`}
+    function settingsPanel(){return `<div class="panel-card"><div style="display:flex;align-items:center;gap:14px"><img class="about-logo" src="assets/images/brand/app_icon_circle.png" alt="眠屿圆形图标"><div><h2>眠屿</h2><p style="margin:4px 0 0">在声音里，遇见更好的自己</p></div></div></div><div class="panel-card"><div class="list-row"><div><strong>夜晚低光模式</strong><small>降低界面刺激与动效</small></div><button class="switch on" aria-label="夜晚低光模式"></button></div><div class="list-row"><div><strong>儿童模式</strong><small>过滤成人故事与自由对话</small></div><button class="switch" aria-label="儿童模式"></button></div><div class="list-row"><div><strong>保存播放记录</strong><small>只记录应用使用事实</small></div><button class="switch on" aria-label="保存播放记录"></button></div></div><div class="panel-card"><h3>说明</h3><p>眠屿不是医疗产品，不能诊断失眠。</p></div>`}
+    document.querySelectorAll('[data-panel]').forEach(button=>button.addEventListener('click',()=>{const panel=button.dataset.panel;if(panel==='scene')return;showView('panelView');$('panelTitle').textContent=panel==='plan'?'我的方案':panel==='favorite'?'收藏':'设置';$('panelContent').innerHTML=panel==='plan'?planPanel():panel==='favorite'?favoritePanel():settingsPanel();bindPanel()}));
+    function bindPanel(){document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{const index=Number(button.dataset.preset);$('planReason').textContent=index===0?'保留小雨与雨打窗户，明确排除远雷。':index===1?'使用十五分钟短方案，以室内底噪和轻键盘为主。':index===2?'只保留环境声，不加入任何故事或人声。':'加入已审核模板故事，并用小雨与室内底噪托住声音。';showToast('今晚方案已更新')}));document.querySelectorAll('.switch').forEach(button=>button.addEventListener('click',()=>button.classList.toggle('on')))}
+    $('closePanel').addEventListener('click',()=>showView('sceneView'));
+    setBackground();renderGrid();renderClock();
+  </script>
+  <script>
+    // Pointer-only drag layer: the source card is captured immediately, then the floating card follows the pointer.
+    // Native HTML5 drag is intentionally disabled because it can steal the pointer on touch and mouse devices.
+    (function installPointerDrag(){
+      const state={item:null,id:null,moved:false,startX:0,startY:0,lastX:0,lastY:0,source:null};
+      const gridScrollbar=$('gridScrollbar'),gridScrollThumb=$('gridScrollThumb');
+      function updateGridScrollbar(){if(!gridScrollbar||!gridScrollThumb)return;const max=soundGrid.scrollWidth-soundGrid.clientWidth;if(max<=1){gridScrollbar.style.display='none';return}gridScrollbar.style.display='block';const ratio=soundGrid.clientWidth/soundGrid.scrollWidth;gridScrollThumb.style.width=`${Math.max(24,ratio*100)}%`;const travel=100-Math.max(24,ratio*100);gridScrollThumb.style.transform=`translateX(${travel*(soundGrid.scrollLeft/max)}%)`}
+      function itemForButton(button){return sounds.find(item=>item.id===button.dataset.soundId)}
+      function pointPercent(event){const rect=dragOverlay.getBoundingClientRect();return {x:Math.min(96,Math.max(4,(event.clientX-rect.left)/rect.width*100)),y:Math.min(96,Math.max(4,(event.clientY-rect.top)/rect.height*100))}}
+      function sourceDown(event){
+        const button=event.target.closest('.sound-card'); if(!button)return;
+        const item=itemForButton(button); if(!item||item.disabled)return;
+        button.draggable=false; button.setPointerCapture?.(event.pointerId);
+        const point=pointPercent(event); Object.assign(state,{item,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY,lastX:event.clientX,lastY:event.clientY,source:button});
+        pointerDrag={item,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY}; showDragPreview(item,point.x,point.y);
+      }
+      function sourceMove(event){
+        if(state.id!==event.pointerId||!state.item)return; event.preventDefault();
+        state.lastX=event.clientX; state.lastY=event.clientY; if(Math.hypot(event.clientX-state.startX,event.clientY-state.startY)>8)state.moved=true;
+        pointerDrag.moved=state.moved; if(state.moved)moveDragPreview(event);
+      }
+      function sourceUp(event){
+        if(state.id!==event.pointerId||!state.item)return; event.preventDefault();
+        const releaseEvent={clientX:event.clientX||state.lastX,clientY:event.clientY||state.lastY}; const item=state.item,moved=state.moved,point=pointPercent(releaseEvent),rect=dropZone.getBoundingClientRect();
+        state.source?.releasePointerCapture?.(event.pointerId); Object.assign(state,{item:null,id:null,moved:false,startX:0,startY:0,source:null});
+        pointerDrag={item:null,id:null,moved:false,startX:0,startY:0};
+        if(moved){skipNextClick=true; const inside=releaseEvent.clientX>=rect.left&&releaseEvent.clientX<=rect.right&&releaseEvent.clientY>=rect.top&&releaseEvent.clientY<=rect.bottom; if(inside)addSound(item,(releaseEvent.clientX-rect.left)/rect.width*100,(releaseEvent.clientY-rect.top)/rect.height*100);else{hideDragPreview();showToast('请松手在场景区域内放置素材')}}else hideDragPreview();
+      }
+      function chipDown(event){if(!activeDragItem)return;dragChip.setPointerCapture?.(event.pointerId);Object.assign(state,{item:activeDragItem,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY,lastX:event.clientX,lastY:event.clientY,source:dragChip});pointerDrag={item:activeDragItem,id:event.pointerId,moved:false,startX:event.clientX,startY:event.clientY};}
+      function chipMove(event){if(state.source!==dragChip||state.id!==event.pointerId)return;sourceMove(event)}
+      function chipUp(event){if(state.source!==dragChip||state.id!==event.pointerId)return;sourceUp(event)}
+      const originalRenderGrid=renderGrid;
+      renderGrid=function(){originalRenderGrid();soundGrid.querySelectorAll('.sound-card').forEach(button=>{button.dataset.soundId=button.querySelector('span')?.textContent?activeItems().find(item=>item.name===button.querySelector('span').textContent)?.id||'': '';button.draggable=false});requestAnimationFrame(updateGridScrollbar)};
+      renderGrid(); soundGrid.addEventListener('scroll',updateGridScrollbar,{passive:true}); dragChip.draggable=false;
+      soundGrid.addEventListener('pointerdown',sourceDown,true);soundGrid.addEventListener('pointermove',sourceMove,true);soundGrid.addEventListener('pointerup',sourceUp,true);soundGrid.addEventListener('pointercancel',sourceUp,true);
+      dragOverlay.addEventListener('pointerdown',chipDown,true);dragOverlay.addEventListener('pointermove',chipMove,true);dragOverlay.addEventListener('pointerup',chipUp,true);dragOverlay.addEventListener('pointercancel',chipUp,true);
+    })();
+  </script>
+  <script src="app_pages.js?v=59"></script>
+</body>
+</html>

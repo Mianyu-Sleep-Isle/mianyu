@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>眠屿 · 当前首页预览</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --night: #07132e;
+      --deep: #030918;
+      --surface: #0e2142;
+      --raised: #162d52;
+      --primary: #5c7cfa;
+      --primary-soft: #8fa8ff;
+      --accent: #ffa24c;
+      --accent-soft: #ffd08a;
+      --text: #f5f7ff;
+      --muted: #c3cee7;
+      --border: #38527f;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #020713; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(92, 124, 250, .22), transparent 35%),
+        radial-gradient(circle at 82% 88%, rgba(255, 162, 76, .12), transparent 32%),
+        #020713;
+      display: grid;
+      place-items: start center;
+      padding: 28px 16px;
+    }
+
+    .preview-note {
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto 12px;
+      color: #9dafd3;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .phone {
+      position: relative;
+      width: min(100%, 430px);
+      height: min(880px, calc(100vh - 74px));
+      min-height: 660px;
+      overflow: hidden;
+      border: 1px solid rgba(143, 168, 255, .35);
+      border-radius: 34px;
+      background: var(--night);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .56), 0 0 0 7px rgba(9, 24, 53, .7);
+    }
+
+    .ambient {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(3, 9, 24, .70), rgba(7, 19, 46, .95)),
+        url("assets/images/scenes/bedroom.png") center top / cover;
+    }
+
+    .content {
+      position: absolute;
+      inset: 0 0 76px;
+      overflow-y: auto;
+      padding: 24px 20px 38px;
+      scrollbar-width: none;
+    }
+    .content::-webkit-scrollbar { display: none; }
+
+    .greeting { display: flex; align-items: center; gap: 12px; }
+    .logo { width: 48px; height: 48px; object-fit: cover; border-radius: 14px; box-shadow: 0 8px 22px rgba(0, 0, 0, .32); }
+    .greeting-copy { min-width: 0; flex: 1; }
+    .greeting-copy strong { display: block; font-size: 20px; }
+    .greeting-copy span { color: var(--muted); font-size: 13px; }
+
+    .mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(14, 33, 66, .84);
+      color: var(--text);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .mode i { color: var(--primary-soft); font-style: normal; }
+
+    h1 { margin: 28px 0 12px; font-size: 34px; line-height: 1.18; letter-spacing: -.5px; }
+    .lead { margin: 0; max-width: 350px; color: var(--muted); font-size: 16px; line-height: 1.7; }
+
+    button {
+      min-height: 48px;
+      border: 0;
+      border-radius: 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease, border-color .15s ease;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: scale(.98); }
+    button:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 3px; }
+
+    .primary {
+      width: 100%;
+      margin-top: 22px;
+      color: white;
+      background: linear-gradient(135deg, #6786ff, #4c68db);
+      box-shadow: 0 12px 28px rgba(55, 86, 211, .33);
+    }
+    .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .ghost { color: var(--text); background: rgba(14, 33, 66, .82); border: 1px solid var(--border); }
+
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 28px 0 12px; }
+    .section-head h2 { margin: 0; font-size: 20px; }
+    .section-head span { color: var(--muted); font-size: 12px; text-align: right; }
+
+    .room-card {
+      position: relative;
+      height: 210px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      background: url("assets/images/scenes/bedroom.png") center / cover;
+      box-shadow: inset 0 -80px 80px rgba(3, 9, 24, .35);
+    }
+    .room-card::after { content: ""; position: absolute; inset: 0; background: rgba(3, 9, 24, .20); }
+    .room-action {
+      position: absolute;
+      z-index: 1;
+      left: 14px;
+      bottom: 14px;
+      min-height: 42px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(3, 9, 24, .82);
+      border: 1px solid rgba(255, 208, 138, .35);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+    }
+    .room-action b { color: var(--accent-soft); font-size: 18px; }
+
+    .empty {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(14, 33, 66, .92);
+    }
+    .empty-icon { color: var(--primary-soft); font-size: 26px; }
+    .empty h3 { margin: 10px 0 6px; font-size: 17px; }
+    .empty p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .empty .ghost { width: 100%; margin-top: 16px; }
+
+    nav {
+      position: absolute;
+      z-index: 4;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 76px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 5px 8px 8px;
+      border-top: 1px solid var(--border);
+      background: rgba(14, 33, 66, .97);
+      backdrop-filter: blur(18px);
+    }
+    .nav-item {
+      min-height: 58px;
+      display: grid;
+      place-content: center;
+      gap: 3px;
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+    }
+    .nav-item .icon { font-size: 20px; line-height: 1; }
+    .nav-item.active { color: var(--text); background: rgba(92, 124, 250, .22); font-weight: 700; }
+
+    .toast {
+      position: absolute;
+      z-index: 8;
+      left: 50%;
+      bottom: 92px;
+      translate: -50% 18px;
+      width: max-content;
+      max-width: calc(100% - 40px);
+      padding: 11px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #152c51;
+      color: var(--text);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .22s ease;
+    }
+    .toast.show { opacity: 1; translate: -50% 0; }
+
+    @media (max-width: 470px) {
+      body { padding: 0; }
+      .preview-note { display: none; }
+      .phone { width: 100%; height: 100vh; min-height: 620px; border: 0; border-radius: 0; box-shadow: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <div style="width:min(100%,430px)">
+    <div class="preview-note">眠屿 Flutter 首页 · 浏览器视觉预览</div>
+    <main class="phone" aria-label="眠屿首页预览">
+      <div class="ambient" aria-hidden="true"></div>
+      <section class="content">
+        <header class="greeting">
+          <img class="logo" src="assets/images/brand/app_icon.png" alt="眠屿图标" />
+          <div class="greeting-copy"><strong>晚上好</strong><span>成人模式</span></div>
+          <div class="mode"><i>☾</i> 低光模式</div>
+        </header>
+
+        <h1>把今晚交给<br />一间安静的小屋</h1>
+        <p class="lead">先说说现在的状态，我们会给出一个能解释、也能修改的方案。</p>
+
+        <button class="primary" type="button" data-message="将进入“今晚沟通”页面">◌&nbsp;&nbsp;告诉我今晚的状态</button>
+        <div class="button-row">
+          <button class="ghost" type="button" data-message="将进入内容中心">♫&nbsp;&nbsp;内容中心</button>
+          <button class="ghost" type="button" data-message="将进入二维声景编辑器">▣&nbsp;&nbsp;进入房间</button>
+        </div>
+
+        <div class="section-head"><h2>今晚的小屋</h2><span>还没有生成场景</span></div>
+        <div class="room-card" role="button" tabindex="0" data-message="将打开房间编辑器" aria-label="去布置一间小屋">
+          <div class="room-action"><b>▦</b> 去布置一间小屋 <span>→</span></div>
+        </div>
+
+        <div class="section-head"><h2>今晚的方案</h2><span>推荐有理由，也始终可以修改</span></div>
+        <div class="empty">
+          <div class="empty-icon">◫</div>
+          <h3>还没有今晚方案</h3>
+          <p>用点选或预制句告诉我们现在的状态，通常不到一分钟。</p>
+          <button class="ghost" type="button" data-message="将进入“今晚沟通”页面">开始沟通&nbsp;&nbsp;→</button>
+        </div>
+      </section>
+
+      <nav aria-label="主导航">
+        <div class="nav-item active"><span class="icon">⌂</span><span>眠屿</span></div>
+        <div class="nav-item"><span class="icon">✦</span><span>编辑</span></div>
+        <div class="nav-item"><span class="icon">▤</span><span>档案</span></div>
+        <div class="nav-item"><span class="icon">○</span><span>我的</span></div>
+      </nav>
+      <div class="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script>
+    const toast = document.querySelector('.toast');
+    let toastTimer;
+    function showMessage(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+    document.querySelectorAll('[data-message]').forEach((element) => {
+      element.addEventListener('click', () => showMessage(element.dataset.message));
+      element.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          showMessage(element.dataset.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
