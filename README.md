@@ -27,6 +27,12 @@ flutter run
 
 当前代码仅依赖 Flutter SDK，不依赖第三方 UI、状态管理或 SVG 包。
 
+前端页面、导航、交互、视觉 token、素材规范和验收路径见
+[`docs/FRONTEND_INTERFACE_SPEC.md`](docs/FRONTEND_INTERFACE_SPEC.md)。
+
+按当前可运行页面整理的真实交互流程见
+[`docs/FRONTEND_INTERACTION_ACTUAL.md`](docs/FRONTEND_INTERACTION_ACTUAL.md)。
+
 无需 Flutter 时，也可以在本目录启动静态服务器后打开：
 
 ```text
