@@ -203,6 +203,10 @@
   app.insertAdjacentHTML('beforeend',html);
 
   const nav=document.getElementById('appBottomNav');
+  const ports=window.MianyuPorts;
+  let activePlan=null;
+  let activeContentTab='声音';
+  let pendingFeedbackSession=null;
   const routeHistory=[];
   const mainRoutes=new Set(['homeView','archiveView','settingsView']);
   let currentView='onboardingView';
@@ -223,6 +227,8 @@
       document.getElementById('homeView').classList.remove('door-opening');
       window.requestAnimationFrame(syncHomeInteractionFrame);
     }
+    if(route==='archiveView'||route==='pointsView')refreshGrowthViews();
+    if(route==='feedbackView')loadPendingFeedback();
   }
   function goBack(){
     let route=routeHistory.pop()||'homeView';
@@ -266,56 +272,41 @@
   document.getElementById('skipPin').addEventListener('click',function(){document.getElementById('onboardPin').value='';setOnboardStep(2)});
   document.getElementById('medicalConsent').addEventListener('change',function(event){document.getElementById('onboardConsentNext').disabled=!event.target.checked});
   document.getElementById('onboardConsentNext').addEventListener('click',function(){setOnboardStep(3)});
-  function finishOnboarding(){settingsAge=onboardAge||'adult';const modeValue=document.querySelector('#ageModeRow .setting-value');if(modeValue)modeValue.textContent=settingsAge==='adult'?'成人模式':'儿童模式';const sentenceButton=document.querySelector('[data-compose-mode="sentence"]');sentenceButton.hidden=settingsAge==='child'&&!pinConfigured;if(sentenceButton.hidden){document.querySelector('[data-compose-mode="choices"]').click()}navigate('homeView',false);showToast('设置已保存，可以随时修改')}
+  async function finishOnboarding(){settingsAge=onboardAge||'adult';try{await ports.auth.updateUser({age_mode:settingsAge,pin_configured:pinConfigured,non_medical_accepted:true})}catch(error){showToast(error.message||'设置保存失败');return}const modeValue=document.querySelector('#ageModeRow .setting-value');if(modeValue)modeValue.textContent=settingsAge==='adult'?'成人模式':'儿童模式';const sentenceButton=document.querySelector('[data-compose-mode="sentence"]');sentenceButton.hidden=settingsAge==='child'&&!pinConfigured;if(sentenceButton.hidden){document.querySelector('[data-compose-mode="choices"]').click()}navigate('homeView',false);showToast('设置已保存，可以随时修改')}
   document.getElementById('finishOnboarding').addEventListener('click',finishOnboarding);document.getElementById('skipPreferences').addEventListener('click',finishOnboarding);
   document.querySelectorAll('.onboard-step .choice-chip').forEach(function(button){button.addEventListener('click',function(){button.classList.toggle('selected')})});
 
   document.querySelectorAll('[data-choice-group]').forEach(function(group){group.querySelectorAll('.choice-chip').forEach(function(button){button.addEventListener('click',function(){group.querySelectorAll('.choice-chip').forEach(function(x){x.classList.toggle('selected',x===button)})})})});
   document.querySelectorAll('[data-compose-mode]').forEach(function(button){button.addEventListener('click',function(){if(button.hidden)return;document.querySelectorAll('[data-compose-mode]').forEach(function(x){x.classList.toggle('active',x===button)});const sentence=button.dataset.composeMode==='sentence';document.getElementById('sentenceComposer').classList.toggle('hidden',!sentence);document.getElementById('choiceComposer').classList.toggle('hidden',sentence)})});
   document.querySelectorAll('[data-preset-list] .preset-sentence').forEach(function(button,index){button.addEventListener('click',function(){document.querySelectorAll('[data-preset-list] .preset-sentence').forEach(function(x){x.classList.toggle('selected',x===button)});const reasons=['保留小雨和室内暖声，并按你的禁忌排除远雷。','使用十五分钟短方案，以室内底噪和轻键盘为主。','只保留环境声，不加入任何故事或人声。','加入已审核模板故事，并用小雨与室内底噪托住声音。'];document.getElementById('generatedReason').textContent=reasons[index]})});
-  function generatePlan(){const button=document.getElementById('generatePlan');button.disabled=true;button.innerHTML='生成中 <span class="loading-dots"><i></i><i></i><i></i></span>';setTimeout(function(){button.disabled=false;button.textContent='重新整理方案';document.getElementById('generatedPlan').classList.remove('hidden');document.getElementById('generatedPlan').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});showToast('已使用规则建议生成方案')},650)}
+  function selectedText(groupIndex){const group=document.querySelectorAll('[data-choice-group]')[groupIndex];return group&&group.querySelector('.selected')?group.querySelector('.selected').textContent.trim():''}
+  function sleepIntent(){const voiceMap={'需要':'want','不要':'avoid','都可以':'unspecified'};const minuteMatch=selectedText(3).match(/\d+/);return {emotion:selectedText(0)==='平静'?'calm':'unspecified',voice_preference:voiceMap[selectedText(1)]||'unspecified',available_minutes:minuteMatch?Number(minuteMatch[0]):30,forbidden_tags:selectedText(2)?[selectedText(2)]:[],preset_sentence:document.getElementById('sentenceInput').value.trim()||undefined}}
+  async function generatePlan(){const button=document.getElementById('generatePlan');button.disabled=true;button.innerHTML='生成中 <span class="loading-dots"><i></i><i></i><i></i></span>';try{activePlan=activePlan?await ports.planComposer.regenerate(sleepIntent()):await ports.planComposer.compose(sleepIntent());document.getElementById('generatedReason').textContent=activePlan.reason;document.getElementById('planSourceLabel').textContent=activePlan.source==='llm'?'模型建议':'规则建议';button.textContent='重新整理方案';document.getElementById('generatedPlan').classList.remove('hidden');document.getElementById('generatedPlan').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});showToast('已使用规则建议生成方案')}catch(error){button.textContent='生成今晚方案';showToast(error.message||'方案生成失败')}finally{button.disabled=false}}
   document.getElementById('generatePlan').addEventListener('click',generatePlan);document.getElementById('regeneratePlan').addEventListener('click',generatePlan);
-  document.getElementById('confirmPlan').addEventListener('click',function(){startSleep();document.getElementById('sleepMessage').textContent='声音正在慢慢变小';nav.classList.add('hidden');currentView='sleepView'});
+  document.getElementById('confirmPlan').addEventListener('click',async function(){try{if(activePlan)activePlan=await ports.planComposer.confirm(activePlan.id);await startSleep();document.getElementById('sleepMessage').textContent='声音正在慢慢变小';nav.classList.add('hidden');currentView='sleepView'}catch(error){showToast(error.message||'无法开始方案')}});
   const homeStartSleep=document.getElementById('homeStartSleep');
   if(homeStartSleep)homeStartSleep.addEventListener('click',function(){navigate('conversationView')});
 
-  const contentData={
-    '声音':[
-      {name:'壁炉',meta:'室内 · 温暖火声',art:'fireplace',action:'试听'},
-      {name:'小雨',meta:'户外 · 轻柔雨声',art:'rain',action:'试听'},
-      {name:'夜晚森林',meta:'户外 · 林间夜声',art:'forest',action:'试听'},
-      {name:'远雷',meta:'户外 · 低沉远雷',art:'thunder',action:'试听'},
-      {name:'翻书声',meta:'室内 · 轻缓翻页',art:'bookturn',action:'试听'},
-      {name:'轻键盘',meta:'室内 · 低声敲击',art:'keyboard',action:'试听'},
-      {name:'被子摩擦',meta:'室内 · 柔软织物声',art:'blanket',action:'试听'},
-      {name:'室内底噪',meta:'室内 · 稳定环境声',art:'roomtone',action:'试听'}
-    ],
-    '故事':[
-      {name:'窗边听雨',meta:'成人故事 · 4 分钟',art:'story-rain-window',image:'assets/images/content/adult_rain_window.png',action:'详情',detail:true},
-      {name:'静室入夜',meta:'成人故事 · 9 分钟',art:'story-quiet-room',image:'assets/images/content/adult_quiet_room.png',action:'详情',detail:true},
-      {name:'暖茶时光',meta:'成人故事 · 4 分钟',art:'story-warm-tea',image:'assets/images/content/adult_warm_tea.png',action:'详情',detail:true},
-      {name:'星星和小毯子',meta:'儿童故事 · 5 分钟',art:'story-star-blanket',image:'assets/images/content/child_star_blanket.png',action:'详情',detail:true},
-      {name:'小小花园的晚安',meta:'儿童故事 · 4 分钟',art:'story-small-garden',image:'assets/images/content/child_small_garden.png',action:'详情',detail:true}
-    ],
-    '呼吸':[{name:'睡前两分钟呼吸',meta:'呼吸训练 · 2 分钟',art:'breath-relax',image:'assets/images/content/breath_relax.png',action:'详情',detail:true}],
-    '预设':[{name:'暖火与细雨',meta:'壁炉 + 小雨 · 可继续修改',art:'fireplace',action:'查看'},{name:'林间留白',meta:'夜晚森林 + 室内底噪',art:'forest',action:'查看'}],
-    '收藏':[{name:'小雨',meta:'声音 · 已收藏',art:'rain',action:'试听'},{name:'月光邮局',meta:'模板故事 · 已收藏',art:'letter',action:'详情',detail:true},{name:'壁炉',meta:'声音 · 已收藏',art:'fireplace',action:'试听'}]
-  };
-  function renderContent(tabName){const list=document.getElementById('contentList');const items=contentData[tabName]||[];list.innerHTML=items.map(function(item){const ageBlocked=settingsAge==='child'&&item.meta.includes('成人');const disabled=item.disabled||ageBlocked;const meta=ageBlocked?'当前是儿童内容包，需要 PIN 才能打开':item.meta;const art=item.image?'<img src="'+item.image+'" alt="" loading="lazy">':'<i></i><i></i><i></i>';return '<article class="content-item '+(disabled?'disabled':'')+'"><div class="content-art art-'+(item.art||'echo')+'" aria-hidden="true">'+art+'</div><div class="content-item-copy"><h3>'+item.name+'</h3><p>'+meta+'</p></div><button class="content-action" type="button" '+(disabled?'disabled':'')+' data-content-name="'+item.name+'" data-detail="'+(item.detail?'1':'0')+'" aria-label="'+(ageBlocked?'需要 PIN 才能打开':item.action)+item.name+'">'+(disabled?uiIcon('lock'):item.action==='试听'?uiIcon('play'):uiIcon('chevron'))+'</button></article>'}).join('');list.querySelectorAll('[data-content-name]').forEach(function(button){button.addEventListener('click',function(){if(button.disabled)return;if(button.dataset.detail==='1')navigate('detailView');else showToast(button.dataset.contentName+(button.getAttribute('aria-label').includes('试听')?' 正在试听':' 已载入'))})})}
+  async function renderContent(tabName){const list=document.getElementById('contentList');activeContentTab=tabName;try{const items=await ports.catalog.list(tabName,settingsAge);if(activeContentTab!==tabName)return;list.innerHTML=items.map(function(item){const ageBlocked=settingsAge==='child'&&item.age_mode==='adult';const disabled=!item.enabled||ageBlocked;const meta=ageBlocked?'当前是儿童内容包，需要 PIN 才能打开':item.meta;const art=item.image?'<img src="'+item.image+'" alt="" loading="lazy">':'<i></i><i></i><i></i>';return '<article class="content-item '+(disabled?'disabled':'')+'"><div class="content-art art-'+(item.art||'echo')+'" aria-hidden="true">'+art+'</div><div class="content-item-copy"><h3>'+item.name+'</h3><p>'+meta+'</p></div><button class="content-action" type="button" '+(disabled?'disabled':'')+' data-content-id="'+item.id+'" data-content-name="'+item.name+'" data-detail="'+(item.detail?'1':'0')+'" aria-label="'+(ageBlocked?'需要 PIN 才能打开':item.action)+item.name+'">'+(disabled?uiIcon('lock'):item.action==='试听'?uiIcon('play'):uiIcon('chevron'))+'</button></article>'}).join('');list.querySelectorAll('[data-content-name]').forEach(function(button){button.addEventListener('click',async function(){if(button.disabled)return;if(button.dataset.detail==='1')navigate('detailView');else{try{await ports.resourceResolver.resolve(button.dataset.contentId);await ports.audioEngine.preview(button.dataset.contentId);showToast(button.dataset.contentName+(button.getAttribute('aria-label').includes('试听')?' 正在试听':' 已载入'))}catch(error){showToast(error.message||'试听失败')}}})})}catch(error){showToast(error.message||'内容加载失败')}}
   function setContentTab(name){document.querySelectorAll('[data-content]').forEach(function(button){button.classList.toggle('active',button.dataset.content===name)});renderContent(name)}
   document.querySelectorAll('[data-content]').forEach(function(button){button.addEventListener('click',function(){setContentTab(button.dataset.content)})});document.querySelectorAll('[data-content-tab]').forEach(function(button){button.addEventListener('click',function(){setContentTab(button.dataset.contentTab)})});renderContent('声音');
-  function toggleStoryPreview(button){const active=button.classList.toggle('playing');button.innerHTML=active?uiIcon('pause','sm')+' 停止试听':uiIcon('play','sm')+' 试听'}
-  document.getElementById('previewStory').addEventListener('click',function(event){toggleStoryPreview(event.currentTarget)});document.getElementById('secondaryPreviewStory').addEventListener('click',function(event){toggleStoryPreview(event.currentTarget)});document.getElementById('favoriteStory').addEventListener('click',function(event){event.currentTarget.innerHTML=uiIcon('check');event.currentTarget.setAttribute('aria-label','已收藏月光邮局');showToast('已加入收藏')});document.getElementById('addStoryToPlan').addEventListener('click',function(){showToast('月光邮局已加入今晚方案')});
+  async function toggleStoryPreview(button){const active=button.classList.toggle('playing');try{await (active?ports.audioEngine.preview('ST06'):ports.audioEngine.stopPreview());button.innerHTML=active?uiIcon('pause','sm')+' 停止试听':uiIcon('play','sm')+' 试听'}catch(error){button.classList.remove('playing');showToast(error.message||'试听失败')}}
+  document.getElementById('previewStory').addEventListener('click',function(event){toggleStoryPreview(event.currentTarget)});document.getElementById('secondaryPreviewStory').addEventListener('click',function(event){toggleStoryPreview(event.currentTarget)});document.getElementById('favoriteStory').addEventListener('click',async function(event){try{await ports.catalog.setFavorite('ST06',true);event.currentTarget.innerHTML=uiIcon('check');event.currentTarget.setAttribute('aria-label','已收藏月光邮局');showToast('已加入收藏')}catch(error){showToast(error.message||'收藏失败')}});document.getElementById('addStoryToPlan').addEventListener('click',function(){showToast('月光邮局已加入今晚方案')});
 
   document.querySelectorAll('[data-feedback]').forEach(function(group){group.querySelectorAll('.feedback-option').forEach(function(button){button.addEventListener('click',function(){group.querySelectorAll('.feedback-option').forEach(function(x){x.classList.toggle('selected',x===button)})})})});
   const feedbackNote=document.getElementById('feedbackNote');
   feedbackNote.addEventListener('input',function(){document.getElementById('feedbackCount').textContent=String(feedbackNote.value.length)});
-  document.getElementById('submitFeedback').addEventListener('click',function(event){
+  async function loadPendingFeedback(){try{const result=await ports.feedback.pending();pendingFeedbackSession=result.pending&&result.session?result.session.id:null;if(!result.pending){document.getElementById('feedbackStateLabel').textContent='今日反馈已记录'}}catch(error){showToast(error.message||'待反馈状态加载失败')}}
+  async function refreshGrowthViews(){try{const results=await Promise.all([ports.points.entries(),ports.preferences.current(),ports.archive.query(document.querySelector('.archive-period .active')?.textContent.includes('30')?'30d':'7d')]);const points=results[0],preference=results[1],archive=results[2];document.getElementById('pointsBalance').textContent=String(points.balance);document.getElementById('growthPointsLabel').textContent=points.balance+' 积分';document.getElementById('growthHeadline').textContent='已从 '+archive.feedback_count+' 次反馈中了解你';const voiceLabel={want:'想要',avoid:'不要',unspecified:'都可以'}[preference.voice_preference]||'都可以';const chips=[];if(preference.forbidden_sound_tags&&preference.forbidden_sound_tags.length)chips.push('<span>避开 · '+preference.forbidden_sound_tags.join('、')+'</span>');chips.push('<span>人声 · '+voiceLabel+'</span>');document.getElementById('preferenceChips').innerHTML=chips.join('')}catch(error){showToast(error.message||'成长档案加载失败')}}
+  document.getElementById('submitFeedback').addEventListener('click',async function(event){
     const groups=[...document.querySelectorAll('[data-feedback]')];
     const complete=groups.every(function(group){return group.querySelector('.selected')});
     if(!complete){showToast('请先完成三项选择');return}
     const answers={};
     groups.forEach(function(group){answers[group.dataset.feedback]=group.querySelector('.selected').textContent.trim()});
+    const sleepMap={'容易':'easy','一般':'normal','不容易':'difficult'};const soundMap={'舒服':'comfortable','还可以':'acceptable','不舒服':'uncomfortable'};const voiceMap={'想要':'want','都可以':'unspecified','不要':'avoid'};
+    if(!pendingFeedbackSession){await loadPendingFeedback();if(!pendingFeedbackSession){showToast('当前没有待填写的次日反馈');return}}
+    let submitted;try{event.currentTarget.disabled=true;submitted=await ports.feedback.submit({session_id:pendingFeedbackSession,fall_asleep_ease:sleepMap[answers.sleep]||'unknown',sound_comfort:soundMap[answers.sound],voice_next_time:voiceMap[answers.voice]||'unspecified',note:feedbackNote.value.trim()||undefined,forbidden_sound_tags:answers.sound==='不舒服'?['layered_sound']:[]});pendingFeedbackSession=null}catch(error){event.currentTarget.disabled=false;showToast(error.message||'反馈提交失败');return}
     const resultTags=[
       '入睡感受 · '+answers.sleep,
       answers.sound==='不舒服'?'下次降低声音层次':'声景感受 · '+answers.sound,
@@ -324,8 +315,8 @@
     document.getElementById('feedbackResultTags').innerHTML=resultTags.map(function(tag){return '<span>'+tag+'</span>'}).join('');
     document.getElementById('feedbackForm').classList.add('hidden');
     document.getElementById('feedbackResult').classList.remove('hidden');
-    document.getElementById('pointsBalance').textContent='125';
-    document.getElementById('growthPointsLabel').textContent='125 积分';
+    document.getElementById('pointsBalance').textContent=String(submitted.balance);
+    document.getElementById('growthPointsLabel').textContent=submitted.balance+' 积分';
     document.getElementById('growthHeadline').textContent='已从 7 次反馈中了解你';
     document.getElementById('growthDescription').textContent='刚刚的选择已记录，今晚的新选择仍会始终优先。';
     document.getElementById('preferenceChips').innerHTML=resultTags.slice(1).map(function(tag){return '<span>'+tag+'</span>'}).join('')+'<span>避开 · 远雷</span>';
@@ -342,7 +333,7 @@
   });
 
   document.querySelectorAll('.app-switch').forEach(function(button){button.addEventListener('click',function(){const next=!button.classList.contains('on');button.classList.toggle('on',next);button.setAttribute('aria-checked',String(next));showToast(next?'已开启':'已关闭并清理相关授权')})});
-  document.getElementById('ageModeRow').addEventListener('click',function(){const switchMode=function(){settingsAge=settingsAge==='adult'?'child':'adult';const modeText=settingsAge==='adult'?'成人模式':'儿童模式';const modeValue=document.querySelector('#ageModeRow .setting-value');if(modeValue)modeValue.textContent=modeText;document.querySelector('[data-compose-mode="sentence"]').hidden=settingsAge==='child'&&!pinConfigured;showToast(settingsAge==='child'?'已切换儿童内容包':'已切换成人内容包')};if(settingsAge==='child'&&pinConfigured)showDialog('验证本机 PIN','切换到成人模式需要验证本机 PIN。演示中确认代表验证通过。',switchMode);else switchMode()});
+  document.getElementById('ageModeRow').addEventListener('click',function(){const switchMode=async function(){const previous=settingsAge;settingsAge=settingsAge==='adult'?'child':'adult';try{await ports.auth.updateUser({age_mode:settingsAge})}catch(error){settingsAge=previous;showToast(error.message||'模式切换失败');return}const modeText=settingsAge==='adult'?'成人模式':'儿童模式';const modeValue=document.querySelector('#ageModeRow .setting-value');if(modeValue)modeValue.textContent=modeText;document.querySelector('[data-compose-mode="sentence"]').hidden=settingsAge==='child'&&!pinConfigured;showToast(settingsAge==='child'?'已切换儿童内容包':'已切换成人内容包')};if(settingsAge==='child'&&pinConfigured)showDialog('验证本机 PIN','切换到成人模式需要验证本机 PIN。演示中确认代表验证通过。',switchMode);else switchMode()});
   document.getElementById('pinRow').addEventListener('click',function(){showDialog('设置本机 PIN','PIN 仅保存在本机。演示中确认后标记为已设置。',function(){pinConfigured=true;const pinValue=document.querySelector('#pinRow .setting-value');if(pinValue)pinValue.textContent='已设置';showToast('PIN 已设置')})});
   document.getElementById('aboutRow').addEventListener('click',function(){showDialog('关于眠屿','眠屿 MVP 0.1 · 低刺激、可解释、可修改的睡前声音体验。',function(){})});
   document.getElementById('medicalInfoRow').addEventListener('click',function(){showDialog('非医疗说明','眠屿不是医疗产品，不能诊断失眠；播放记录也不代表实际入睡情况。',function(){})});
@@ -351,13 +342,13 @@
   function showDialog(title,message,onConfirm){document.getElementById('dialogTitle').textContent=title;document.getElementById('dialogMessage').textContent=message;dialogAction=onConfirm;dialog.classList.add('show');document.getElementById('dialogCancel').focus()}
   function closeDialog(){dialog.classList.remove('show');dialogAction=null}
   document.getElementById('dialogCancel').addEventListener('click',closeDialog);document.getElementById('dialogConfirm').addEventListener('click',function(){const action=dialogAction;closeDialog();if(action)action()});
-  document.getElementById('eraseData').addEventListener('click',function(){showDialog('删除本机数据？','将删除方案、场景、播放记录、反馈和偏好，且无法恢复。',function(){const button=document.getElementById('eraseData');button.disabled=true;button.textContent='正在清理…';setTimeout(function(){button.textContent='已清理';showToast('本机数据已清理')},650)})});
+  document.getElementById('eraseData').addEventListener('click',function(){showDialog('删除本机数据？','将删除方案、场景、播放记录、反馈和偏好，且无法恢复。',async function(){const button=document.getElementById('eraseData');button.disabled=true;button.textContent='正在清理…';try{await ports.erasure.eraseAll();button.textContent='已清理';showToast('本机数据已清理')}catch(error){button.disabled=false;button.textContent='删除本机数据';showToast(error.message||'清理失败')}})});
   document.getElementById('revokePermissions').addEventListener('click',function(){showDialog('撤回全部授权？','所有可选数据授权会恢复为关闭，基础功能仍可使用。',function(){document.querySelectorAll('#privacyView .app-switch').forEach(function(button){button.classList.remove('on');button.setAttribute('aria-checked','false')});showToast('已撤回全部可选授权')})});
-  document.querySelectorAll('.archive-period button').forEach(function(button){button.addEventListener('click',function(){document.querySelectorAll('.archive-period button').forEach(function(item){item.classList.toggle('active',item===button)});showToast('已切换到'+button.textContent)})});
+  document.querySelectorAll('.archive-period button').forEach(function(button){button.addEventListener('click',async function(){document.querySelectorAll('.archive-period button').forEach(function(item){item.classList.toggle('active',item===button)});try{await ports.archive.query(button.textContent.includes('30')?'30d':'7d');await refreshGrowthViews();showToast('已切换到'+button.textContent)}catch(error){showToast(error.message||'档案加载失败')}})});
 
   nav.querySelector('[data-main-route="sceneView"]').addEventListener('click',function(){nav.classList.add('hidden')});
   document.getElementById('backEdit').addEventListener('click',function(){if(currentView==='sceneView')navigate('homeView',false)});
-  document.getElementById('exitSleep').addEventListener('click',function(event){event.preventDefault();event.stopImmediatePropagation();showDialog('退出睡眠模式？','声音会停止，并返回眠屿首页。',function(){clearInterval(timer);navigate('homeView',false);showToast('已结束本次播放')})},true);
+  document.getElementById('exitSleep').addEventListener('click',function(event){event.preventDefault();event.stopImmediatePropagation();showDialog('退出睡眠模式？','声音会停止，并返回眠屿首页。',async function(){clearInterval(timer);try{await ports.sleepSession.stop()}catch(_){}navigate('homeView',false);showToast('已结束本次播放')})},true);
   document.getElementById('startButton').addEventListener('click',function(){document.getElementById('sleepMessage').textContent='声音正在慢慢变小';nav.classList.add('hidden');currentView='sleepView'});
 
   navigate('onboardingView',false);

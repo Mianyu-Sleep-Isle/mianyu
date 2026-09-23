@@ -102,6 +102,14 @@
   </main>
 
   <script>
+    window.__MIANYU_TRANSPORTS__=Object.assign({content:'mock',planning:'mock',scene:'mock',session:'mock',growth:'http',common:'mock'},window.__MIANYU_TRANSPORTS__||{});
+    window.__MIANYU_API_BASE_URL__=window.__MIANYU_API_BASE_URL__||'http://127.0.0.1:8787/api/v1';
+  </script>
+  <script src="frontend-api/core.js?v=1"></script>
+  <script src="frontend-api/mock-adapters.js?v=1"></script>
+  <script src="frontend-api/http-adapters.js?v=1"></script>
+  <script src="frontend-api/mianyu-ports.js?v=1"></script>
+  <script>
     const sounds=[
       {id:'A01',name:'小雨',category:'outdoor',icon:'rain_light',space:'outdoor'},
       {id:'A02',name:'雨打窗户',category:'indoor',icon:'rain_window',space:'indoor'},
@@ -164,12 +172,13 @@
     $('masterVolume').addEventListener('input',event=>$('sleepVolume').value=event.target.value);$('sleepVolume').addEventListener('input',event=>$('masterVolume').value=event.target.value);
     function leaveEditor(){setEditing(false);if(typeof window.navigateMianyu==='function'){window.navigateMianyu('homeView',false)}else{showView('sceneView')}}
     function confirmSaved(){const button=$('saveButton');button.textContent='已保存';button.classList.add('saved');button.disabled=true;showToast('场景已保存，可以开始睡眠');setTimeout(()=>{button.textContent='保存';button.classList.remove('saved');button.disabled=false},1400)}
-    $('undoButton').addEventListener('click',()=>{if(!placed.length){showToast('没有可以撤销的操作');return}placed.pop();renderPlaced();renderGrid();showToast('已撤销上一步')});$('backEdit').addEventListener('click',leaveEditor);$('saveButton').addEventListener('click',()=>{if($('saveButton').disabled)return;renderPlaced();confirmSaved()});
+    function sceneDto(){return {id:'scene-demo',name:outdoor?'雨夜小院':'我的睡前小屋',status:'draft',version:1,sources:placed.map(entry=>{const item=sounds.find(sound=>sound.id===entry.id);return {id:'source-'+entry.id,track:{asset_id:entry.id,name:item?.name||entry.id,asset_path:iconPath(item||{icon:'room_tone'},'png'),default_space:item?.space||'indoor'},space:item?.space||'indoor',x:entry.x,y:entry.y,volume:Number($('masterVolume').value)/100,enabled:true}})}}
+    $('undoButton').addEventListener('click',()=>{if(!placed.length){showToast('没有可以撤销的操作');return}placed.pop();renderPlaced();renderGrid();showToast('已撤销上一步')});$('backEdit').addEventListener('click',leaveEditor);$('saveButton').addEventListener('click',async()=>{if($('saveButton').disabled)return;renderPlaced();try{await window.MianyuPorts.sceneQuery.saveDraft(sceneDto());confirmSaved()}catch(error){showToast(error.message||'场景保存失败')}});
     function showView(id){document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view.id===id))}
-    function startSleep(){if(!placed.length){['A03','A01','A04'].forEach((id,index)=>{const item=sounds.find(s=>s.id===id);placed.push({id,x:22+index*26,y:35})});renderPlaced()}showView('sleepView');paused=false;$('pauseButton').textContent='Ⅱ';$('sleepMessage').textContent='声音正在陪着你';startTimer()}
+    async function startSleep(){if(!placed.length){['A03','A01','A04'].forEach((id,index)=>{const item=sounds.find(s=>s.id===id);placed.push({id,x:22+index*26,y:35})});renderPlaced()}try{const scene=await window.MianyuPorts.sceneQuery.saveDraft(sceneDto());await window.MianyuPorts.sleepSession.start({plan_id:'plan-demo',scene_id:scene.id})}catch(error){showToast(error.message||'会话启动失败');return}showView('sleepView');paused=false;$('pauseButton').textContent='Ⅱ';$('sleepMessage').textContent='声音正在陪着你';startTimer()}
     function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(!paused&&secondsLeft>0){secondsLeft--;renderClock()}},1000);renderClock()}
     function renderClock(){const min=Math.floor(secondsLeft/60),sec=secondsLeft%60;$('clock').textContent=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`}
-    $('startButton').addEventListener('click',startSleep);$('pauseButton').addEventListener('click',()=>{paused=!paused;$('pauseButton').textContent=paused?'▶':'Ⅱ';$('sleepMessage').textContent=paused?'已暂停':'声音正在陪着你'});$('timeSelect').addEventListener('change',event=>{secondsLeft=Number(event.target.value)*60;renderClock()});$('exitSleep').addEventListener('click',()=>{clearInterval(timer);showView('sceneView');showToast('已结束本次播放')});
+    $('startButton').addEventListener('click',startSleep);$('pauseButton').addEventListener('click',async()=>{paused=!paused;try{await (paused?window.MianyuPorts.sleepSession.pause():window.MianyuPorts.sleepSession.resume())}catch(error){paused=!paused;showToast(error.message||'会话状态更新失败')}$('pauseButton').textContent=paused?'▶':'Ⅱ';$('sleepMessage').textContent=paused?'已暂停':'声音正在陪着你'});$('timeSelect').addEventListener('change',event=>{secondsLeft=Number(event.target.value)*60;renderClock()});$('exitSleep').addEventListener('click',async()=>{clearInterval(timer);try{await window.MianyuPorts.sleepSession.stop()}catch(_){}showView('sceneView');showToast('已结束本次播放')});
     const presets=['赶作业，想听雨，不要打雷。','明天考试，只剩十五分钟。','不要人声。','心情不好，想有人陪一会儿。'];
     function planPanel(){return `<div class="panel-card"><h2>今晚想怎么被陪伴？</h2><p>选一句最接近现在状态的话，方案会说明理由，也可以继续修改。</p>${presets.map((text,index)=>`<button class="preset" data-preset="${index}">${text}</button>`).join('')}</div><div class="panel-card"><div style="display:flex;justify-content:space-between;gap:10px"><h3>当前方案</h3><span class="tag">规则建议</span></div><p id="planReason">室内暖声搭配窗外小雨，层次清楚但不过度刺激。</p><div class="tag">30 分钟 · 最后 5 分钟渐弱</div></div>`}
     function favoritePanel(){return `<div class="panel-card"><h2>收藏</h2><p>收藏只保存你主动选择的内容。</p>${['A01','A03','A04','A09'].map(id=>{const item=sounds.find(s=>s.id===id);return `<div class="list-row"><img src="${iconPath(item)}" alt=""><div><strong>${item.name}</strong><small>已审核 · 可加入睡前小屋</small></div><button class="text-btn">加入</button></div>`}).join('')}</div>`}

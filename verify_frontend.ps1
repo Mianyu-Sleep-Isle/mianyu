@@ -82,7 +82,8 @@ Assert-Check ($pubspec -match '(?ms)^dependencies:\r?\n  flutter:\r?\n    sdk: f
 $previewSource = Get-Content -Raw (Join-Path $projectRoot 'system_preview.html')
 $appPagesSource = Get-Content -Raw (Join-Path $projectRoot 'app_pages.js')
 $appPagesStyles = Get-Content -Raw (Join-Path $projectRoot 'app_pages.css')
-$completePreviewSource = $previewSource + "`n" + $appPagesSource + "`n" + $appPagesStyles
+$frontendApiSource = Get-Content -Raw (Join-Path $projectRoot 'frontend-api\mock-adapters.js')
+$completePreviewSource = $previewSource + "`n" + $appPagesSource + "`n" + $appPagesStyles + "`n" + $frontendApiSource
 Assert-Check (-not ($previewSource -match '>P(?:0|1|2|3|4|5|6|7|8|9|10|11)[^<]*<')) '用户预览不显示 P0–P11 开发编号'
 Assert-Check (-not $previewSource.Contains('系统预览')) '用户预览不显示“系统预览”开发字样'
 Assert-Check ($previewSource.Contains('drag-overlay') -and $previewSource.Contains('drag-preview')) '预览包含拖拽虚像提示层'
@@ -113,7 +114,7 @@ foreach ($copy in $requiredCopy) {
 foreach ($phrase in $forbiddenPhrases) {
     Assert-Check (-not $completePreviewSource.Contains($phrase)) "浏览器预览不含禁用表述：$phrase"
 }
-Assert-Check ($appPagesSource.Contains('夜晚森林') -and $appPagesSource.Contains('远雷')) '内容中心包含完整户外素材'
+Assert-Check ($frontendApiSource.Contains('夜晚森林') -and $frontendApiSource.Contains('远雷')) '内容中心包含完整户外素材'
 Assert-Check ($appPagesStyles.Contains('abstract low-light background') -and -not $appPagesStyles.Contains('bedroom.png') -and -not $appPagesStyles.Contains('rain_courtyard.png')) '非编辑页面未复用声景背景图'
 
 $flutterCommand = Get-Command flutter -ErrorAction SilentlyContinue
