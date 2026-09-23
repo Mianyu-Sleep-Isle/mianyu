@@ -1,0 +1,62 @@
+{
+  "sleep_plans": [
+    {
+      "plan_id": "fixture-plan-001",
+      "plan_type": "soundscape",
+      "reason": "你想听雨但不想听雷声，所以我选择轻柔雨声并排除雷声音轨。",
+      "tracks": [
+        {"asset_id": "A01", "volume": 0.34, "pan": -0.15, "distance": 0.55, "indoor_or_outdoor": "outdoor"},
+        {"asset_id": "A02", "volume": 0.22, "pan": 0.15, "distance": 0.70, "indoor_or_outdoor": "outdoor"}
+      ],
+      "story_id": null,
+      "breath_id": null,
+      "duration_min": 20,
+      "fade_out_min": 3,
+      "source": "rule"
+    },
+    {
+      "plan_id": "fixture-plan-002",
+      "plan_type": "mix",
+      "reason": "你希望有人陪一会儿，我选择短故事和轻柔环境声。",
+      "tracks": [
+        {"asset_id": "A03", "volume": 0.30, "pan": 0.0, "distance": 0.50, "indoor_or_outdoor": "indoor"},
+        {"asset_id": "A07", "volume": 0.20, "pan": 0.1, "distance": 0.65, "indoor_or_outdoor": "indoor"},
+        {"asset_id": "A04", "volume": 0.12, "pan": -0.1, "distance": 0.60, "indoor_or_outdoor": "indoor"}
+      ],
+      "story_id": "story-adult-01",
+      "breath_id": null,
+      "story_config": {
+        "theme": "quiet_room",
+        "tone": "gentle",
+        "speech_rate": 0.85,
+        "duration_min": 5,
+        "ending_mode": "environment_only_then_fade"
+      },
+      "duration_min": 20,
+      "fade_out_min": 3,
+      "source": "rule"
+    },
+    {
+      "plan_id": "fixture-plan-003",
+      "plan_type": "mix",
+      "reason": "时间比较短，我安排短呼吸训练配合环境声。",
+      "tracks": [
+        {"asset_id": "A07", "volume": 0.30, "pan": 0.0, "distance": 0.50, "indoor_or_outdoor": "indoor"},
+        {"asset_id": "A08", "volume": 0.15, "pan": 0.1, "distance": 0.70, "indoor_or_outdoor": "indoor"}
+      ],
+      "story_id": null,
+      "breath_id": "breath-gentle-01",
+      "breath_config": {
+        "breath_type": "gentle_box",
+        "inhale_sec": 4,
+        "hold_sec": 2,
+        "exhale_sec": 6,
+        "cycle_count": 6,
+        "duration_sec": 72
+      },
+      "duration_min": 15,
+      "fade_out_min": 2,
+      "source": "rule"
+    }
+  ]
+}
