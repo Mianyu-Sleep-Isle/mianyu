@@ -1,0 +1,24 @@
+name: mianyu_app
+description: 眠屿 MVP 前端——低刺激、可解释、可修改的助眠体验。
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/brand/
+    - assets/images/scenes/
+    - assets/images/sounds/
+    - assets/images/icons/
