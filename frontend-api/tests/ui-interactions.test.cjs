@@ -12,6 +12,8 @@ test('场景编辑器保留可发现的点击与长按替代操作', () => {
     assert.ok(page.includes(marker), `Missing editor interaction marker: ${marker}`);
   }
   assert.equal(page.includes('class="entity-remove"'), false, 'Placed entities must not render a corner remove button');
+  assert.match(page, /function showDragPreview\([^)]*\)\{clearPlacementHint\(true\)/, 'Long press must replace the tap hint instead of stacking a second preview');
+  assert.ok(page.includes("A02:{w:'min(56vw,230px)',h:'min(41vh,230px)',x:68,y:35"), 'Rain-window entity should fit the background window');
 });
 
 test('时长、未保存返回与播放退出路径保持明确', () => {
