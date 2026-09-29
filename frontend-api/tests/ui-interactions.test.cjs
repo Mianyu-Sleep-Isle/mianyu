@@ -17,6 +17,14 @@ test('场景编辑器保留可发现的点击与长按替代操作', () => {
   assert.equal(page.includes('.drag-overlay.active .drag-chip{display:none}'), false, 'The small drag card must follow the finger until release');
   assert.ok(page.includes('sceneRect=dropZone.getBoundingClientRect(),overlayRect=app.getBoundingClientRect()'), 'Drag coordinates must use the visible app canvas');
   assert.ok(page.includes('function point(event){const rect=app.getBoundingClientRect()'), 'Long press must start the drag card at the pressed card position');
+  assert.ok(page.includes('.drag-overlay{position:absolute;z-index:4;inset:0'), 'The drag card coordinate layer must cover the full phone canvas');
+  assert.ok(page.includes("window.addEventListener('pointermove'"), 'Drag tracking must survive the sound sheet moving away');
+  assert.ok(page.includes("window.addEventListener('pointerup',finish,true)"), 'Drop completion must be observed across the whole window');
+  assert.ok(page.includes('function sceneDropPoint(clientX,clientY)'), 'The visible scene must expose one shared drop hit test');
+  assert.ok(page.includes('existingIndex=placed.findIndex(entry=>entry.id===item.id)'), 'Re-dropping a sound must reposition its existing entity instead of stacking duplicates');
+  assert.ok(page.includes('showToast(`${item.name}位置已更新`)'), 'Repositioning an existing entity must give explicit feedback');
+  assert.ok(page.includes('function suppressNextClick(){skipNextClick=true;clearTimeout(skipClickTimer);skipClickTimer=setTimeout(()=>{skipNextClick=false},360)}'), 'Suppressed drag clicks must expire instead of blocking a later sound card');
+  assert.equal(page.includes('state.timer=null;skipNextClick=true'), false, 'Horizontal sound-list scrolling must not leave the next card click blocked');
   assert.ok(page.includes("A02:{w:'min(56vw,230px)',h:'min(41vh,230px)',x:68,y:35"), 'Rain-window entity should fit the background window');
 });
 
