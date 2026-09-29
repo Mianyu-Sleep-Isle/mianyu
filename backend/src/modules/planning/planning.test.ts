@@ -47,6 +47,14 @@ test('短时间优先生成含呼吸的方案', () => {
   assert.ok(plan.tracks.some((track) => track.contentKind === 'breath')); assert.ok(plan.fadeOutSec <= plan.durationSec);
 });
 
+test('明确需要陪伴时优先于短时间建议', () => {
+  const intent = toStructuredIntent({ inputMode: 'choices', mood: 'calm', voicePreference: 'wanted', avoidTags: [], durationSec: 600, selectedContentIds: [] });
+  const plan = composeRulePlan({ userId: 'u1', ageMode: 'adult', intent, candidates });
+  assert.equal(plan.durationSec, 600);
+  assert.ok(plan.tracks.some((track) => track.contentKind === 'story'));
+  assert.ok(plan.tracks.every((track) => track.contentKind !== 'breath'));
+});
+
 test('儿童模式不会选择成人故事', () => {
   const intent = sentence('心情不好，想有人陪一会儿。');
   const plan = composeRulePlan({ userId: 'child', ageMode: 'child', intent, candidates });

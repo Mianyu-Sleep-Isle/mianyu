@@ -16,8 +16,8 @@ export function composeRulePlan(args: { userId: string; ageMode: AgeMode; intent
   if (selected.some((item) => !item)) throw new PlanningError('NO_SAFE_CONTENT_MATCH', '已选内容不满足当前安全限制', 400);
   const rules: RuleCode[] = [];
   if (intent.voicePreference === 'avoid') rules.push('avoid_voice');
-  else if (intent.durationSec <= 900) rules.push('short_duration');
   else if (intent.voicePreference === 'wanted') rules.push('wanted_company');
+  else if (intent.durationSec <= 900) rules.push('short_duration');
   else if (avoid.has('thunder')) rules.push('avoid_thunder');
   else rules.push('default');
   const desiredKind = rules[0] === 'short_duration' ? 'breath' : rules[0] === 'wanted_company' ? 'story' : 'audio';
