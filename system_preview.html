@@ -32,14 +32,16 @@
     .grid-scrollbar{height:4px;margin:1px 5px 5px;border-radius:99px;background:rgba(10,26,54,.72);overflow:hidden}
     .grid-scrollbar span{display:block;height:100%;width:34%;border-radius:99px;background:linear-gradient(90deg,#607dff,#ffb45f);transform:translateX(0);transition:transform .12s ease,width .12s ease}
     /* Interaction refinements from team usability review. */
-    .sound-sheet{height:360px}.placed-layer{bottom:362px}.sound-card{touch-action:pan-x}.sound-grid{scrollbar-width:none;overscroll-behavior-x:contain}.sound-grid::-webkit-scrollbar{display:none}.grid-scrollbar{display:none!important}.sound-sheet.sheet-hidden .track-control{visibility:hidden}
+    .sound-sheet{height:404px}.placed-layer{bottom:406px}.sound-card{touch-action:pan-x}.sound-grid{scrollbar-width:none;overscroll-behavior-x:contain}.sound-grid::-webkit-scrollbar{display:none}.sound-sheet.sheet-hidden .track-control{visibility:hidden}
     .placed{touch-action:none}.placed.moving{scale:1.06;filter:drop-shadow(0 0 18px rgba(255,190,106,.95))}.entity-remove{position:absolute;z-index:3;right:-8px;top:-8px;width:32px;height:32px;border:1px solid rgba(255,208,138,.72);border-radius:50%;background:#132c56;color:#ffe2bb;font-size:20px;line-height:1;display:none}.placed.selected .entity-remove{display:grid;place-items:center}
     .scene-trash{position:absolute;z-index:8;right:18px;top:92px;min-width:78px;min-height:48px;padding:7px 11px;border:1px solid rgba(255,145,145,.55);border-radius:17px;background:rgba(78,24,42,.92);color:#ffc4c4;display:none;place-items:center;font-size:12px}.scene-trash.show{display:grid}.scene-trash.hot{background:#a83e55;color:white;scale:1.06}
     .editor-guide{position:absolute;z-index:5;left:50%;top:92px;translate:-50% 0;width:max-content;max-width:calc(100% - 36px);padding:8px 12px;border:1px solid rgba(121,151,255,.45);border-radius:999px;background:rgba(4,15,36,.82);color:#d7e2fa;font-size:11px;backdrop-filter:blur(10px)}
     .track-control{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;min-height:42px;margin:3px 0 8px;padding:7px 9px;border:1px solid rgba(83,115,172,.58);border-radius:15px;background:rgba(6,20,45,.66)}.track-control strong{max-width:92px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track-control input{min-width:0;width:100%;accent-color:#ffad54}.track-control button{min-height:34px;padding:0 10px;border:0;border-radius:11px;background:#405ed8;font-size:11px}
+    .grid-scrollbar{display:block!important;position:relative;height:44px;margin:1px 0 4px;padding:16px 4px;border-radius:22px;background:rgba(4,16,37,.58);touch-action:none;cursor:grab;user-select:none}.grid-scrollbar.is-hidden{display:none!important}.grid-scrollbar:focus-visible{outline:3px solid #ffd08a;outline-offset:2px}.grid-scrollbar.dragging{cursor:grabbing;background:rgba(20,43,83,.88)}.grid-scrollbar span{display:block;height:12px;min-width:58px;border-radius:99px;background:linear-gradient(90deg,#7893ff,#ffb45f);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 4px 12px rgba(0,0,0,.3);transform:translateX(0);transition:transform .08s linear,width .12s ease}.grid-scrollbar.dragging span{box-shadow:0 0 0 3px rgba(121,151,255,.22),0 5px 14px rgba(0,0,0,.34)}
+    @media(max-height:720px){.sound-sheet{height:386px}.placed-layer{bottom:388px}.grid-scrollbar{height:40px;padding-block:14px}}
     .duration-scrim{position:absolute;z-index:24;inset:0;display:none;align-items:end;padding:16px;background:rgba(1,6,18,.72);backdrop-filter:blur(8px)}.duration-scrim.show{display:flex}.duration-panel{width:100%;padding:18px;border:1px solid var(--line);border-radius:26px;background:#0e2142}.duration-panel h2{margin:0 0 6px}.duration-panel p{margin:0 0 14px;color:var(--muted);font-size:12px}.duration-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.duration-options button{min-height:46px;border:1px solid var(--line);border-radius:15px;background:#102a52}.duration-custom{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.duration-custom input{min-width:0;height:48px;padding:0 13px;border:1px solid var(--line);border-radius:14px;background:#071a38;color:white}.duration-custom button{min-width:88px;border:0;border-radius:14px;background:#4c68e6}
   </style>
-  <link rel="stylesheet" href="app_pages.css?v=60" />
+  <link rel="stylesheet" href="app_pages.css?v=61" />
 </head>
 <body>
   <main class="phone" id="app" aria-label="眠屿移动端应用">
@@ -80,7 +82,7 @@
           <button data-category="outdoor" aria-pressed="false">户外</button>
         </div>
         <div class="sound-grid" id="soundGrid" aria-label="横向滑动查看全部声音素材"></div>
-        <div class="grid-scrollbar" id="gridScrollbar" aria-hidden="true"><span id="gridScrollThumb"></span></div>
+        <div class="grid-scrollbar" id="gridScrollbar" role="scrollbar" tabindex="0" aria-label="声音列表位置" aria-controls="soundGrid" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="gridScrollThumb" aria-hidden="true"></span></div>
         <div class="track-control hidden" id="trackControl"><strong id="trackTitle">素材音量</strong><input id="trackVolume" type="range" min="0" max="100" value="62" aria-label="当前素材音量"><button id="trackAdd" type="button">加入场景</button></div>
         <div class="sheet-controls">
           <button class="room-select" id="roomButton">▥&nbsp; 我的睡前小屋⌄</button>
@@ -161,7 +163,7 @@
     function showToast(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1800)}
     function iconPath(item,type='svg'){return `assets/images/${type==='svg'?'icons':'sounds'}/${item.icon}.${type==='svg'?'svg':'png'}`}
     function setBackground(){const path=outdoor?'assets/images/scenes/rain_courtyard.png':'assets/images/scenes/bedroom.png';sceneBg.style.backgroundImage=`url("${path}")`;$('sleepView').style.backgroundImage=`url("${path}")`;}
-    function setEditing(value){editing=value;$('brandbar').classList.toggle('hidden',value);$('topnav').classList.toggle('hidden',value);$('editbar').classList.toggle('hidden',!value);if(value&&!sessionStorage.getItem('mianyu-editor-guide')){$('editorGuide').classList.remove('hidden');setTimeout(()=>{$('editorGuide').classList.add('hidden');sessionStorage.setItem('mianyu-editor-guide','1')},4200)}if(typeof renderPlaced==='function')renderPlaced()}
+    function setEditing(value){editing=value;$('brandbar').classList.toggle('hidden',value);$('topnav').classList.toggle('hidden',value);$('editbar').classList.toggle('hidden',!value);if(value&&!sessionStorage.getItem('mianyu-editor-guide')){$('editorGuide').classList.remove('hidden');setTimeout(()=>{$('editorGuide').classList.add('hidden');sessionStorage.setItem('mianyu-editor-guide','1')},4200)}if(typeof renderPlaced==='function')renderPlaced();if(value)requestAnimationFrame(()=>window.updateSoundScrollbar?.())}
     function markSceneDirty(){sceneDirty=true;$('saveButton').removeAttribute('disabled');$('saveButton').textContent='保存'}
     function snapshotScene(){return JSON.stringify({outdoor,placed:placed.map(({settle,...entry})=>entry),secondsLeft})}
     function updateDragGuide(chipX,chipY){const rect=dragOverlay.getBoundingClientRect();const spec=dragPreview.getBoundingClientRect();const ghostX=(spec.left+spec.width/2-rect.left)/rect.width*100,ghostY=(spec.top+spec.height/2-rect.top)/rect.height*100;const px=rect.width*chipX/100,py=rect.height*chipY/100,gx=rect.width*ghostX/100,gy=rect.height*ghostY/100;dragGuidePath.setAttribute('d',`M ${px} ${py} C ${px} ${py*.72+gy*.28}, ${gx} ${gy*.72+py*.28}, ${gx} ${gy}`)}
@@ -214,6 +216,17 @@
     setBackground();renderGrid();renderClock();savedSceneSnapshot=snapshotScene();
   </script>
   <script>
+    (function installSoundScrollbar(){
+      const bar=$('gridScrollbar'),thumb=$('gridScrollThumb');let drag=null;
+      function measurements(){const max=Math.max(0,soundGrid.scrollWidth-soundGrid.clientWidth),inner=Math.max(1,bar.clientWidth-8),thumbWidth=Math.max(58,inner*(soundGrid.clientWidth/soundGrid.scrollWidth)),travel=Math.max(0,inner-thumbWidth);return{max,inner,thumbWidth,travel}}
+      function update(){const max=Math.max(0,soundGrid.scrollWidth-soundGrid.clientWidth);bar.classList.toggle('is-hidden',max<=1);if(max>1&&bar.clientWidth===0){requestAnimationFrame(update);return}const {thumbWidth,travel}=measurements(),ratio=max?Math.min(1,Math.max(0,soundGrid.scrollLeft/max)):0;thumb.style.width=`${thumbWidth}px`;thumb.style.transform=`translateX(${travel*ratio}px)`;bar.setAttribute('aria-valuenow',String(Math.round(ratio*100)))}
+      function moveTo(clientX){const rect=bar.getBoundingClientRect(),{max,thumbWidth,travel}=measurements();if(!max||!travel)return;const ratio=Math.min(1,Math.max(0,(clientX-rect.left-4-thumbWidth/2)/travel));soundGrid.scrollLeft=ratio*max;update()}
+      bar.addEventListener('pointerdown',event=>{const thumbRect=thumb.getBoundingClientRect();if(event.clientX<thumbRect.left||event.clientX>thumbRect.right)moveTo(event.clientX);drag={id:event.pointerId,startX:event.clientX,startScroll:soundGrid.scrollLeft};bar.classList.add('dragging');bar.setPointerCapture?.(event.pointerId);event.preventDefault()});
+      bar.addEventListener('pointermove',event=>{if(!drag||drag.id!==event.pointerId)return;const {max,travel}=measurements();if(travel)soundGrid.scrollLeft=Math.min(max,Math.max(0,drag.startScroll+(event.clientX-drag.startX)*max/travel));event.preventDefault()});
+      function finish(event){if(!drag||drag.id!==event.pointerId)return;bar.releasePointerCapture?.(event.pointerId);drag=null;bar.classList.remove('dragging');update()}
+      bar.addEventListener('pointerup',finish);bar.addEventListener('pointercancel',finish);bar.addEventListener('keydown',event=>{const step=event.key==='PageDown'||event.key==='PageUp'?soundGrid.clientWidth*.8:72;const direction=event.key==='ArrowRight'||event.key==='PageDown'?1:event.key==='ArrowLeft'||event.key==='PageUp'?-1:0;if(!direction)return;event.preventDefault();soundGrid.scrollBy({left:direction*step,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})});soundGrid.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});window.updateSoundScrollbar=update;if(typeof ResizeObserver!=='undefined')new ResizeObserver(update).observe(soundGrid);
+      const baseRenderGrid=renderGrid;renderGrid=function(){baseRenderGrid();requestAnimationFrame(update)};renderGrid();
+    })();
     // A short hold separates deliberate placement from ordinary horizontal swiping.
     (function installLongPressDrag(){
       const state={item:null,id:null,active:false,startX:0,startY:0,lastX:0,lastY:0,source:null,timer:null};
@@ -226,6 +239,6 @@
       renderGrid();
     })();
   </script>
-  <script src="app_pages.js?v=60"></script>
+  <script src="app_pages.js?v=61"></script>
 </body>
 </html>
