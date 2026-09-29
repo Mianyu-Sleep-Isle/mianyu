@@ -8,9 +8,10 @@ const page = fs.readFileSync(path.join(root, 'system_preview.html'), 'utf8');
 const appPages = fs.readFileSync(path.join(root, 'app_pages.js'), 'utf8');
 
 test('场景编辑器保留可发现的点击与长按替代操作', () => {
-  for (const marker of ['trackControl', 'entity-remove', 'installLongPressDrag', 'installPlacedMove', 'installSoundScrollbar', '方向键也可微调位置']) {
+  for (const marker of ['trackControl', 'placement-hint', 'scene-trash', 'installLongPressDrag', 'installPlacedMove', 'installSoundScrollbar', '拖入删除', '方向键也可微调位置']) {
     assert.ok(page.includes(marker), `Missing editor interaction marker: ${marker}`);
   }
+  assert.equal(page.includes('class="entity-remove"'), false, 'Placed entities must not render a corner remove button');
 });
 
 test('时长、未保存返回与播放退出路径保持明确', () => {
