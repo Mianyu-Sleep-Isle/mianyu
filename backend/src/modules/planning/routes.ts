@@ -9,6 +9,7 @@ const userContext = (request: Request) => { const userId = request.header('X-Mia
 const sendError = (response: Response, error: unknown) => { const requestId = randomUUID();
   if (error instanceof PlanningError) return response.status(error.status).json({ error: { code: error.code, message: error.message, requestId, details: error.details } });
   if (error instanceof ZodError) return response.status(400).json({ error: { code: 'INVALID_REQUEST', message: '请求字段不合法', requestId, details: error.issues } });
+  console.error(`[planning:${requestId}]`, error);
   return response.status(500).json({ error: { code: 'INTERNAL_ERROR', message: '服务器内部错误', requestId, details: [] } }); };
 export function createPlanningRouter(service: PlanningService): Router { const router = Router();
   router.post('/plans/compose', async (req, res) => { try { const ctx = userContext(req); res.status(201).json(await service.compose(ctx.userId, ctx.ageMode, req.body, req.header('Idempotency-Key'))); } catch (e) { sendError(res, e); } });
