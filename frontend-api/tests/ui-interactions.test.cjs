@@ -25,6 +25,8 @@ test('场景编辑器保留可发现的点击与长按替代操作', () => {
   assert.ok(page.includes('showToast(`${item.name}位置已更新`)'), 'Repositioning an existing entity must give explicit feedback');
   assert.ok(page.includes('function suppressNextClick(){skipNextClick=true;clearTimeout(skipClickTimer);skipClickTimer=setTimeout(()=>{skipNextClick=false},360)}'), 'Suppressed drag clicks must expire instead of blocking a later sound card');
   assert.equal(page.includes('state.timer=null;skipNextClick=true'), false, 'Horizontal sound-list scrolling must not leave the next card click blocked');
+  assert.equal(page.includes('建议放在这里'), false, 'Placement guidance should use only the visual ghost without a text label');
+  assert.equal(page.includes('.placement-hint span{'), false, 'Removed placement hint text must not leave dead label styling');
   assert.ok(page.includes("A02:{w:'min(56vw,230px)',h:'min(41vh,230px)',x:68,y:35"), 'Rain-window entity should fit the background window');
 });
 
