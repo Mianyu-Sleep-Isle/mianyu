@@ -13,7 +13,8 @@ test('场景编辑器保留可发现的点击与长按替代操作', () => {
   }
   assert.equal(page.includes('class="entity-remove"'), false, 'Placed entities must not render a corner remove button');
   assert.match(page, /function showDragPreview\([^)]*\)\{clearTimeout\(placementHintTimer\);placementHintTimer=null;placementHintId=item.id;renderPlaced\(\)/, 'Long press must reuse the exact tap-hint position');
-  assert.ok(page.includes('.drag-guide,.drag-overlay.active .drag-preview,.drag-overlay.active .drag-chip{display:none}'), 'Only the fixed placement hint may remain visible during long press');
+  assert.ok(page.includes('.drag-guide,.drag-overlay.active .drag-preview{display:none}'), 'The legacy movable ghost must stay hidden');
+  assert.equal(page.includes('.drag-overlay.active .drag-chip{display:none}'), false, 'The small drag card must follow the finger until release');
   assert.ok(page.includes("A02:{w:'min(56vw,230px)',h:'min(41vh,230px)',x:68,y:35"), 'Rain-window entity should fit the background window');
 });
 
