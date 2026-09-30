@@ -1,0 +1,22 @@
+{
+  "name": "mianyu-backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": { "node": ">=24 <25" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-transform-types --test src/modules/planning/planning.test.ts",
+    "check": "npm run typecheck && npm test",
+    "start": "node --experimental-transform-types src/server.ts"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2"
+  }
+}
