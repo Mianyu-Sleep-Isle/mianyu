@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: Mianyu MVP HTTP API
+  version: 1.0.0
+  description: 五模块唯一 HTTP 契约。除匿名注册和健康检查外，请求均携带 X-User-Id；写请求携带 Idempotency-Key。
+servers:
+  - url: http://127.0.0.1:8787/api/v1
+tags:
+  - { name: Common }
+  - { name: Module1-Content }
+  - { name: Module2-Planning }
+  - { name: Module3-Scene }
+  - { name: Module4-Session }
+  - { name: Module5-Growth }
+paths:
+  /health:
+    get:
+      tags: [Module5-Growth]
+      operationId: health
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } } }
+  /users/anonymous:
+    post:
+      tags: [Common]
+      operationId: createAnonymousUser
+      requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { age_mode: { $ref: '#/components/schemas/AgeMode' } } } } } }
+      responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } } }
+  /users/me:
+    get: { tags: [Common], operationId: currentUser, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    patch: { tags: [Common], operationId: updateUser, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /users/me/data:
+    delete: { tags: [Common], operationId: eraseUserData, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /auth/pin/verify:
+    post: { tags: [Common], operationId: verifyPin, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /content:
+    get:
+      tags: [Module1-Content]
+      operationId: listContent
+      parameters:
+        - { name: category, in: query, required: true, schema: { type: string } }
+        - { name: age_mode, in: query, required: true, schema: { $ref: '#/components/schemas/AgeMode' } }
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /content/{assetId}/playable:
+    get: { tags: [Module1-Content], operationId: resolvePlayable, parameters: [{ $ref: '#/components/parameters/AssetId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /content/{assetId}/favorite:
+    put: { tags: [Module1-Content], operationId: setFavorite, parameters: [{ $ref: '#/components/parameters/AssetId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /plans:
+    post: { tags: [Module2-Planning], operationId: composePlan, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SleepIntent' } } } }, responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /plans/current:
+    get: { tags: [Module2-Planning], operationId: currentPlan, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /plans/regenerate:
+    post: { tags: [Module2-Planning], operationId: regeneratePlan, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /plans/{planId}/confirm:
+    post: { tags: [Module2-Planning], operationId: confirmPlan, parameters: [{ name: planId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /scenes/current:
+    get: { tags: [Module3-Scene], operationId: currentScene, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    put: { tags: [Module3-Scene], operationId: saveSceneDraft, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SceneConfig' } } } }, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /scenes/{sceneId}/handoff:
+    post: { tags: [Module3-Scene], operationId: handoffScene, parameters: [{ name: sceneId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /scenes/{sceneId}/copy:
+    post: { tags: [Module3-Scene], operationId: copyScene, parameters: [{ name: sceneId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /sessions:
+    post: { tags: [Module4-Session], operationId: startSession, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /sessions/history:
+    get: { tags: [Module4-Session], operationId: sessionHistory, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /sessions/{sessionId}/pause:
+    post: { tags: [Module4-Session], operationId: pauseSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /sessions/{sessionId}/resume:
+    post: { tags: [Module4-Session], operationId: resumeSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /sessions/{sessionId}/events:
+    post: { tags: [Module4-Session], operationId: appendSessionEvent, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /sessions/{sessionId}/stop:
+    post: { tags: [Module4-Session], operationId: stopSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /feedback/pending:
+    get: { tags: [Module5-Growth], operationId: pendingFeedback, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /feedback:
+    post:
+      tags: [Module5-Growth]
+      operationId: submitFeedback
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MorningFeedback' } } } }
+      responses: { '201': { $ref: '#/components/responses/Success' }, '409': { $ref: '#/components/responses/Error' } }
+  /preferences:
+    get: { tags: [Module5-Growth], operationId: currentPreferences, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /points:
+    get: { tags: [Module5-Growth], operationId: pointLedger, responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /archive:
+    get:
+      tags: [Module5-Growth]
+      operationId: archive
+      parameters: [{ name: period, in: query, required: true, schema: { type: string, enum: [7d, 30d] } }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+components:
+  parameters:
+    AssetId: { name: assetId, in: path, required: true, schema: { type: string } }
+    SessionId: { name: sessionId, in: path, required: true, schema: { type: string } }
+    IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 100 } }
+  responses:
+    Success: { description: Success, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } }
+    Error: { description: Error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+  schemas:
+    Envelope: { type: object, required: [data], properties: { data: {} } }
+    ErrorEnvelope: { type: object, required: [error], properties: { error: { type: object, required: [code, message], properties: { code: { type: string }, message: { type: string }, details: {} } } } }
+    AgeMode: { type: string, enum: [adult, child] }
+    VoicePreference: { type: string, enum: [want, avoid, unspecified] }
+    SleepIntent:
+      type: object
+      required: [emotion, voice_preference, available_minutes, forbidden_tags]
+      properties:
+        emotion: { type: string, enum: [excited, anxious, wants_company, calm, unspecified] }
+        voice_preference: { $ref: '#/components/schemas/VoicePreference' }
+        available_minutes: { type: integer, minimum: 1, maximum: 180 }
+        forbidden_tags: { type: array, items: { type: string } }
+        preset_sentence: { type: string, maxLength: 500 }
+    SceneConfig:
+      type: object
+      required: [id, name, status, sources, version]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        status: { type: string, enum: [draft, handed_off, retired] }
+        sources: { type: array, items: { type: object } }
+        version: { type: integer, minimum: 1 }
+    MorningFeedback:
+      type: object
+      additionalProperties: false
+      required: [session_id, fall_asleep_ease, sound_comfort, voice_next_time]
+      properties:
+        session_id: { type: string }
+        fall_asleep_ease: { type: string, enum: [easy, normal, difficult, unknown] }
+        sound_comfort: { type: string, enum: [comfortable, acceptable, uncomfortable] }
+        voice_next_time: { $ref: '#/components/schemas/VoicePreference' }
+        story_effect_rating: { type: integer, minimum: 1, maximum: 5 }
+        disliked_content: { type: string, maxLength: 500 }
+        note: { type: string, maxLength: 500 }
+        forbidden_sound_tags: { type: array, items: { type: string } }
+        story_themes: { type: array, items: { type: string } }
+        breath_templates: { type: array, items: { type: string } }
+        scenes: { type: array, items: { type: string } }

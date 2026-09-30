@@ -11,10 +11,9 @@
 ## 目录
 
 - [项目书（精简）](#项目书精简)
+- [代码与运行](#代码与运行)
 - [组员本机协作指南](#组员本机协作指南)
 - [许可](#许可)
-
-后续计划补充：需求分析调研材料、架构图、交互原型、MVP 代码。
 
 ---
 
@@ -73,6 +72,48 @@ MVP 只做能证明价值的闭环：室内外二维场景、不少于 12 种声
 隐私上：默认不持续录音、不采集精确健康数据；对话和睡眠信息需单独授权；明确标注非医疗产品。
 
 实施上按 13 周推进：需求与原型 → 视觉交互 → MVP 开发 → 测试 → 答辩。详细章节、页面结构、风险、指标和分工见 [眠屿项目书.md](./眠屿项目书.md)。
+
+---
+
+# 代码与运行
+
+## 目录
+
+| 路径 | 内容 |
+|---|---|
+| `lib/`、`test/`、`pubspec.yaml` | Flutter 客户端：P0–P11 页面、主题、状态编排、契约与 Fake 服务 |
+| `system_preview.html`、`app_pages.css`、`app_pages.js` | 完整移动端浏览器交互预览 |
+| `frontend-api/` | 五模块浏览器 Port、HTTP / Mock Adapter、DTO 类型与契约测试 |
+| `contracts/openapi.yaml` | 五模块统一 HTTP 契约 |
+| `assets/images/` | 品牌、场景、声音、内容和 SVG 图标素材 |
+| `prototype_images/` | 原型图与分层素材，浏览器预览会引用 |
+| `docs/` | 前端说明、团队开发文档、设计图和整合记录 |
+
+## 浏览器预览
+
+```powershell
+node preview_server.js
+```
+
+打开 `http://127.0.0.1:4173/system_preview.html`，或通过 `index.html` 进入。本地预览中各模块使用哪种传输由 `window.__MIANYU_TRANSPORTS__` 决定，接口地址由 `window.__MIANYU_API_BASE_URL__` 覆盖；GitHub Pages 等静态托管环境一律使用 Mock。
+
+## Flutter 运行
+
+需要 Flutter 3.x，只依赖 Flutter SDK：
+
+```bash
+flutter pub get
+flutter run
+```
+
+## 前端文档
+
+- [前端实现说明](docs/FRONTEND_IMPLEMENTATION.md)
+- [前端界面说明](docs/FRONTEND_INTERFACE_SPEC.md)
+- [当前实际交互说明](docs/FRONTEND_INTERACTION_ACTUAL.md)
+- [前后端联调说明](docs/FRONTEND_BACKEND_INTEGRATION.md)
+
+眠屿不是医疗产品，不能诊断或治疗失眠；播放记录不代表实际入睡情况。
 
 ---
 

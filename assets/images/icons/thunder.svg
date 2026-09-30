@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="远雷">
+  <title>远雷</title>
+  <style>
+    .blue { fill: none; stroke: #A9C8F0; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+    .warm { fill: none; stroke: #FFB86C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+    .thin { stroke-width: 2.2; }
+  </style>
+  <path class="blue" d="M22 55c-7-1-11-7-10-13 0-7 6-12 13-12 3-12 13-18 24-16 8 1 14 7 16 14 11-2 20 5 20 15 0 7-5 12-12 12H22Z"/><path class="warm" d="M52 40 38 63h12l-6 22 22-29H53l8-16H52Z"/><path class="blue thin" d="M16 68l-5 4M73 69l5 4M14 20l-4-4M78 20l5-4"/>
+</svg>
