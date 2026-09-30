@@ -1,0 +1,940 @@
+{
+  "schemaVersion": "1.0.0",
+  "scope": "member1_nature_audio_delivery",
+  "durationUnit": "seconds",
+  "resourceBase": "assets/",
+  "apiContract": "supplied backend-team/01-HTTP-API-v1.md",
+  "integrationStatus": "contract-aligned import data; no backend implementation supplied",
+  "defaultPolicy": "no active defaults until license and listening review; longest source per category is provisional candidate; A12 always excluded",
+  "assets": [
+    {
+      "assetId": "e2e2bddf-8c80-59c1-bf81-43a542ee2a54",
+      "contentId": "e2e2bddf-8c80-59c1-bf81-43a542ee2a54",
+      "soundCode": "A01",
+      "variantId": "A01-01",
+      "name": "小雨 候选01",
+      "title": "小雨 候选01",
+      "kind": "audio",
+      "category": "小雨",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A01/A01-01_小雨.mp3",
+      "resourceAddress": "assets/audio/A01/A01-01_小雨.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A01 小雨/dragon-studio-gentle-rain-07-437321.mp3",
+      "originalFilename": "dragon-studio-gentle-rain-07-437321.mp3",
+      "sizeBytes": 2880768,
+      "sha256": "4bbeffc74f48dc64312937451b04081b693602ba5fa53d5607eb986b282ee33f",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 90.024,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 3751,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3",
+      "contentId": "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3",
+      "soundCode": "A01",
+      "variantId": "A01-02",
+      "name": "小雨 候选02",
+      "title": "小雨 候选02",
+      "kind": "audio",
+      "category": "小雨",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A01/A01-02_小雨.mp3",
+      "resourceAddress": "assets/audio/A01/A01-02_小雨.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A01 小雨/eryliaa-gentle-rain-for-relaxation-and-sleep-337279.mp3",
+      "originalFilename": "eryliaa-gentle-rain-for-relaxation-and-sleep-337279.mp3",
+      "sizeBytes": 16979712,
+      "sha256": "3f96de2d322f7d3d5fa4a28ef2b193e2ccb1f8319d2358e669d9f3f38b74ab88",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": true,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 530.616,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 22109,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "29374e78-ef05-5b96-9076-37b377ba8d1d",
+      "contentId": "29374e78-ef05-5b96-9076-37b377ba8d1d",
+      "soundCode": "A01",
+      "variantId": "A01-03",
+      "name": "小雨 候选03",
+      "title": "小雨 候选03",
+      "kind": "audio",
+      "category": "小雨",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A01/A01-03_小雨.mp3",
+      "resourceAddress": "assets/audio/A01/A01-03_小雨.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A01 小雨/freesound_community-gentle-rain-sound-51799.mp3",
+      "originalFilename": "freesound_community-gentle-rain-sound-51799.mp3",
+      "sizeBytes": 6201600,
+      "sha256": "1444dc67b3c269444f5d8ce239ff6b544f9a9065c49ed2222f1ec8502c4bc321",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 310.08,
+      "sampleRatesHz": [
+        24000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        160
+      ],
+      "frameCount": 12920,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "8f7f5ee7-ac98-5cda-be07-702039bd0b89",
+      "contentId": "8f7f5ee7-ac98-5cda-be07-702039bd0b89",
+      "soundCode": "A02",
+      "variantId": "A02-01",
+      "name": "雨打窗户 候选01",
+      "title": "雨打窗户 候选01",
+      "kind": "audio",
+      "category": "雨打窗户",
+      "spaceType": "indoor",
+      "resourceKey": "audio/A02/A02-01_雨打窗户.mp3",
+      "resourceAddress": "assets/audio/A02/A02-01_雨打窗户.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A02 雨打窗户/eryliaa-gentle-rain-on-window-350529.mp3",
+      "originalFilename": "eryliaa-gentle-rain-on-window-350529.mp3",
+      "sizeBytes": 4699392,
+      "sha256": "21c9fc2abccf585dfbc57cdee963b3fc25338bfd43e68dc96a10c6a8672755db",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 146.856,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 6119,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60",
+      "contentId": "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60",
+      "soundCode": "A02",
+      "variantId": "A02-02",
+      "name": "雨打窗户 候选02",
+      "title": "雨打窗户 候选02",
+      "kind": "audio",
+      "category": "雨打窗户",
+      "spaceType": "indoor",
+      "resourceKey": "audio/A02/A02-02_雨打窗户.mp3",
+      "resourceAddress": "assets/audio/A02/A02-02_雨打窗户.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A02 雨打窗户/eryliaa-gentle-rain-on-window-for-sleep-422420.mp3",
+      "originalFilename": "eryliaa-gentle-rain-on-window-for-sleep-422420.mp3",
+      "sizeBytes": 24331008,
+      "sha256": "e038d6cb1237cbe6c9e12bbe6449ba1586da3954b90bc6bd71b15759cb2bd0c0",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": true,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 760.344,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 31681,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "251f9f6c-1d3b-5449-8077-1268b1d59740",
+      "contentId": "251f9f6c-1d3b-5449-8077-1268b1d59740",
+      "soundCode": "A02",
+      "variantId": "A02-03",
+      "name": "雨打窗户 候选03",
+      "title": "雨打窗户 候选03",
+      "kind": "audio",
+      "category": "雨打窗户",
+      "spaceType": "indoor",
+      "resourceKey": "audio/A02/A02-03_雨打窗户.mp3",
+      "resourceAddress": "assets/audio/A02/A02-03_雨打窗户.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A02 雨打窗户/eryliaa-soft-rain-on-window-glass-422406.mp3",
+      "originalFilename": "eryliaa-soft-rain-on-window-glass-422406.mp3",
+      "sizeBytes": 8145408,
+      "sha256": "dcd8aef3fc03362f7233697513c96ba59333b5f1770fe100915c2daf7ba7c8f4",
+      "tags": [
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 254.544,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 10606,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "42c9fd86-88e6-5e0f-a807-916067649415",
+      "contentId": "42c9fd86-88e6-5e0f-a807-916067649415",
+      "soundCode": "A05",
+      "variantId": "A05-01",
+      "name": "微风或窗外风 候选01",
+      "title": "微风或窗外风 候选01",
+      "kind": "audio",
+      "category": "微风或窗外风",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A05/A05-01_微风.mp3",
+      "resourceAddress": "assets/audio/A05/A05-01_微风.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A05 微风/freesound_community-a-gentle-breeze-wind-3-7009.mp3",
+      "originalFilename": "freesound_community-a-gentle-breeze-wind-3-7009.mp3",
+      "sizeBytes": 2493600,
+      "sha256": "fefde06dc16d6b28f249240d40e611081a5ac4b64a548b1b244315053b52cdb3",
+      "tags": [
+        "wind"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": true,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 124.68,
+      "sampleRatesHz": [
+        24000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        160
+      ],
+      "frameCount": 5195,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "6560943e-c02a-5bd1-979f-0da9611381de",
+      "contentId": "6560943e-c02a-5bd1-979f-0da9611381de",
+      "soundCode": "A05",
+      "variantId": "A05-02",
+      "name": "微风或窗外风 候选02",
+      "title": "微风或窗外风 候选02",
+      "kind": "audio",
+      "category": "微风或窗外风",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A05/A05-02_微风.mp3",
+      "resourceAddress": "assets/audio/A05/A05-02_微风.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A05 微风/storegraphic-soft-wind-477404.mp3",
+      "originalFilename": "storegraphic-soft-wind-477404.mp3",
+      "sizeBytes": 257462,
+      "sha256": "2351722d774c15b9e732befdea533dd02d4a1d10bf3987547d4bbc5d84c489f7",
+      "tags": [
+        "wind"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 8.045714,
+      "sampleRatesHz": [
+        44100
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 308,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "570439f5-283b-5cee-a431-8ed37501071f",
+      "contentId": "570439f5-283b-5cee-a431-8ed37501071f",
+      "soundCode": "A05",
+      "variantId": "A05-03",
+      "name": "微风或窗外风 候选03",
+      "title": "微风或窗外风 候选03",
+      "kind": "audio",
+      "category": "微风或窗外风",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A05/A05-03_微风.mp3",
+      "resourceAddress": "assets/audio/A05/A05-03_微风.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A05 微风/storegraphic-soft-wind-sound-318855.mp3",
+      "originalFilename": "storegraphic-soft-wind-sound-318855.mp3",
+      "sizeBytes": 706351,
+      "sha256": "d4113da84f4876a8bf9013c87f3476db50fc4155e6928b847c889b79405d5212",
+      "tags": [
+        "wind"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 22.073469,
+      "sampleRatesHz": [
+        44100
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 845,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "ed1f1439-227a-5795-ba39-d873f6295e6e",
+      "contentId": "ed1f1439-227a-5795-ba39-d873f6295e6e",
+      "soundCode": "A06",
+      "variantId": "A06-01",
+      "name": "溪流或轻水声 候选01",
+      "title": "溪流或轻水声 候选01",
+      "kind": "audio",
+      "category": "溪流或轻水声",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A06/A06-01_溪流.mp3",
+      "resourceAddress": "assets/audio/A06/A06-01_溪流.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A06 溪流/allyinnature-running-stream-water-sound-239612.mp3",
+      "originalFilename": "allyinnature-running-stream-water-sound-239612.mp3",
+      "sizeBytes": 17760000,
+      "sha256": "ce07516a407c60f71480d160e1a464e92e4e8920ffaafecf38223248842d7028",
+      "tags": [
+        "water",
+        "stream"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 555.0,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 23125,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "8100669e-990f-51c6-b06c-27ae7823c4e0",
+      "contentId": "8100669e-990f-51c6-b06c-27ae7823c4e0",
+      "soundCode": "A06",
+      "variantId": "A06-02",
+      "name": "溪流或轻水声 候选02",
+      "title": "溪流或轻水声 候选02",
+      "kind": "audio",
+      "category": "溪流或轻水声",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A06/A06-02_溪流.mp3",
+      "resourceAddress": "assets/audio/A06/A06-02_溪流.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A06 溪流/dragon-studio-quiet-stream-420899.mp3",
+      "originalFilename": "dragon-studio-quiet-stream-420899.mp3",
+      "sizeBytes": 5647872,
+      "sha256": "610ff43b0f76f2e8cf55e5105fbccd215d47252b8cfda4d2e6e07287425d6b3a",
+      "tags": [
+        "water",
+        "stream"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 176.496,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 7354,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed",
+      "contentId": "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed",
+      "soundCode": "A06",
+      "variantId": "A06-03",
+      "name": "溪流或轻水声 候选03",
+      "title": "溪流或轻水声 候选03",
+      "kind": "audio",
+      "category": "溪流或轻水声",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A06/A06-03_溪流.mp3",
+      "resourceAddress": "assets/audio/A06/A06-03_溪流.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A06 溪流/dragon-studio-relaxing-stream-ambience-for-youtube-420901.mp3",
+      "originalFilename": "dragon-studio-relaxing-stream-ambience-for-youtube-420901.mp3",
+      "sizeBytes": 23040768,
+      "sha256": "46552bf4368332fb8e531bb4b2a4ed20a56ac77c320743726913737910834063",
+      "tags": [
+        "water",
+        "stream"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": true,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 720.024,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 30001,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "72042dc4-70ef-56dc-a042-07380fd96de1",
+      "contentId": "72042dc4-70ef-56dc-a042-07380fd96de1",
+      "soundCode": "A09",
+      "variantId": "A09-01",
+      "name": "森林夜晚（轻虫鸣/树叶） 候选01",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选01",
+      "kind": "audio",
+      "category": "森林夜晚（轻虫鸣/树叶）",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A09/A09-01_森林夜晚_雨声与虫鸣.mp3",
+      "resourceAddress": "assets/audio/A09/A09-01_森林夜晚_雨声与虫鸣.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A09 森林夜晚/enternalrainsounds-light-rain-ambience-with-cricket-sound-in-forest-night-420326.mp3",
+      "originalFilename": "enternalrainsounds-light-rain-ambience-with-cricket-sound-in-forest-night-420326.mp3",
+      "sizeBytes": 28773146,
+      "sha256": "c0fecf2480bb6da52ccc3fbcb46b32917de2fc6c1805124f4448172d83d77652",
+      "tags": [
+        "forest",
+        "insects",
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": true,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 899.160816,
+      "sampleRatesHz": [
+        44100
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 34421,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "0a752371-afef-50f2-b41b-93ec548d7d8e",
+      "contentId": "0a752371-afef-50f2-b41b-93ec548d7d8e",
+      "soundCode": "A09",
+      "variantId": "A09-02",
+      "name": "森林夜晚（轻虫鸣/树叶） 候选02",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选02",
+      "kind": "audio",
+      "category": "森林夜晚（轻虫鸣/树叶）",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A09/A09-02_森林夜晚_蛙声与虫鸣.mp3",
+      "resourceAddress": "assets/audio/A09/A09-02_森林夜晚_蛙声与虫鸣.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A09 森林夜晚/eryliaa-night-forest-with-frogs-and-crickets-for-sleep-451153.mp3",
+      "originalFilename": "eryliaa-night-forest-with-frogs-and-crickets-for-sleep-451153.mp3",
+      "sizeBytes": 26143488,
+      "sha256": "8f6daecc6d32ea14f01d8dfa6e62b2de1515ae5d42ea6c34f0533d9a8024d636",
+      "tags": [
+        "forest",
+        "insects",
+        "frogs"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 816.984,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 34041,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "95eac1aa-68ec-5d1b-9b32-2f4bc039b35a",
+      "contentId": "95eac1aa-68ec-5d1b-9b32-2f4bc039b35a",
+      "soundCode": "A09",
+      "variantId": "A09-03",
+      "name": "森林夜晚（轻虫鸣/树叶） 候选03",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选03",
+      "kind": "audio",
+      "category": "森林夜晚（轻虫鸣/树叶）",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A09/A09-03_森林夜晚_虫鸣.mp3",
+      "resourceAddress": "assets/audio/A09/A09-03_森林夜晚_虫鸣.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A09 森林夜晚/freesound_community-night-cricket-ambience-22484.mp3",
+      "originalFilename": "freesound_community-night-cricket-ambience-22484.mp3",
+      "sizeBytes": 2626560,
+      "sha256": "83fc7d07f061df15244befe6d995d62d8e03231e9aa0119cae663d26adcaf19e",
+      "tags": [
+        "forest",
+        "insects"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": true,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "自然声候选素材，审核后用于内容中心试听及方案",
+      "exclusionTestOnly": false,
+      "unavailableReason": "COPYRIGHT_PENDING_REVIEW",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 82.08,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        1
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 3420,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "97be8a83-b66a-513c-93d8-8a16f90de99a",
+      "contentId": "97be8a83-b66a-513c-93d8-8a16f90de99a",
+      "soundCode": "A12",
+      "variantId": "A12-01",
+      "name": "远雷 候选01",
+      "title": "远雷 候选01",
+      "kind": "audio",
+      "category": "远雷",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A12/A12-01_远雷_伴随雨声_仅排除测试.mp3",
+      "resourceAddress": "assets/audio/A12/A12-01_远雷_伴随雨声_仅排除测试.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A12 远雷/49656682-steady-rain-with-rolling-thunder-in-the-distance-341895.mp3",
+      "originalFilename": "49656682-steady-rain-with-rolling-thunder-in-the-distance-341895.mp3",
+      "sizeBytes": 2877696,
+      "sha256": "71f958835e98765a21b0a984b0f200d5fb7605129e847cdfd3631164812272e4",
+      "tags": [
+        "thunder",
+        "rain",
+        "water"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": false,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "仅用于不要打雷的排除验证",
+      "exclusionTestOnly": true,
+      "unavailableReason": "EXCLUSION_TEST_ONLY",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 89.928,
+      "sampleRatesHz": [
+        48000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 3747,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+      "contentId": "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+      "soundCode": "A12",
+      "variantId": "A12-02",
+      "name": "远雷 候选02",
+      "title": "远雷 候选02",
+      "kind": "audio",
+      "category": "远雷",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A12/A12-02_远雷_仅排除测试.mp3",
+      "resourceAddress": "assets/audio/A12/A12-02_远雷_仅排除测试.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A12 远雷/derrickmckinnon-distant-thunder-320067.mp3",
+      "originalFilename": "derrickmckinnon-distant-thunder-320067.mp3",
+      "sizeBytes": 1302360,
+      "sha256": "72c8cd7ed9eacf23a5a8fd940f678a8972a097893733ed8bd5d947012eca22dd",
+      "tags": [
+        "thunder"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": false,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "仅用于不要打雷的排除验证",
+      "exclusionTestOnly": true,
+      "unavailableReason": "EXCLUSION_TEST_ONLY",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 40.698776,
+      "sampleRatesHz": [
+        44100
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        256
+      ],
+      "frameCount": 1558,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "c1e98903-e381-5e69-9f8c-ae01532e7015",
+      "contentId": "c1e98903-e381-5e69-9f8c-ae01532e7015",
+      "soundCode": "A12",
+      "variantId": "A12-03",
+      "name": "远雷 候选03",
+      "title": "远雷 候选03",
+      "kind": "audio",
+      "category": "远雷",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A12/A12-03_远雷_持续雷声_仅排除测试.mp3",
+      "resourceAddress": "assets/audio/A12/A12-03_远雷_持续雷声_仅排除测试.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A12 远雷/freesound_community-distant-continuous-thunder-25005.mp3",
+      "originalFilename": "freesound_community-distant-continuous-thunder-25005.mp3",
+      "sizeBytes": 22324767,
+      "sha256": "9795a017d3004393e3f3870ba60cad37f8d1f83fde816aebbf990674e7dbd462",
+      "tags": [
+        "thunder"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": false,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "仅用于不要打雷的排除验证",
+      "exclusionTestOnly": true,
+      "unavailableReason": "EXCLUSION_TEST_ONLY",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 1116.238367,
+      "sampleRatesHz": [
+        22050
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        160
+      ],
+      "frameCount": 42731,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    },
+    {
+      "assetId": "a6a3a150-e1e8-592c-8be1-55084dfcf733",
+      "contentId": "a6a3a150-e1e8-592c-8be1-55084dfcf733",
+      "soundCode": "A12",
+      "variantId": "A12-04",
+      "name": "远雷 候选04",
+      "title": "远雷 候选04",
+      "kind": "audio",
+      "category": "远雷",
+      "spaceType": "outdoor",
+      "resourceKey": "audio/A12/A12-04_远雷_仅排除测试.mp3",
+      "resourceAddress": "assets/audio/A12/A12-04_远雷_仅排除测试.mp3",
+      "sourceArchiveEntry": "sucai level1 成员1-自然声/A12 远雷/freesound_community-distant-thunder-19162.mp3",
+      "originalFilename": "freesound_community-distant-thunder-19162.mp3",
+      "sizeBytes": 8547840,
+      "sha256": "4288f469b2ac15a30743814205aa531df145ceda14e0babe5cda2f11de388e19",
+      "tags": [
+        "thunder"
+      ],
+      "classificationBasis": "source directory and original filename; not auditory verified",
+      "isDefault": false,
+      "isDefaultCandidate": false,
+      "allowRecommendation": false,
+      "recommendationCandidate": false,
+      "enabled": false,
+      "copyrightStatus": "pending_review",
+      "licenseEvidence": null,
+      "ageMode": "adult",
+      "ageReviewStatus": "pending",
+      "purpose": "仅用于不要打雷的排除验证",
+      "exclusionTestOnly": true,
+      "unavailableReason": "EXCLUSION_TEST_ONLY",
+      "format": "mp3",
+      "codec": "MPEG Layer III",
+      "durationSec": 427.392,
+      "sampleRatesHz": [
+        24000
+      ],
+      "channels": [
+        2
+      ],
+      "bitratesKbps": [
+        160
+      ],
+      "frameCount": 17808,
+      "validation": "all_mpeg_frames_parsed",
+      "durationMethod": "sum_of_mpeg_frame_samples; encoder delay/padding not removed"
+    }
+  ]
+}

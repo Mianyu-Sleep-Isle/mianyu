@@ -1,0 +1,22 @@
+{
+  "result": "PASS",
+  "checkedAt": "2026-09-28T13:20:16.269174+00:00",
+  "assetCount": 19,
+  "sourceZipCrc": "PASS",
+  "sourceVsDeliveryByteEquality": "19/19 PASS",
+  "mpegFrameStructure": "19/19 PASS",
+  "metadataAndMapping": "PASS",
+  "a12ExcludedFromDefaultAndRecommendation": "4/4 PASS",
+  "uuidUniqueness": "19/19 PASS",
+  "totalSizeBytes": 205739798,
+  "totalDurationSec": 7171.265142,
+  "notPerformed": [
+    "full audio decoding",
+    "human auditory review",
+    "license approval",
+    "live backend integration"
+  ],
+  "backendContractStatus": "Existing API documents checked; executable backend and DDL not supplied",
+  "filenameUpdateCheckedAt": "2026-09-30T11:17:12.958924+00:00",
+  "filenameAndReferenceCheck": "PASS"
+}
