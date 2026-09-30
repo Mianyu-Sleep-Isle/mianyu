@@ -11,6 +11,8 @@
 - `intent-parser.ts`
 - `rule-engine.ts`
 - `explanation.ts`
+- `frontend-compat.ts`（现有前端 Adapter 的兼容转换层）
+- `seed.ts`（仅供独立 Demo 使用的候选内容）
 - `planning.test.ts`
 
 正式实现以仓库根部的后端团队文档和 HTTP API v1 契约为准。

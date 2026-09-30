@@ -4,18 +4,7 @@ import express from 'express';
 import { createPlanningRouter } from './modules/planning/routes.ts';
 import { PlanningRepository } from './modules/planning/repository.ts';
 import { PlanningService, type ContentCatalogService, type PreferenceQueryService } from './modules/planning/service.ts';
-import type { ContentCandidate } from './modules/planning/types.ts';
-const demoCandidates: ContentCandidate[] = [
-  { contentId: 'A01', contentKind: 'audio', tags: ['rain'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'licensed', enabled: true },
-  { contentId: 'A03', contentKind: 'audio', tags: ['fire'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'A04', contentKind: 'audio', tags: ['page'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'A07', contentKind: 'audio', tags: ['room'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'A10', contentKind: 'audio', tags: ['keyboard'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'A12', contentKind: 'audio', tags: ['thunder'], ageMode: 'all', hasVoice: false, reviewStatus: 'approved', copyrightStatus: 'licensed', enabled: true },
-  { contentId: 'S01', contentKind: 'story', tags: ['gentle'], ageMode: 'adult', hasVoice: true, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'S02', contentKind: 'story', tags: ['gentle'], ageMode: 'child', hasVoice: true, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-  { contentId: 'B01', contentKind: 'breath', tags: ['calm'], ageMode: 'all', hasVoice: true, reviewStatus: 'approved', copyrightStatus: 'owned', enabled: true },
-];
+import { demoCandidates } from './modules/planning/seed.ts';
 export function createApp(options: { database?: DatabaseSync; catalog?: ContentCatalogService; preferences?: PreferenceQueryService } = {}) {
   const database = options.database ?? new DatabaseSync(':memory:'); database.exec(readFileSync(new URL('../migrations/200_module2.sql', import.meta.url), 'utf8'));
   const catalog = options.catalog ?? { async listCandidates() { return demoCandidates; } };

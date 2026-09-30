@@ -41,3 +41,11 @@ CREATE TABLE IF NOT EXISTS breath_config (
   duration_sec INTEGER NOT NULL CHECK (duration_sec=(inhale_sec+hold_sec+exhale_sec)*cycle_count),
   FOREIGN KEY(plan_id) REFERENCES sleep_plan(plan_id) ON DELETE CASCADE
 );
+
+-- Down / recovery instructions (execute only when reverting this migration):
+-- PRAGMA foreign_keys = OFF;
+-- DROP TABLE IF EXISTS breath_config;
+-- DROP TABLE IF EXISTS story_config;
+-- DROP TABLE IF EXISTS sleep_plan_track;
+-- DROP TABLE IF EXISTS sleep_plan;
+-- PRAGMA foreign_keys = ON;

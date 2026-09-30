@@ -47,12 +47,21 @@ test('短时间优先生成含呼吸的方案', () => {
   assert.ok(plan.tracks.some((track) => track.contentKind === 'breath')); assert.ok(plan.fadeOutSec <= plan.durationSec);
 });
 
-test('明确需要陪伴时优先于短时间建议', () => {
+test('正式规则中短时间优先于陪伴建议', () => {
   const intent = toStructuredIntent({ inputMode: 'choices', mood: 'calm', voicePreference: 'wanted', avoidTags: [], durationSec: 600, selectedContentIds: [] });
   const plan = composeRulePlan({ userId: 'u1', ageMode: 'adult', intent, candidates });
   assert.equal(plan.durationSec, 600);
-  assert.ok(plan.tracks.some((track) => track.contentKind === 'story'));
-  assert.ok(plan.tracks.every((track) => track.contentKind !== 'breath'));
+  assert.ok(plan.tracks.some((track) => track.contentKind === 'breath'));
+  assert.ok(plan.tracks.every((track) => track.contentKind !== 'story'));
+});
+
+test('禁忌、短时和陪伴冲突时保持正式优先级', () => {
+  const intent = toStructuredIntent({ inputMode: 'choices', mood: 'calm', voicePreference: 'wanted', avoidTags: ['thunder'], durationSec: 900, selectedContentIds: [] });
+  const plan = composeRulePlan({ userId: 'u1', ageMode: 'adult', intent, candidates });
+  assert.ok(plan.tracks.every((track) => track.contentId !== 'A12' && track.contentKind !== 'story'));
+  assert.ok(plan.tracks.some((track) => track.contentKind === 'breath'));
+  assert.match(plan.reason, /排除雷声/);
+  assert.match(plan.reason, /时间较短/);
 });
 
 test('儿童模式不会选择成人故事', () => {
@@ -105,6 +114,7 @@ test('迁移、Repository所有权和幂等确认', () => {
   assert.equal(started.status, 'started');
   assert.throws(() => repo.markStarted(plan.planId, 'session-2', '2026-09-28T00:04:00.000Z'), /其他睡眠会话/);
   assert.equal(repo.markCompleted(plan.planId, 'session-1', '2026-09-28T00:05:00.000Z').status, 'completed');
+  assert.throws(() => repo.confirm(plan.planId, 'u1', '2026-09-28T00:06:00.000Z'), /当前状态不能确认/);
   db.close();
 });
 
@@ -143,6 +153,12 @@ test('HTTP四接口、所有权和freeText不落库', async () => {
     assert.equal(created.data.durationSec, 1800);
     const get = await fetch(`${base}/plans/${created.data.planId}`, { headers }); assert.equal(get.status, 200);
     const forbidden = await fetch(`${base}/plans/${created.data.planId}`, { headers: { ...headers, 'X-Mianyu-User-Id': 'other-user' } }); assert.equal(forbidden.status, 403);
+    const forbiddenConfirm = await fetch(`${base}/plans/${created.data.planId}/confirm`, { method: 'POST', headers: { ...headers, 'X-Mianyu-User-Id': 'other-user' } }); assert.equal(forbiddenConfirm.status, 403);
+    const missingIdentity = await fetch(`${base}/plans/${created.data.planId}`); assert.equal(missingIdentity.status, 401);
+    const missingPlan = await fetch(`${base}/plans/00000000-0000-4000-8000-000000000000`, { headers }); assert.equal(missingPlan.status, 404);
+    const invalidCompose = await fetch(`${base}/plans/compose`, { method: 'POST', headers, body: JSON.stringify({
+      inputMode: 'choices', mood: 'unknown', voicePreference: 'either', avoidTags: [], durationSec: 1800, selectedContentIds: [],
+    }) }); assert.equal(invalidCompose.status, 400);
     const confirm = await fetch(`${base}/plans/${created.data.planId}/confirm`, { method: 'POST', headers }); assert.equal(confirm.status, 200);
     const retry = await fetch(`${base}/plans/${created.data.planId}/confirm`, { method: 'POST', headers }); assert.equal(retry.status, 200);
     const regenerationHeaders = { ...headers, 'Idempotency-Key': 'regen-http-1' };
@@ -194,11 +210,18 @@ test('现有前端 PlanningHttpAdapter 契约可直接接入', async () => {
     const next = await regenerated.json() as { data: { id: string; tracks: Array<{ contentKind: string }> } };
     assert.notEqual(next.data.id, created.data.id);
     assert.ok(next.data.tracks.some((track) => track.contentKind === 'story'));
+    const latest = await fetch(`${base}/plans/current`, { headers: { 'X-User-Id': 'frontend-user' } });
+    const latestPlan = await latest.json() as { data: { id: string } };
+    assert.equal(latestPlan.data.id, next.data.id);
 
     const preflight = await fetch(`${base}/plans`, {
       method: 'OPTIONS', headers: { Origin: 'https://liuzilin94.github.io', 'Access-Control-Request-Headers': 'x-user-id,content-type,idempotency-key' },
     });
     assert.equal(preflight.status, 204);
     assert.equal(preflight.headers.get('access-control-allow-origin'), 'https://liuzilin94.github.io');
+    const invalidLegacy = await fetch(`${base}/plans`, {
+      method: 'POST', headers, body: JSON.stringify({ ...frontendIntent, voice_preference: 'sometimes' }),
+    });
+    assert.equal(invalidLegacy.status, 400);
   } finally { await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve())); database.close(); }
 });

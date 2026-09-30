@@ -40,7 +40,7 @@ export class PlanningRepository {
       createdAt: String(row.created_at), confirmedAt: row.confirmed_at === null ? null : String(row.confirmed_at), startedSessionId: row.started_session_id === null ? null : String(row.started_session_id) };
   }
   getCurrent(userId: string): SleepPlan | null {
-    const row = this.db.prepare('SELECT plan_id FROM sleep_plan WHERE user_id=? ORDER BY created_at DESC LIMIT 1').get(userId) as Row | undefined;
+    const row = this.db.prepare('SELECT plan_id FROM sleep_plan WHERE user_id=? ORDER BY created_at DESC, rowid DESC LIMIT 1').get(userId) as Row | undefined;
     return row ? this.get(String(row.plan_id), userId) : null;
   }
   confirm(planId: string, userId: string, now: string): SleepPlan {
