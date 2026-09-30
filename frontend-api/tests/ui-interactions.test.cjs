@@ -43,3 +43,8 @@ test('儿童模式、PIN 与完成反馈具有稳定状态', () => {
   assert.ok(appPages.includes('本次反馈已经保存'));
   assert.ok(appPages.includes('每次播放会话只记录一份反馈'));
 });
+
+test('静态托管环境使用可演示的成长模块适配器', () => {
+  assert.ok(page.includes("const localGrowthTransport=/^(localhost|127\\.0\\.0\\.1)$/.test(location.hostname)?'http':'mock'"));
+  assert.ok(page.includes("growth:localGrowthTransport"));
+});

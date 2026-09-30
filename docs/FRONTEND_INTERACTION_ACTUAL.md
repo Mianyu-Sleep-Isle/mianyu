@@ -1,7 +1,7 @@
 # 眠屿前端实际交互说明
 
-版本：当前浏览器预览 `system_preview.html?v=59`  
-文档性质：以当前代码和可运行页面为准的交互记录，不是需求稿  
+版本：当前浏览器预览 `system_preview.html?v=59`
+文档性质：以当前代码和可运行页面为准的交互记录，不是需求稿
 对应实现：`system_preview.html`、`app_pages.js`、`app_pages.css`
 
 ## 1. 阅读范围

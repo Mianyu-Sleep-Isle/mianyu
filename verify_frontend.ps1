@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 
 $scriptPath = $MyInvocation.MyCommand.Path
 $projectRoot = if ([string]::IsNullOrWhiteSpace($scriptPath)) {
@@ -26,8 +26,8 @@ function Assert-Check {
 }
 
 $dartFiles = Get-ChildItem -Path $libRoot -Recurse -Filter '*.dart'
-$allSource = ($dartFiles | Get-Content -Raw) -join "`n"
-$contractSource = Get-Content -Raw (Join-Path $libRoot 'domain\contracts.dart')
+$allSource = ($dartFiles | Get-Content -Raw -Encoding UTF8) -join "`n"
+$contractSource = Get-Content -Raw -Encoding UTF8 (Join-Path $libRoot 'domain\contracts.dart')
 
 $screenNames = @(
     'OnboardingScreen', 'HomeScreen', 'ConversationScreen', 'ContentCenterScreen',
@@ -76,13 +76,13 @@ foreach ($copy in $requiredCopy) {
     Assert-Check ($allSource.Contains($copy)) "关键文案存在：$copy"
 }
 
-$pubspec = Get-Content -Raw (Join-Path $projectRoot 'pubspec.yaml')
+$pubspec = Get-Content -Raw -Encoding UTF8 (Join-Path $projectRoot 'pubspec.yaml')
 Assert-Check ($pubspec -match '(?ms)^dependencies:\r?\n  flutter:\r?\n    sdk: flutter\r?\n') '运行时只依赖 Flutter SDK'
 
-$previewSource = Get-Content -Raw (Join-Path $projectRoot 'system_preview.html')
-$appPagesSource = Get-Content -Raw (Join-Path $projectRoot 'app_pages.js')
-$appPagesStyles = Get-Content -Raw (Join-Path $projectRoot 'app_pages.css')
-$frontendApiSource = Get-Content -Raw (Join-Path $projectRoot 'frontend-api\mock-adapters.js')
+$previewSource = Get-Content -Raw -Encoding UTF8 (Join-Path $projectRoot 'system_preview.html')
+$appPagesSource = Get-Content -Raw -Encoding UTF8 (Join-Path $projectRoot 'app_pages.js')
+$appPagesStyles = Get-Content -Raw -Encoding UTF8 (Join-Path $projectRoot 'app_pages.css')
+$frontendApiSource = Get-Content -Raw -Encoding UTF8 (Join-Path $projectRoot 'frontend-api\mock-adapters.js')
 $completePreviewSource = $previewSource + "`n" + $appPagesSource + "`n" + $appPagesStyles + "`n" + $frontendApiSource
 Assert-Check (-not ($previewSource -match '>P(?:0|1|2|3|4|5|6|7|8|9|10|11)[^<]*<')) '用户预览不显示 P0–P11 开发编号'
 Assert-Check (-not $previewSource.Contains('系统预览')) '用户预览不显示“系统预览”开发字样'

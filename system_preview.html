@@ -119,7 +119,8 @@
   </main>
 
   <script>
-    window.__MIANYU_TRANSPORTS__=Object.assign({content:'mock',planning:'mock',scene:'mock',session:'mock',growth:'http',common:'mock'},window.__MIANYU_TRANSPORTS__||{});
+    const localGrowthTransport=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?'http':'mock';
+    window.__MIANYU_TRANSPORTS__=Object.assign({content:'mock',planning:'mock',scene:'mock',session:'mock',growth:localGrowthTransport,common:'mock'},window.__MIANYU_TRANSPORTS__||{});
     window.__MIANYU_API_BASE_URL__=window.__MIANYU_API_BASE_URL__||'http://127.0.0.1:8787/api/v1';
   </script>
   <script src="frontend-api/core.js?v=1"></script>
