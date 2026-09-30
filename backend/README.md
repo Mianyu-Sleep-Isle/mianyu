@@ -53,6 +53,7 @@ npm start       # http://127.0.0.1:8787/api/v1
 
 ## 已知限制
 
-- 模块1尚未交付，`src/modules/content/manifest.ts` 是与前端原型编号一致的占位清单，素材 UUID 固定不可复用。
+- 模块1尚未交付，`src/modules/content/manifest.ts` 是与前端原型编号一致的占位清单，素材 UUID 固定不可复用。成员1的自然声交付包（`docs/素材台账/成员1-自然声/`）使用按文件哈希生成的另一套 UUID，接入内容服务时需统一。
+- 自然声 A01、A02、A05、A06、A09 为 `pending_review`，不可播放、不进方案；A12 `exclusionTestOnly`，任何路径都不可选用或播放。详见 `assets/audio/README.md`。
 - 幂等缓存在进程内存中；多实例部署前需要换成持久化幂等表。
 - `PlanStarted` 在会话事务提交后同步发布，进程若在两者之间退出，积分可能漏记，需后续补发件箱。

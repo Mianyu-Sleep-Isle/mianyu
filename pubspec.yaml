@@ -22,3 +22,7 @@ flutter:
     - assets/images/scenes/
     - assets/images/sounds/
     - assets/images/icons/
+    - assets/images/content/
+    - assets/audio/indoor/
+    - assets/audio/stories/
+    - assets/audio/breath/

@@ -52,7 +52,7 @@ export class ContentCatalog {
   }
 
   isPlayable(entry: ContentEntry, ageMode?: AgeMode): boolean {
-    return entry.enabled && usableCopyright.has(entry.copyrightStatus)
+    return entry.enabled && !entry.exclusionTestOnly && usableCopyright.has(entry.copyrightStatus)
       && (ageMode === undefined || entry.ageMode === 'all' || entry.ageMode === ageMode);
   }
 
@@ -61,7 +61,7 @@ export class ContentCatalog {
       .filter((entry) => entry.ageMode === 'all' || entry.ageMode === ageMode)
       .map((entry) => ({
         contentId: entry.contentId, contentKind: entry.kind, tags: entry.tags, ageMode: entry.ageMode, hasVoice: entry.hasVoice,
-        reviewStatus: 'approved', copyrightStatus: entry.copyrightStatus, enabled: entry.enabled,
+        reviewStatus: 'approved', copyrightStatus: entry.copyrightStatus, enabled: entry.enabled && !entry.exclusionTestOnly,
       }));
   }
 
@@ -108,7 +108,8 @@ export class ContentCatalog {
     const entry = this.find(idOrAssetId);
     if (!entry) throw new ApiError('CONTENT_NOT_FOUND', '内容不存在', 404);
     if (entry.ageMode !== 'all' && entry.ageMode !== ageMode) throw new ApiError('CONTENT_AGE_RESTRICTED', '当前年龄模式不能播放该内容', 403);
-    return { asset_id: entry.assetId, content_id: entry.contentId, url: entry.audioPath ?? '', image: entry.imagePath, playable: this.isPlayable(entry, ageMode), expires_at: null };
+    const playable = this.isPlayable(entry, ageMode);
+    return { asset_id: entry.assetId, content_id: entry.contentId, url: playable ? entry.audioPath ?? '' : '', image: entry.imagePath, playable, expires_at: null };
   }
 
   setFavorite(userId: string, idOrAssetId: string, favorite: boolean): { asset_id: string; content_id: string; favorite: boolean } {

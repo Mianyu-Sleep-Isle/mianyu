@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterEach, beforeEach, test } from 'node:test';
 import { createApp } from '../app.ts';
+import { contentManifest } from '../modules/content/manifest.ts';
 
 type Json = Record<string, any>;
 let server: Server;
@@ -184,6 +185,28 @@ test('内容目录、收藏与年龄限制', async () => {
   const favorites = await call('GET', '/content?category=%E6%94%B6%E8%97%8F&age_mode=child', userId);
   assert.deepEqual(favorites.body.data.map((item: Json) => item.id), ['A01']);
   assert.equal((await call('GET', '/content?category=unknown&age_mode=adult', userId)).status, 400);
+});
+
+test('内容清单引用的音频文件都在仓库中', () => {
+  const missing = contentManifest.filter((entry) => entry.audioPath && !existsSync(new URL(`../../../${entry.audioPath}`, import.meta.url)));
+  assert.deepEqual(missing.map((entry) => entry.contentId), []);
+  assert.deepEqual(contentManifest.filter((entry) => !entry.audioPath).map((entry) => entry.contentId), ['A01', 'A02', 'A05', 'A06', 'A09', 'A12', 'ST06']);
+});
+
+test('待审核自然声不可播放，远雷仅用于排除测试', async () => {
+  const userId = String((await call('POST', '/users/anonymous', undefined, { age_mode: 'adult' })).body.data.user_id);
+  const rain = await call('GET', '/content/A01/playable', userId);
+  assert.equal(rain.body.data.playable, false);
+  assert.equal(rain.body.data.url, '');
+  const sounds = (await call('GET', '/content?category=%E5%A3%B0%E9%9F%B3&age_mode=adult', userId)).body.data as Json[];
+  assert.deepEqual(sounds.filter((item) => item.enabled).map((item) => item.id), ['A03', 'A04', 'A07', 'A08', 'A10', 'A11']);
+  const explicit = await call('POST', '/plans/compose', userId, {
+    inputMode: 'choices', mood: 'calm', voicePreference: 'either', avoidTags: [], durationSec: 1200, selectedContentIds: ['A12'],
+  });
+  assert.equal(explicit.status, 400);
+  assert.equal(explicit.body.error.code, 'NO_SAFE_CONTENT_MATCH');
+  const plan = await call('POST', '/plans', userId, { emotion: 'calm', voice_preference: 'avoid', available_minutes: 30, forbidden_tags: [] });
+  assert.ok((plan.body.data.tracks as Json[]).every((track) => !['A01', 'A02', 'A05', 'A06', 'A09', 'A12'].includes(String(track.content_id ?? track.id))));
 });
 
 test('公共身份、PIN 与统一错误包络', async () => {
