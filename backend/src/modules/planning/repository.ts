@@ -39,6 +39,10 @@ export class PlanningRepository {
       reason: String(row.reason), source: String(row.source) as SleepPlan['source'], sourceLabel: row.source === 'rule' ? '规则建议' : '模型建议', tracks,
       createdAt: String(row.created_at), confirmedAt: row.confirmed_at === null ? null : String(row.confirmed_at), startedSessionId: row.started_session_id === null ? null : String(row.started_session_id) };
   }
+  getCurrent(userId: string): SleepPlan | null {
+    const row = this.db.prepare('SELECT plan_id FROM sleep_plan WHERE user_id=? ORDER BY created_at DESC LIMIT 1').get(userId) as Row | undefined;
+    return row ? this.get(String(row.plan_id), userId) : null;
+  }
   confirm(planId: string, userId: string, now: string): SleepPlan {
     const current = this.get(planId, userId); if (current.status === 'confirmed') return current;
     if (current.status !== 'draft') throw new PlanningError('PLAN_STATUS_CONFLICT', '当前状态不能确认', 409);

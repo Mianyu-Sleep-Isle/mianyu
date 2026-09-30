@@ -27,6 +27,7 @@ export class PlanningService {
     return result;
   }
   getPlan(planId: string, userId: string): SleepPlan { return this.repository.get(planId, userId); }
+  getCurrentPlan(userId: string): SleepPlan | null { return this.repository.getCurrent(userId); }
   confirm(planId: string, userId: string): SleepPlan { return this.repository.confirm(planId, userId, new Date().toISOString()); }
   async regenerate(planId: string, userId: string, ageMode: AgeMode, idempotencyKey?: string): Promise<{ data: SleepPlan; meta?: PlanningMeta }> {
     const cacheKey = idempotencyKey ? `regenerate:${userId}:${planId}:${idempotencyKey}` : null;

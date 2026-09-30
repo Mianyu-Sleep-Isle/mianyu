@@ -154,3 +154,51 @@ test('HTTP四接口、所有权和freeText不落库', async () => {
     assert.equal(databaseText.includes('心情不好'), false);
   } finally { await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve())); database.close(); }
 });
+
+test('现有前端 PlanningHttpAdapter 契约可直接接入', async () => {
+  const database = new DatabaseSync(':memory:');
+  const { app } = createApp({ database });
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise<void>((resolve) => server.once('listening', resolve));
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const base = `http://127.0.0.1:${address.port}/api/v1`;
+  const headers = { 'Content-Type': 'application/json', 'X-User-Id': 'frontend-user', 'Idempotency-Key': 'frontend-compose-1' };
+  const frontendIntent = {
+    emotion: 'calm', voice_preference: 'avoid', available_minutes: 30,
+    forbidden_tags: ['水声'], preset_sentence: '今晚不要人声，也不想听水声。',
+  };
+  try {
+    const compose = await fetch(`${base}/plans`, { method: 'POST', headers, body: JSON.stringify(frontendIntent) });
+    assert.equal(compose.status, 201);
+    assert.equal(compose.headers.get('access-control-allow-origin'), null);
+    const created = await compose.json() as { data: { id: string; planId: string; type: string; duration_minutes: number; tracks: Array<{ asset_id: string }> } };
+    assert.equal(created.data.id, created.data.planId);
+    assert.equal(created.data.duration_minutes, 30);
+    assert.ok(created.data.tracks.every((track) => track.asset_id !== 'A01'));
+
+    const current = await fetch(`${base}/plans/current`, { headers: { 'X-User-Id': 'frontend-user' } });
+    const currentPlan = await current.json() as { data: { id: string } };
+    assert.equal(currentPlan.data.id, created.data.id);
+
+    const confirmed = await fetch(`${base}/plans/${created.data.id}/confirm`, { method: 'POST', headers: { 'X-User-Id': 'frontend-user' } });
+    const confirmedPlan = await confirmed.json() as { data: { id: string; status: string } };
+    assert.equal(confirmedPlan.data.id, created.data.id);
+    assert.equal(confirmedPlan.data.status, 'confirmed');
+
+    const regenerated = await fetch(`${base}/plans/regenerate`, {
+      method: 'POST', headers: { ...headers, 'Idempotency-Key': 'frontend-regenerate-1' },
+      body: JSON.stringify({ ...frontendIntent, voice_preference: 'want', forbidden_tags: [], preset_sentence: undefined }),
+    });
+    assert.equal(regenerated.status, 201);
+    const next = await regenerated.json() as { data: { id: string; tracks: Array<{ contentKind: string }> } };
+    assert.notEqual(next.data.id, created.data.id);
+    assert.ok(next.data.tracks.some((track) => track.contentKind === 'story'));
+
+    const preflight = await fetch(`${base}/plans`, {
+      method: 'OPTIONS', headers: { Origin: 'https://liuzilin94.github.io', 'Access-Control-Request-Headers': 'x-user-id,content-type,idempotency-key' },
+    });
+    assert.equal(preflight.status, 204);
+    assert.equal(preflight.headers.get('access-control-allow-origin'), 'https://liuzilin94.github.io');
+  } finally { await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve())); database.close(); }
+});
