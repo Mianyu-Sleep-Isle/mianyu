@@ -92,6 +92,15 @@ export class SceneService {
     return this.repository.getHandedOffSnapshot(sceneConfigId, userId);
   }
 
+  // In-process query for the session module, which checks ownership itself.
+  findSnapshot(sceneConfigId: string): SceneSnapshot | null {
+    return this.repository.findSnapshot(sceneConfigId);
+  }
+
+  current(userId: string): SceneSnapshot | null {
+    return this.repository.findLatestOwned(userId);
+  }
+
   async save(userId: string, sceneConfigId: string, unknownInput: unknown, idempotencyKey?: string): Promise<SceneSnapshot> {
     const key = this.cacheKey(userId, 'save', idempotencyKey, sceneConfigId);
     const cached = this.recall(key);

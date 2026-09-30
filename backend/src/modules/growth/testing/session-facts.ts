@@ -1,4 +1,4 @@
-import type { SessionFact, SessionFactsPort } from './contracts.js';
+import type { SessionFact, SessionFactsPort } from '../contracts.ts';
 
 export class DevelopmentSessionFactsAdapter implements SessionFactsPort {
   private readonly sessions = new Map<string, SessionFact>();

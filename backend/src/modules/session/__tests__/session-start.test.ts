@@ -10,10 +10,10 @@ test('audio started acknowledgement makes session running and publishes one stab
   const first=await h.service.start('user-1',prepared.session.sessionId);
   assert.equal(first.session.status,'running');
   assert.equal(first.session.startedAt,h.clock.now().toISOString());
-  assert.equal(first.stages[0].status,'running');
+  assert.equal(first.stages[0]?.status,'running');
   await h.service.start('user-1',prepared.session.sessionId);
   assert.equal(h.publisher.facts.size,1);
-  assert.equal([...h.publisher.facts.values()][0].eventId,prepared.session.sessionId);
+  assert.equal([...h.publisher.facts.values()][0]?.eventId,prepared.session.sessionId);
   assert.equal(h.repository.listEvents(prepared.session.sessionId).filter(e=>e.eventType==='session_started').length,1);
 });
 

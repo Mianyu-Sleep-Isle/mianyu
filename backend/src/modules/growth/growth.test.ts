@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { afterEach, beforeEach, test } from 'node:test';
 import type { AddressInfo } from 'node:net';
 import type { Server } from 'node:http';
-import { createApp } from '../src/app.js';
-import { DevelopmentSessionFactsAdapter } from '../src/session-facts.js';
-import type { GrowthService } from '../src/service.js';
+import { createApp } from '../../app.ts';
+import { DevelopmentSessionFactsAdapter } from './testing/session-facts.ts';
+import type { GrowthService } from './service.ts';
 
 let server: Server;
 let baseUrl: string;
@@ -13,8 +13,8 @@ let service: GrowthService;
 
 beforeEach(async () => {
   facts = new DevelopmentSessionFactsAdapter();
-  const built = createApp({ databasePath: ':memory:', sessionFacts: facts });
-  service = built.service;
+  const built = createApp({ sessionFacts: facts });
+  service = built.services.growth;
   server = built.app.listen(0, '127.0.0.1');
   await new Promise<void>((resolve) => server.once('listening', resolve));
   baseUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/v1`;

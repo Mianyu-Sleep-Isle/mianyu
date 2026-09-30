@@ -23,6 +23,6 @@ test('interrupting a paused session closes the current stage and counts pause ti
   assert.equal(facts.session.status,'failed');
   assert.equal(facts.session.activePlaybackSec,12);
   assert.equal(facts.session.pausedSec,8);
-  assert.equal(facts.stages[0].status,'failed');
-  assert.equal(facts.stages[0].actualDurationSec,12);
+  assert.equal(facts.stages[0]?.status,'failed');
+  assert.equal(facts.stages[0]?.actualDurationSec,12);
 });

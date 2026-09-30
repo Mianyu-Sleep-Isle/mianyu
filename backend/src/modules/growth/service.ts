@@ -1,22 +1,16 @@
 import { randomUUID } from 'node:crypto';
 import type { DatabaseSync } from 'node:sqlite';
-import type { FeedbackInput, SessionFactsPort } from './contracts.js';
+import type { FeedbackInput, SessionFactsPort } from './contracts.ts';
 
 type SqlRow = Record<string, unknown>;
+
+const userTables = ['preference_forbidden_sound_tag', 'preference_story_theme', 'preference_breath_template', 'preference_scene', 'points_ledger', 'preference_profile', 'morning_feedback'];
 
 export class GrowthService {
   constructor(private readonly db: DatabaseSync, private readonly sessionFacts: SessionFactsPort) {}
 
-  createAnonymous(ageMode: 'adult' | 'child') {
-    const userId = randomUUID();
-    const now = new Date().toISOString();
-    this.db.prepare('INSERT INTO user_profile(user_id, age_mode, created_at, updated_at) VALUES(?,?,?,?)').run(userId, ageMode, now, now);
-    this.db.prepare('INSERT INTO preference_profile(profile_id, user_id, voice_preference, updated_at) VALUES(?,?,?,?)').run(randomUUID(), userId, 'unspecified', now);
-    return { user_id: userId, age_mode: ageMode, pin_configured: false, created_at: now };
-  }
-
-  hasUser(userId: string): boolean {
-    return Boolean(this.db.prepare('SELECT 1 FROM user_profile WHERE user_id = ?').get(userId));
+  ensureProfile(userId: string): void {
+    this.db.prepare('INSERT OR IGNORE INTO preference_profile(profile_id, user_id, voice_preference, updated_at) VALUES(?,?,?,?)').run(randomUUID(), userId, 'unspecified', new Date().toISOString());
   }
 
   async pendingFeedback(userId: string) {
@@ -32,6 +26,7 @@ export class GrowthService {
     if (existing) throw new DomainError('FEEDBACK_ALREADY_EXISTS', '本次会话的反馈已经提交', 409);
     const feedbackId = randomUUID();
     const now = new Date().toISOString();
+    this.ensureProfile(userId);
     try {
       this.db.exec('BEGIN IMMEDIATE');
       this.db.prepare(`INSERT INTO morning_feedback(
@@ -55,6 +50,7 @@ export class GrowthService {
   }
 
   preferences(userId: string) {
+    this.ensureProfile(userId);
     const profile = this.db.prepare('SELECT voice_preference, preferred_voice_id, last_feedback_id, updated_at FROM preference_profile WHERE user_id = ?').get(userId) as SqlRow;
     return {
       ...profile,
@@ -93,6 +89,23 @@ export class GrowthService {
       if (!message.includes('UNIQUE constraint failed')) throw error;
     }
     return this.points(userId);
+  }
+
+  forbiddenSoundTags(userId: string): string[] {
+    return this.relationValues('preference_forbidden_sound_tag', 'tag', userId);
+  }
+
+  eraseUserData(userId: string): number {
+    let removed = 0;
+    this.db.exec('BEGIN IMMEDIATE');
+    try {
+      for (const table of userTables) removed += Number(this.db.prepare(`DELETE FROM ${table} WHERE user_id = ?`).run(userId).changes);
+      this.db.exec('COMMIT');
+    } catch (error) {
+      this.db.exec('ROLLBACK');
+      throw error;
+    }
+    return removed;
   }
 
   private feedbackById(feedbackId: string) { return this.db.prepare('SELECT * FROM morning_feedback WHERE feedback_id = ?').get(feedbackId); }

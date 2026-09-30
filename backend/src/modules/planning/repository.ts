@@ -39,6 +39,10 @@ export class PlanningRepository {
       reason: String(row.reason), source: String(row.source) as SleepPlan['source'], sourceLabel: row.source === 'rule' ? '规则建议' : '模型建议', tracks,
       createdAt: String(row.created_at), confirmedAt: row.confirmed_at === null ? null : String(row.confirmed_at), startedSessionId: row.started_session_id === null ? null : String(row.started_session_id) };
   }
+  findById(planId: string): SleepPlan | null {
+    const row = this.db.prepare('SELECT user_id FROM sleep_plan WHERE plan_id=?').get(planId) as Row | undefined;
+    return row ? this.get(planId, String(row.user_id)) : null;
+  }
   getCurrent(userId: string): SleepPlan | null {
     const row = this.db.prepare('SELECT plan_id FROM sleep_plan WHERE user_id=? ORDER BY created_at DESC, rowid DESC LIMIT 1').get(userId) as Row | undefined;
     return row ? this.get(String(row.plan_id), userId) : null;

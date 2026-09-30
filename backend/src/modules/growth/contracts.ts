@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-export const ageModeSchema = z.enum(['adult', 'child']);
 export const voicePreferenceSchema = z.enum(['want', 'avoid', 'unspecified']);
-export const anonymousUserSchema = z.object({ age_mode: ageModeSchema.default('adult') });
 export const feedbackSchema = z.object({
   session_id: z.string().min(1).max(100),
   fall_asleep_ease: z.enum(['easy', 'normal', 'difficult', 'unknown']),

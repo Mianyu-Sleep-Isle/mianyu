@@ -27,6 +27,8 @@ export class PlanningService {
     return result;
   }
   getPlan(planId: string, userId: string): SleepPlan { return this.repository.get(planId, userId); }
+  // In-process query for the session module, which checks ownership itself.
+  findPlan(planId: string): SleepPlan | null { return this.repository.findById(planId); }
   getCurrentPlan(userId: string): SleepPlan | null { return this.repository.getCurrent(userId); }
   confirm(planId: string, userId: string): SleepPlan { return this.repository.confirm(planId, userId, new Date().toISOString()); }
   async regenerate(planId: string, userId: string, ageMode: AgeMode, idempotencyKey?: string): Promise<{ data: SleepPlan; meta?: PlanningMeta }> {

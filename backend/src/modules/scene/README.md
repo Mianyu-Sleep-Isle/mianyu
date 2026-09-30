@@ -86,7 +86,7 @@ handed_off --copy--> 新的 draft
 
 ### 请求头
 
-`X-Mianyu-User-Id` 必填，表示本机匿名身份。缺失时返回 401 `IDENTITY_REQUIRED`。所有读写都按这个身份做所有权隔离：别人的场景返回 403 `SCENE_FORBIDDEN`，不存在返回 404 `SCENE_NOT_FOUND`。
+`X-User-Id` 必填（旧的 `X-Mianyu-User-Id` 仍被接受），表示本机匿名身份。缺失时返回 401 `IDENTITY_REQUIRED`。所有读写都按这个身份做所有权隔离：别人的场景返回 403 `SCENE_FORBIDDEN`，不存在返回 404 `SCENE_NOT_FOUND`。
 
 `Idempotency-Key` 可选。同一个用户、同一个操作、同一个目标、同一个键，在当前进程里再次调用会直接返回第一次成功的快照，不会再执行一次写入。创建、保存、交接、复制都看这个头。不传或只有空白时，每次都真实执行。这个缓存只在内存中，进程重启后消失。交接本身还有数据库级幂等：已经 `handed_off` 的版本再次交接，即使没有这个头，也返回第一次的 `handedOffAt`，并且不再访问素材目录。
 
@@ -203,25 +203,9 @@ X-Mianyu-User-Id: device-user-1
 
 读取后若页面仍用百分比，把 `positionX`、`positionY` 乘回 100。视觉宽高继续留在前端设计配置里。
 
-## 独立启动和测试
+## 启动和测试
 
-场景路由还没有挂进 `src/app.ts`。`npm start` 目前只提供方案接口。场景验收使用测试文件里的最小 Express 应用，监听本机随机端口，不改总应用。
-
-在 `backend` 目录执行：
-
-```text
-node --experimental-transform-types --test src/modules/scene/scene.test.ts
-npm run typecheck
-```
-
-仓库根目录也可以执行：
-
-```text
-node --experimental-transform-types --test backend/src/modules/scene/scene.test.ts
-npm --prefix backend run typecheck
-```
-
-当前 `npm test` 只运行 planning 测试。场景测试要单独用上面的命令，直到组长改测试脚本。
+场景路由已挂进统一后端 `src/app.ts`，`npm start` 即可访问。`scene.test.ts` 仍使用测试文件里的最小 Express 应用验收本模块；在 `backend` 目录执行 `npm run check` 会连同其他模块一起运行。
 
 ## Fake 假设
 
@@ -252,17 +236,17 @@ Fake 展示编号只用于测试，不能当作线上目录：
 | A03 | `10000000-0000-4000-8000-000000000003` |
 | A12 | `10000000-0000-4000-8000-000000000012` |
 
-## 需要组长完成的最小集成
+## 统一后端集成状态
 
-本分支不修改 `app.ts` 和 `package.json`。接入时：
+已完成：
 
-1. 在 `200_module2.sql` 之后执行 `migrations/300_module3.sql`。
-2. 用真实 `PlanQueryService`、`ContentCatalogService` 构造 `SceneRepository` 和 `SceneService`，再执行 `app.use('/api/v1', createSceneRouter(sceneService))`。
-3. `Access-Control-Allow-Methods` 在现有 `GET,POST,OPTIONS` 上增加 `PUT`。`Idempotency-Key` 已经在允许的请求头里。
-4. 把 test 脚本改成同时运行 planning 和 scene：
+1. 迁移执行器按号段在 `200_module2.sql` 之后执行 `300_module3.sql`。
+2. `PlanQueryService` 由 `src/integration/adapters.ts` 的 `confirmedPlansForScene` 接方案模块；`ContentCatalogService` 由内容目录 `ContentCatalog` 实现。
+3. CORS 已允许 `PUT`。
+4. `npm test` 运行全部模块测试。
+5. 为兼容 `frontend-api`，装配时传入 `SceneAssetDirectory`，额外提供：
+   - `GET/PUT /scenes/current`：读取或保存当前草稿。页面的 `{ id, track.asset_id, x, y, volume }` 在后端换成素材 UUID 和 0～1 坐标；当前场景已交接时先 copy 出新草稿再保存。
+   - `POST /scenes/:id/handoff`：`hand-off` 的契约别名，请求体带 `sources` 时先保存再交接。
+   - 所有场景响应附带 `id`、`name`、`version` 和 `sources[].track/space/x/y` 别名，规范字段保持不变。
 
-```json
-"test": "node --experimental-transform-types --test src/modules/planning/planning.test.ts src/modules/scene/scene.test.ts"
-```
-
-5. 前端负责人把 `placed` 保存接到 PUT，把“开始睡眠”接到 hand-off；继续编辑已交接场景时先 copy。
+待前端负责人处理：页面“开始睡眠”目前直接调用会话开始，统一后端会在 `POST /sessions` 时自动交接当前草稿；继续编辑已交接场景时仍应先 copy。

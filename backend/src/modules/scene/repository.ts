@@ -33,6 +33,18 @@ export class SceneRepository {
     return this.loadSnapshot(this.requireConfig(sceneConfigId, userId, 'read'));
   }
 
+  findSnapshot(sceneConfigId: string): SceneSnapshot | null {
+    const row = this.db.prepare('SELECT * FROM scene_config WHERE scene_config_id=?').get(sceneConfigId) as SqlRow | undefined;
+    return row ? this.loadSnapshot(mapSceneConfig(row)) : null;
+  }
+
+  findLatestOwned(userId: string): SceneSnapshot | null {
+    const row = this.db.prepare(
+      'SELECT * FROM scene_config WHERE user_id=? ORDER BY updated_at DESC, rowid DESC LIMIT 1',
+    ).get(userId) as SqlRow | undefined;
+    return row ? this.loadSnapshot(mapSceneConfig(row)) : null;
+  }
+
   getHandedOffSnapshot(sceneConfigId: string, userId: string): SceneSnapshot {
     const config = this.requireConfig(sceneConfigId, userId, 'read');
     if (config.status !== 'handed_off') {

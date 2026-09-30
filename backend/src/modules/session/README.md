@@ -8,14 +8,7 @@
 
 ## 本地运行
 
-需要 Node.js 24（使用内置 `node:sqlite`）。在仓库根目录的 PowerShell 中运行：
-
-```powershell
-$tests=Get-ChildItem 'backend/src/modules/session/__tests__/*.test.ts' | ForEach-Object FullName
-node --test $tests
-```
-
-测试直接运行 TypeScript 文件；`node:sqlite` 当前会提示实验性警告。无需安装依赖。
+需要 Node.js 24（使用内置 `node:sqlite`）。在 `backend` 目录运行 `npm test`，会连同其他模块一起执行本模块测试；`node:sqlite` 当前会提示实验性警告。
 
 ## 功能和测试文件
 
@@ -33,8 +26,17 @@ node --test $tests
 
 ## 联调交接
 
-组长需提供可访问的应用代码基线、共享 Fixture 和测试命令，并核定网页 HTTP 接口如何表达 `preparing → running`。HTTP 草案未经核定，本模块只暴露服务类，不自行修改公共契约。真正音频播放的回调才调用 `SleepSessionService.start`，不能在用户点击按钮时调用。
+统一后端已装配本模块，`routes.ts` 按 `contracts/openapi.yaml` 暴露 HTTP 接口：
 
-联调时把 `PlanQueryPort` 接成员二的已确认方案查询、`SceneConfigQueryPort` 接成员三的已交接场景查询、`PlayableResourceResolverPort` 接成员一的资源解析。当前 `testing/fakes.ts` 和 `testing/harness.ts` 用固定本地样例支撑独立测试，组长的共享 Fixture 到位后需替换样例并重跑测试。
+| 接口 | 服务方法 |
+| --- | --- |
+| `POST /sessions` | 由组合根解析方案与场景（草稿会先交接冻结），再 `prepare`，返回 `preparing` |
+| `POST /sessions/:id/start` | 音频确实开始后调用 `start`，进入 `running` 并发布开始事实 |
+| `POST /sessions/:id/pause`、`/resume` | `pause`、`resume` |
+| `POST /sessions/:id/stop` | 准备阶段 `user_cancelled_before_start`，播放后 `user_ended` |
+| `POST /sessions/:id/events` | `track_*`、`resource_missing`、`playback_error` 追加观测；`stage_completed`、`stage_skipped`、`volume_changed` 驱动阶段与音量 |
+| `GET /sessions/history`、`GET /sessions/:id` | `listHistory`、`getSessionFacts` |
 
-向成员五提供 `PlanStartedFact`：以 `sessionId` 作为稳定 `eventId`，在进入 `running` 后发布。发布接口可能被重试；成员五应按 `eventId` 幂等处理，才能保持一次计分。组长的进程内事件总线接入后应验证这条链路。若进程在会话事务提交后、事件发布前退出，需要组长在公共事件总线方案中补交付恢复机制。
+端口实现见 `src/integration/adapters.ts`：`PlanQueryPort` 接方案模块（已开始或已完成的方案不能再开新会话），`SceneConfigQueryPort` 接场景模块（声源 `trackId` 即素材 UUID），`PlayableResourceResolverPort` 接内容目录。`testing/fakes.ts` 和 `testing/harness.ts` 仍只服务于本模块的单元测试。
+
+`PlanStartedFact` 以 `sessionId` 作为稳定 `eventId`，进入 `running` 后发布给方案模块（标记 `started`）和成长模块（`plan_started +10`，按来源幂等）。若进程在会话事务提交后、事件发布前退出，积分可能漏记，后续需要发件箱补发机制。
