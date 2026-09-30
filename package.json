@@ -1,0 +1,12 @@
+{
+  "name": "mianyu-member4",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "typescript": "^5.9.3"
+  }
+}
