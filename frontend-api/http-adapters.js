@@ -28,7 +28,9 @@
 
   class SessionHttpAdapter {
     constructor(client) { this.client = client; this.currentSessionId = null; }
-    async start(input) { const value = await this.client.request('/sessions', { method: 'POST', body: input, idempotencyKey: api.utils.uuid() }); this.currentSessionId = value.id; return value; }
+    // The browser audio engine begins playback in the same user gesture, so the
+    // prepared session is acknowledged as started right away.
+    async start(input) { const prepared = await this.client.request('/sessions', { method: 'POST', body: input, idempotencyKey: api.utils.uuid() }); this.currentSessionId = prepared.id; return this.client.request('/sessions/' + encodeURIComponent(prepared.id) + '/start', { method: 'POST', idempotencyKey: api.utils.uuid() }); }
     pause() { return this._command('pause'); }
     resume() { return this._command('resume'); }
     appendEvent(type, payload) { return this.client.request('/sessions/' + encodeURIComponent(this.currentSessionId) + '/events', { method: 'POST', body: { type: type, payload: payload || {} }, idempotencyKey: api.utils.uuid() }); }

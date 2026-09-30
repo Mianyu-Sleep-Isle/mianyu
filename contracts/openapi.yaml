@@ -1,8 +1,11 @@
 openapi: 3.1.0
 info:
   title: Mianyu MVP HTTP API
-  version: 1.0.0
-  description: 五模块唯一 HTTP 契约。除匿名注册和健康检查外，请求均携带 X-User-Id；写请求携带 Idempotency-Key。
+  version: 1.1.0
+  description: >-
+    五模块唯一 HTTP 契约，由 backend/ 统一后端实现。除匿名注册和健康检查外，请求均携带 X-User-Id
+    （兼容旧的 X-Mianyu-User-Id）；写请求携带 Idempotency-Key。成功响应为 { data }，失败响应为
+    { error: { code, message, requestId, details } }。响应同时保留 camelCase 规范字段与 snake_case 前端别名。
 servers:
   - url: http://127.0.0.1:8787/api/v1
 tags:
@@ -15,7 +18,7 @@ tags:
 paths:
   /health:
     get:
-      tags: [Module5-Growth]
+      tags: [Common]
       operationId: health
       responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } } }
   /users/anonymous:
@@ -25,73 +28,123 @@ paths:
       requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { age_mode: { $ref: '#/components/schemas/AgeMode' } } } } } }
       responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } } }
   /users/me:
-    get: { tags: [Common], operationId: currentUser, responses: { '200': { $ref: '#/components/responses/Success' } } }
-    patch: { tags: [Common], operationId: updateUser, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Common], operationId: currentUser, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' }, '401': { $ref: '#/components/responses/Error' } } }
+    patch:
+      tags: [Common]
+      operationId: updateUser
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/UserUpdate' } } } }
+      responses: { '200': { $ref: '#/components/responses/Success' } }
   /users/me/data:
-    delete: { tags: [Common], operationId: eraseUserData, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    delete: { tags: [Common], operationId: eraseUserData, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /auth/pin/verify:
-    post: { tags: [Common], operationId: verifyPin, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post:
+      tags: [Common]
+      operationId: verifyPin
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [pin], properties: { pin: { type: string, pattern: '^\d{4}$' } } } } } }
+      responses: { '200': { description: data 为 true 或 false, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } } }
   /content:
     get:
       tags: [Module1-Content]
       operationId: listContent
       parameters:
-        - { name: category, in: query, required: true, schema: { type: string } }
+        - { name: category, in: query, required: true, schema: { type: string, enum: [声音, 故事, 呼吸, 预设, 收藏] } }
         - { name: age_mode, in: query, required: true, schema: { $ref: '#/components/schemas/AgeMode' } }
       responses: { '200': { $ref: '#/components/responses/Success' } }
   /content/{assetId}/playable:
-    get: { tags: [Module1-Content], operationId: resolvePlayable, parameters: [{ $ref: '#/components/parameters/AssetId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module1-Content], operationId: resolvePlayable, parameters: [{ $ref: '#/components/parameters/AssetId' }], responses: { '200': { $ref: '#/components/responses/Success' }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' } } }
   /content/{assetId}/favorite:
-    put: { tags: [Module1-Content], operationId: setFavorite, parameters: [{ $ref: '#/components/parameters/AssetId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    put:
+      tags: [Module1-Content]
+      operationId: setFavorite
+      parameters: [{ $ref: '#/components/parameters/AssetId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [favorite], properties: { favorite: { type: boolean } } } } } }
+      responses: { '200': { $ref: '#/components/responses/Success' } }
   /plans:
-    post: { tags: [Module2-Planning], operationId: composePlan, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SleepIntent' } } } }, responses: { '201': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module2-Planning], operationId: composePlan, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SleepIntent' } } } }, responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /plans/compose:
+    post: { tags: [Module2-Planning], operationId: composePlanCanonical, description: 模块2规范入口，请求体为 camelCase ComposePlanRequest。, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
   /plans/current:
-    get: { tags: [Module2-Planning], operationId: currentPlan, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module2-Planning], operationId: currentPlan, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /plans/regenerate:
-    post: { tags: [Module2-Planning], operationId: regeneratePlan, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module2-Planning], operationId: regeneratePlan, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SleepIntent' } } } }, responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /plans/{planId}:
+    get: { tags: [Module2-Planning], operationId: getPlan, parameters: [{ $ref: '#/components/parameters/PlanId' }, { $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' }, '403': { $ref: '#/components/responses/Error' }, '404': { $ref: '#/components/responses/Error' } } }
   /plans/{planId}/confirm:
-    post: { tags: [Module2-Planning], operationId: confirmPlan, parameters: [{ name: planId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module2-Planning], operationId: confirmPlan, parameters: [{ $ref: '#/components/parameters/PlanId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /plans/{planId}/regenerate:
+    post: { tags: [Module2-Planning], operationId: regeneratePlanById, parameters: [{ $ref: '#/components/parameters/PlanId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+  /scenes:
+    post: { tags: [Module3-Scene], operationId: createScene, description: 模块3规范入口，可携带 sourcePlanId 从已确认方案生成草稿。, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
   /scenes/current:
-    get: { tags: [Module3-Scene], operationId: currentScene, responses: { '200': { $ref: '#/components/responses/Success' } } }
-    put: { tags: [Module3-Scene], operationId: saveSceneDraft, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SceneConfig' } } } }, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module3-Scene], operationId: currentScene, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    put: { tags: [Module3-Scene], operationId: saveSceneDraft, description: 保存当前草稿；当前场景已交接时先复制出新草稿。, parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SceneConfig' } } } }, responses: { '200': { $ref: '#/components/responses/Success' }, '409': { $ref: '#/components/responses/Error' } } }
+  /scenes/{sceneId}:
+    get: { tags: [Module3-Scene], operationId: getScene, parameters: [{ $ref: '#/components/parameters/SceneId' }, { $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    put: { tags: [Module3-Scene], operationId: saveSceneSnapshot, description: 模块3规范入口，请求体为 camelCase 完整快照。, parameters: [{ $ref: '#/components/parameters/SceneId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /scenes/{sceneId}/handoff:
-    post: { tags: [Module3-Scene], operationId: handoffScene, parameters: [{ name: sceneId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module3-Scene], operationId: handoffScene, description: 冻结草稿；请求体可带 SceneConfig，先保存再交接。, parameters: [{ $ref: '#/components/parameters/SceneId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /scenes/{sceneId}/hand-off:
+    post: { tags: [Module3-Scene], operationId: handoffSceneCanonical, description: '/scenes/{sceneId}/handoff 的模块3原始路径。', parameters: [{ $ref: '#/components/parameters/SceneId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /scenes/{sceneId}/copy:
-    post: { tags: [Module3-Scene], operationId: copyScene, parameters: [{ name: sceneId, in: path, required: true, schema: { type: string } }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module3-Scene], operationId: copyScene, parameters: [{ $ref: '#/components/parameters/SceneId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
   /sessions:
-    post: { tags: [Module4-Session], operationId: startSession, parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+    post:
+      tags: [Module4-Session]
+      operationId: prepareSession
+      description: 冻结场景并准备会话，返回 preparing。plan_id/scene_id 缺省或不是 UUID 时使用当前方案与当前场景。
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SessionStart' } } } }
+      responses: { '201': { $ref: '#/components/responses/Success' }, '404': { $ref: '#/components/responses/Error' }, '409': { $ref: '#/components/responses/Error' } }
   /sessions/history:
-    get: { tags: [Module4-Session], operationId: sessionHistory, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get:
+      tags: [Module4-Session]
+      operationId: sessionHistory
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { name: period, in: query, required: false, schema: { type: string, enum: [7d, 30d], default: 7d } }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /sessions/{sessionId}:
+    get: { tags: [Module4-Session], operationId: getSessionFacts, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+  /sessions/{sessionId}/start:
+    post: { tags: [Module4-Session], operationId: acknowledgeSessionStart, description: 音频确实开始播放后调用，进入 running 并发布开始事实；重复调用幂等。, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /sessions/{sessionId}/pause:
-    post: { tags: [Module4-Session], operationId: pauseSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module4-Session], operationId: pauseSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /sessions/{sessionId}/resume:
-    post: { tags: [Module4-Session], operationId: resumeSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module4-Session], operationId: resumeSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /sessions/{sessionId}/events:
-    post: { tags: [Module4-Session], operationId: appendSessionEvent, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '201': { $ref: '#/components/responses/Success' } } }
+    post:
+      tags: [Module4-Session]
+      operationId: appendSessionEvent
+      parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/SessionEvent' } } } }
+      responses: { '201': { $ref: '#/components/responses/Success' } }
   /sessions/{sessionId}/stop:
-    post: { tags: [Module4-Session], operationId: stopSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
+    post: { tags: [Module4-Session], operationId: stopSession, parameters: [{ $ref: '#/components/parameters/SessionId' }, { $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /feedback/pending:
-    get: { tags: [Module5-Growth], operationId: pendingFeedback, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module5-Growth], operationId: pendingFeedback, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /feedback:
     post:
       tags: [Module5-Growth]
       operationId: submitFeedback
-      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
       requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/MorningFeedback' } } } }
       responses: { '201': { $ref: '#/components/responses/Success' }, '409': { $ref: '#/components/responses/Error' } }
   /preferences:
-    get: { tags: [Module5-Growth], operationId: currentPreferences, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module5-Growth], operationId: currentPreferences, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /points:
-    get: { tags: [Module5-Growth], operationId: pointLedger, responses: { '200': { $ref: '#/components/responses/Success' } } }
+    get: { tags: [Module5-Growth], operationId: pointLedger, parameters: [{ $ref: '#/components/parameters/UserId' }], responses: { '200': { $ref: '#/components/responses/Success' } } }
   /archive:
     get:
       tags: [Module5-Growth]
       operationId: archive
-      parameters: [{ name: period, in: query, required: true, schema: { type: string, enum: [7d, 30d] } }]
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { name: period, in: query, required: true, schema: { type: string, enum: [7d, 30d] } }]
       responses: { '200': { $ref: '#/components/responses/Success' } }
 components:
   parameters:
-    AssetId: { name: assetId, in: path, required: true, schema: { type: string } }
+    UserId: { name: X-User-Id, in: header, required: true, schema: { type: string, minLength: 1, maxLength: 100 } }
+    AssetId: { name: assetId, in: path, required: true, description: 展示编号（如 A03）或素材 UUID, schema: { type: string } }
+    PlanId: { name: planId, in: path, required: true, schema: { type: string, format: uuid } }
+    SceneId: { name: sceneId, in: path, required: true, schema: { type: string, format: uuid } }
     SessionId: { name: sessionId, in: path, required: true, schema: { type: string } }
     IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 100 } }
   responses:
@@ -99,27 +152,66 @@ components:
     Error: { description: Error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
   schemas:
     Envelope: { type: object, required: [data], properties: { data: {} } }
-    ErrorEnvelope: { type: object, required: [error], properties: { error: { type: object, required: [code, message], properties: { code: { type: string }, message: { type: string }, details: {} } } } }
+    ErrorEnvelope: { type: object, required: [error], properties: { error: { type: object, required: [code, message, requestId], properties: { code: { type: string }, message: { type: string }, requestId: { type: string, format: uuid }, details: { type: array } } } } }
     AgeMode: { type: string, enum: [adult, child] }
     VoicePreference: { type: string, enum: [want, avoid, unspecified] }
+    UserUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        age_mode: { $ref: '#/components/schemas/AgeMode' }
+        pin: { type: string, pattern: '^\d{4}$' }
+        non_medical_accepted: { type: boolean }
     SleepIntent:
       type: object
       required: [emotion, voice_preference, available_minutes, forbidden_tags]
       properties:
-        emotion: { type: string, enum: [excited, anxious, wants_company, calm, unspecified] }
+        emotion: { type: string, enum: [excited, anxious, wants_company, calm, unspecified], description: 后端兼容接受旧值 annoyed、tired }
         voice_preference: { $ref: '#/components/schemas/VoicePreference' }
-        available_minutes: { type: integer, minimum: 1, maximum: 180 }
+        available_minutes: { type: integer, minimum: 1, maximum: 180, description: 就近取整到 10/15/20/30/45/60 }
         forbidden_tags: { type: array, items: { type: string } }
         preset_sentence: { type: string, maxLength: 500 }
     SceneConfig:
       type: object
       required: [id, name, status, sources, version]
       properties:
-        id: { type: string }
+        id: { type: string, description: 已保存场景的 UUID；页面占位值会被忽略 }
         name: { type: string }
         status: { type: string, enum: [draft, handed_off, retired] }
-        sources: { type: array, items: { type: object } }
+        sources:
+          type: array
+          maxItems: 32
+          items:
+            type: object
+            required: [track]
+            properties:
+              id: { type: string, maxLength: 64 }
+              track: { type: object, required: [asset_id], properties: { asset_id: { type: string } } }
+              space: { type: string, enum: [indoor, outdoor] }
+              x: { type: number, description: 页面百分比坐标 }
+              y: { type: number }
+              volume: { type: number, minimum: 0, maximum: 1 }
+              enabled: { type: boolean }
         version: { type: integer, minimum: 1 }
+    SessionStart:
+      type: object
+      properties:
+        plan_id: { type: string }
+        scene_id: { type: string }
+    SessionEvent:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [track_started, track_stopped, resource_missing, playback_error, stage_completed, stage_skipped, volume_changed] }
+        payload:
+          type: object
+          properties:
+            event_id: { type: string }
+            occurred_at: { type: string, format: date-time }
+            scene_audio_source_id: { type: string }
+            error_code: { type: string }
+            reason: { type: string, maxLength: 100 }
+            volume: { type: number, minimum: 0, maximum: 1 }
     MorningFeedback:
       type: object
       additionalProperties: false

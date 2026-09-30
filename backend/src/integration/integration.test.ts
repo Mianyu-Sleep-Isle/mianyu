@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterEach, beforeEach, test } from 'node:test';
@@ -33,6 +34,30 @@ async function call(method: string, path: string, userId?: string, body?: unknow
 const sceneDto = (sources: string[]) => ({
   id: 'scene-demo', name: '我的睡前小屋', status: 'draft', version: 1,
   sources: sources.map((assetId, index) => ({ id: `source-${assetId}`, track: { asset_id: assetId, name: assetId }, space: 'indoor', x: 22 + index * 26, y: 35, volume: 0.5, enabled: true })),
+});
+
+test('OpenAPI 中的每条路径和方法都已由统一后端实现', async () => {
+  const openapi = readFileSync(new URL('../../../contracts/openapi.yaml', import.meta.url), 'utf8');
+  const operations: Array<{ method: string; path: string }> = [];
+  let currentPath = '';
+  for (const line of openapi.split(/\r?\n/)) {
+    const pathMatch = /^ {2}(\/[^:]*):\s*$/.exec(line);
+    if (pathMatch?.[1]) currentPath = pathMatch[1];
+    const methodMatch = /^ {4}(get|post|put|patch|delete):/.exec(line);
+    if (methodMatch?.[1] && currentPath) operations.push({ method: methodMatch[1].toUpperCase(), path: currentPath });
+    if (/^components:/.test(line)) break;
+  }
+  assert.ok(operations.length >= 35, `只解析到 ${operations.length} 个操作`);
+  const userId = String((await call('POST', '/users/anonymous', undefined, {})).body.data.user_id);
+  const sample: Record<string, string> = { assetId: 'A03', planId: '00000000-0000-4000-8000-000000000000', sceneId: '00000000-0000-4000-8000-000000000000', sessionId: '00000000-0000-4000-8000-000000000000' };
+  for (const operation of operations) {
+    const path = operation.path.replace(/\{(\w+)\}/g, (_match, name: string) => sample[name] ?? name)
+      + (operation.path === '/content' ? '?category=%E5%A3%B0%E9%9F%B3&age_mode=adult' : operation.path === '/archive' ? '?period=7d' : '');
+    if (operation.method === 'DELETE') continue;
+    const result = await call(operation.method, path, userId, ['POST', 'PUT', 'PATCH'].includes(operation.method) ? {} : undefined);
+    assert.notEqual(result.body.error?.message, '接口不存在', `${operation.method} ${operation.path}`);
+    if (result.body.error) assert.ok(result.body.error.requestId, `${operation.method} ${operation.path} 缺少 requestId`);
+  }
 });
 
 test('迁移按模块号顺序执行且可重复运行', () => {

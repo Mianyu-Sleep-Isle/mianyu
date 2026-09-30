@@ -35,7 +35,18 @@ test('公共枚举只使用冻结值', async () => {
 
 test('OpenAPI 覆盖全部 HTTP Client 路径', () => {
   const openapi = readFileSync(join(root, 'contracts', 'openapi.yaml'), 'utf8');
-  for (const path of ['/content:', '/plans:', '/scenes/current:', '/sessions:', '/feedback/pending:', '/feedback:', '/preferences:', '/points:', '/archive:', '/users/anonymous:']) assert.ok(openapi.includes(path), `Missing ${path}`);
+  for (const path of ['/content:', '/plans:', '/scenes/current:', '/scenes/{sceneId}/handoff:', '/scenes/{sceneId}/copy:', '/sessions:', '/sessions/{sessionId}/start:', '/sessions/{sessionId}/stop:', '/sessions/history:', '/feedback/pending:', '/feedback:', '/preferences:', '/points:', '/archive:', '/users/anonymous:', '/users/me:', '/users/me/data:', '/auth/pin/verify:']) assert.ok(openapi.includes(path), `Missing ${path}`);
+  assert.ok(openapi.includes('url: http://127.0.0.1:8787/api/v1'), 'API base URL must match frontend default');
+});
+
+test('会话 HTTP Adapter 先准备会话，再确认音频开始', async () => {
+  const calls = [];
+  const client = { async request(path, options) { calls.push([options && options.method || 'GET', path]); return path === '/sessions' ? { id: 'session-1', status: 'preparing' } : { id: 'session-1', status: 'running' }; } };
+  const adapter = new api.http.SessionHttpAdapter(client);
+  const session = await adapter.start({ plan_id: 'plan-1', scene_id: 'scene-1' });
+  assert.equal(session.status, 'running');
+  await adapter.pause();
+  assert.deepEqual(calls, [['POST', '/sessions'], ['POST', '/sessions/session-1/start'], ['POST', '/sessions/session-1/pause']]);
 });
 
 test('页面只通过 Port 执行业务接口', () => {
