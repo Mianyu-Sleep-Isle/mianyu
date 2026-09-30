@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0.0",
+  "byContentId": {
+    "e2e2bddf-8c80-59c1-bf81-43a542ee2a54": {
+      "resourceKey": "audio/A01/A01-01_小雨.mp3",
+      "relativePath": "assets/audio/A01/A01-01_小雨.mp3",
+      "sha256": "4bbeffc74f48dc64312937451b04081b693602ba5fa53d5607eb986b282ee33f"
+    },
+    "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3": {
+      "resourceKey": "audio/A01/A01-02_小雨.mp3",
+      "relativePath": "assets/audio/A01/A01-02_小雨.mp3",
+      "sha256": "3f96de2d322f7d3d5fa4a28ef2b193e2ccb1f8319d2358e669d9f3f38b74ab88"
+    },
+    "29374e78-ef05-5b96-9076-37b377ba8d1d": {
+      "resourceKey": "audio/A01/A01-03_小雨.mp3",
+      "relativePath": "assets/audio/A01/A01-03_小雨.mp3",
+      "sha256": "1444dc67b3c269444f5d8ce239ff6b544f9a9065c49ed2222f1ec8502c4bc321"
+    },
+    "8f7f5ee7-ac98-5cda-be07-702039bd0b89": {
+      "resourceKey": "audio/A02/A02-01_雨打窗户.mp3",
+      "relativePath": "assets/audio/A02/A02-01_雨打窗户.mp3",
+      "sha256": "21c9fc2abccf585dfbc57cdee963b3fc25338bfd43e68dc96a10c6a8672755db"
+    },
+    "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60": {
+      "resourceKey": "audio/A02/A02-02_雨打窗户.mp3",
+      "relativePath": "assets/audio/A02/A02-02_雨打窗户.mp3",
+      "sha256": "e038d6cb1237cbe6c9e12bbe6449ba1586da3954b90bc6bd71b15759cb2bd0c0"
+    },
+    "251f9f6c-1d3b-5449-8077-1268b1d59740": {
+      "resourceKey": "audio/A02/A02-03_雨打窗户.mp3",
+      "relativePath": "assets/audio/A02/A02-03_雨打窗户.mp3",
+      "sha256": "dcd8aef3fc03362f7233697513c96ba59333b5f1770fe100915c2daf7ba7c8f4"
+    },
+    "42c9fd86-88e6-5e0f-a807-916067649415": {
+      "resourceKey": "audio/A05/A05-01_微风.mp3",
+      "relativePath": "assets/audio/A05/A05-01_微风.mp3",
+      "sha256": "fefde06dc16d6b28f249240d40e611081a5ac4b64a548b1b244315053b52cdb3"
+    },
+    "6560943e-c02a-5bd1-979f-0da9611381de": {
+      "resourceKey": "audio/A05/A05-02_微风.mp3",
+      "relativePath": "assets/audio/A05/A05-02_微风.mp3",
+      "sha256": "2351722d774c15b9e732befdea533dd02d4a1d10bf3987547d4bbc5d84c489f7"
+    },
+    "570439f5-283b-5cee-a431-8ed37501071f": {
+      "resourceKey": "audio/A05/A05-03_微风.mp3",
+      "relativePath": "assets/audio/A05/A05-03_微风.mp3",
+      "sha256": "d4113da84f4876a8bf9013c87f3476db50fc4155e6928b847c889b79405d5212"
+    },
+    "ed1f1439-227a-5795-ba39-d873f6295e6e": {
+      "resourceKey": "audio/A06/A06-01_溪流.mp3",
+      "relativePath": "assets/audio/A06/A06-01_溪流.mp3",
+      "sha256": "ce07516a407c60f71480d160e1a464e92e4e8920ffaafecf38223248842d7028"
+    },
+    "8100669e-990f-51c6-b06c-27ae7823c4e0": {
+      "resourceKey": "audio/A06/A06-02_溪流.mp3",
+      "relativePath": "assets/audio/A06/A06-02_溪流.mp3",
+      "sha256": "610ff43b0f76f2e8cf55e5105fbccd215d47252b8cfda4d2e6e07287425d6b3a"
+    },
+    "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed": {
+      "resourceKey": "audio/A06/A06-03_溪流.mp3",
+      "relativePath": "assets/audio/A06/A06-03_溪流.mp3",
+      "sha256": "46552bf4368332fb8e531bb4b2a4ed20a56ac77c320743726913737910834063"
+    },
+    "72042dc4-70ef-56dc-a042-07380fd96de1": {
+      "resourceKey": "audio/A09/A09-01_森林夜晚_雨声与虫鸣.mp3",
+      "relativePath": "assets/audio/A09/A09-01_森林夜晚_雨声与虫鸣.mp3",
+      "sha256": "c0fecf2480bb6da52ccc3fbcb46b32917de2fc6c1805124f4448172d83d77652"
+    },
+    "0a752371-afef-50f2-b41b-93ec548d7d8e": {
+      "resourceKey": "audio/A09/A09-02_森林夜晚_蛙声与虫鸣.mp3",
+      "relativePath": "assets/audio/A09/A09-02_森林夜晚_蛙声与虫鸣.mp3",
+      "sha256": "8f6daecc6d32ea14f01d8dfa6e62b2de1515ae5d42ea6c34f0533d9a8024d636"
+    },
+    "95eac1aa-68ec-5d1b-9b32-2f4bc039b35a": {
+      "resourceKey": "audio/A09/A09-03_森林夜晚_虫鸣.mp3",
+      "relativePath": "assets/audio/A09/A09-03_森林夜晚_虫鸣.mp3",
+      "sha256": "83fc7d07f061df15244befe6d995d62d8e03231e9aa0119cae663d26adcaf19e"
+    },
+    "97be8a83-b66a-513c-93d8-8a16f90de99a": {
+      "resourceKey": "audio/A12/A12-01_远雷_伴随雨声_仅排除测试.mp3",
+      "relativePath": "assets/audio/A12/A12-01_远雷_伴随雨声_仅排除测试.mp3",
+      "sha256": "71f958835e98765a21b0a984b0f200d5fb7605129e847cdfd3631164812272e4"
+    },
+    "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae": {
+      "resourceKey": "audio/A12/A12-02_远雷_仅排除测试.mp3",
+      "relativePath": "assets/audio/A12/A12-02_远雷_仅排除测试.mp3",
+      "sha256": "72c8cd7ed9eacf23a5a8fd940f678a8972a097893733ed8bd5d947012eca22dd"
+    },
+    "c1e98903-e381-5e69-9f8c-ae01532e7015": {
+      "resourceKey": "audio/A12/A12-03_远雷_持续雷声_仅排除测试.mp3",
+      "relativePath": "assets/audio/A12/A12-03_远雷_持续雷声_仅排除测试.mp3",
+      "sha256": "9795a017d3004393e3f3870ba60cad37f8d1f83fde816aebbf990674e7dbd462"
+    },
+    "a6a3a150-e1e8-592c-8be1-55084dfcf733": {
+      "resourceKey": "audio/A12/A12-04_远雷_仅排除测试.mp3",
+      "relativePath": "assets/audio/A12/A12-04_远雷_仅排除测试.mp3",
+      "sha256": "4288f469b2ac15a30743814205aa531df145ceda14e0babe5cda2f11de388e19"
+    }
+  },
+  "bySoundCode": {
+    "A01": [
+      "e2e2bddf-8c80-59c1-bf81-43a542ee2a54",
+      "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3",
+      "29374e78-ef05-5b96-9076-37b377ba8d1d"
+    ],
+    "A02": [
+      "8f7f5ee7-ac98-5cda-be07-702039bd0b89",
+      "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60",
+      "251f9f6c-1d3b-5449-8077-1268b1d59740"
+    ],
+    "A05": [
+      "42c9fd86-88e6-5e0f-a807-916067649415",
+      "6560943e-c02a-5bd1-979f-0da9611381de",
+      "570439f5-283b-5cee-a431-8ed37501071f"
+    ],
+    "A06": [
+      "ed1f1439-227a-5795-ba39-d873f6295e6e",
+      "8100669e-990f-51c6-b06c-27ae7823c4e0",
+      "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed"
+    ],
+    "A09": [
+      "72042dc4-70ef-56dc-a042-07380fd96de1",
+      "0a752371-afef-50f2-b41b-93ec548d7d8e",
+      "95eac1aa-68ec-5d1b-9b32-2f4bc039b35a"
+    ],
+    "A12": [
+      "97be8a83-b66a-513c-93d8-8a16f90de99a",
+      "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+      "c1e98903-e381-5e69-9f8c-ae01532e7015",
+      "a6a3a150-e1e8-592c-8be1-55084dfcf733"
+    ]
+  },
+  "defaultContentIds": [],
+  "provisionalDefaultContentIds": [
+    "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3",
+    "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60",
+    "42c9fd86-88e6-5e0f-a807-916067649415",
+    "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed",
+    "72042dc4-70ef-56dc-a042-07380fd96de1"
+  ],
+  "excludedContentIds": [
+    "97be8a83-b66a-513c-93d8-8a16f90de99a",
+    "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+    "c1e98903-e381-5e69-9f8c-ae01532e7015",
+    "a6a3a150-e1e8-592c-8be1-55084dfcf733"
+  ]
+}

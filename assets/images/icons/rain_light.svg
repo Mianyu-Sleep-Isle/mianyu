@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="小雨">
+  <title>小雨</title>
+  <style>
+    .blue { fill: none; stroke: #A9C8F0; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+    .warm { fill: none; stroke: #FFB86C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+    .thin { stroke-width: 2.2; }
+  </style>
+  <path class="blue" d="M22 47c-6-1-10-6-10-12 0-6 5-12 12-12 2-10 11-16 21-14 8 1 13 6 16 12 9-2 19 4 19 14 0 7-5 12-12 12H22Z"/><path class="blue thin" d="M25 57l-4 11M41 55l-4 11M57 56l-4 11M72 56l-4 11M31 72l-3 9M49 72l-3 9M64 72l-3 9"/><path class="warm thin" d="M31 21c4-3 9-4 14-3"/>
+</svg>
