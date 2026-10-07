@@ -1,0 +1,12 @@
+{
+  "name": "mianyu-frontend-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "test:contracts": "node --test frontend-api/tests/*.test.cjs",
+    "test:backend": "npm --prefix backend run check",
+    "test": "npm run test:contracts && npm run test:backend"
+  }
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="夜晚森林">
+  <title>夜晚森林</title>
+  <style>
+    .blue { fill: none; stroke: #A9C8F0; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+    .warm { fill: none; stroke: #FFB86C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+    .thin { stroke-width: 2.2; }
+  </style>
+  <path class="blue" d="M13 78c22-4 48-4 70 0M25 75V37m0-21L13 44h8l-8 12h9l-8 13h22l-8-13h9l-8-12h8L25 16ZM49 77V29m0-13L38 43h8l-8 11h8l-7 12h20l-7-12h8l-8-11h8L49 16ZM72 76V39m0-14L63 48h6l-7 10h7l-6 10h18l-6-10h7l-7-10h6L72 25Z"/><path class="warm" d="M75 13a11 11 0 1 0 9 17 13 13 0 1 1-9-17Z"/><path class="warm thin" d="M16 18v5m-3-2h6"/>
+</svg>

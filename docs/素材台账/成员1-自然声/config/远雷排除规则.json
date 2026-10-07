@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "testOnlySoundCodes": [
+    "A12"
+  ],
+  "testOnlyContentIds": [
+    "97be8a83-b66a-513c-93d8-8a16f90de99a",
+    "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+    "c1e98903-e381-5e69-9f8c-ae01532e7015",
+    "a6a3a150-e1e8-592c-8be1-55084dfcf733"
+  ],
+  "deniedRecommendationTags": [
+    "thunder"
+  ],
+  "inputAliases": {
+    "不要打雷": "thunder",
+    "远雷": "thunder",
+    "雷声": "thunder"
+  },
+  "reasonCode": "EXCLUSION_TEST_ONLY",
+  "note": "Local integration policy; reason code is proposed, not frozen in supplied API. Apply to default, recommendation, explicit selectedContentIds and resolve."
+}

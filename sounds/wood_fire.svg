@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="120" height="120" fill="url(#g)"/>
+    <rect x="36" y="72" width="48" height="18" fill="#6b4a2a"/>
+    <circle cx="60" cy="60" r="21.599999999999998" fill="#ff9447" opacity="0.8"/>
+    <text x="60" y="61.8" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="16" text-anchor="middle" font-weight="500">柴火</text>
+  </svg>

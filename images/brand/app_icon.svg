@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="256" height="256" fill="url(#g)"/>
+      <circle cx="128" cy="128" r="107.52" fill="#f8c98a" opacity="0.92"/>
+      <circle cx="128" cy="128" r="107.52" fill="none" stroke="#102a52" stroke-width="4"/>
+      <path d="M128 81.92 a 46.08 46.08 0 1 0 0.01 0 z" fill="#0b1f3f"/>
+      <text x="128" y="199.68" fill="#102a52" font-family="system-ui" font-size="35.84" text-anchor="middle" font-weight="700">眠屿</text>
+    </svg>

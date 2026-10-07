@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="120" height="120" fill="url(#g)"/>
+    <circle cx="84" cy="30" r="10" fill="#f8c98a"/>
+    <path d="M24 96 l18 -66 l18 66 z" fill="#3a5d3e" opacity="0.85"/>
+    <path d="M66 96 l18 -72 l18 72 z" fill="#466f4a" opacity="0.9"/>
+    <text x="60" y="61.8" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="16" text-anchor="middle" font-weight="500">夜晚森林</text>
+  </svg>

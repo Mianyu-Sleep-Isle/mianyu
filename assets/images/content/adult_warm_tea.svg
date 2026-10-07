@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="240" height="320" fill="url(#g)"/>
+    <rect width="240" height="320" fill="#0b1f3f"/>
+    <path d="M84 176 h72 v64 q-36 25.6 -72 0 z" fill="#c4906a" stroke="#8a5a3a"/>
+    <path d="M156 192 q19.2 0 19.2 32 q0 32 -19.2 32" fill="none" stroke="#8a5a3a" stroke-width="3"/>
+    <path d="M120 144 q-12 -32 0 -64 q12 32 0 64" fill="#7a8bb0" opacity="0.6"/>
+    <text x="120" y="146.4" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">暖茶时光</text><text x="120" y="194" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">成人 · 4 分钟</text>
+  </svg>

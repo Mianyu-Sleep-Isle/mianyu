@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="240" height="320" fill="url(#g)"/>
+    <rect width="240" height="320" fill="#1a3a72"/>
+    <circle cx="120" cy="160" r="72" fill="none" stroke="#f8c98a" stroke-width="3" opacity="0.8"/>
+    <circle cx="120" cy="160" r="36" fill="#f8c98a" opacity="0.4"/>
+    <text x="120" y="170.2" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">睡前两分钟呼吸</text>
+  </svg>

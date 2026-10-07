@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="被子枕头摩擦声">
+  <title>被子枕头摩擦声</title>
+  <style>
+    .blue { fill: none; stroke: #A9C8F0; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+    .warm { fill: none; stroke: #FFB86C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+    .thin { stroke-width: 2.2; }
+  </style>
+  <path class="blue" d="M19 36c2-8 10-12 19-10l19 3c8 1 14 6 15 13"/><path class="blue" d="M22 38c-5 7-7 17-4 28 12-4 23-4 34 1 9 4 17 4 27 0-2-9-5-17-9-22-12-3-22-2-32 1-6-3-11-5-16-8Z"/><path class="blue thin" d="M24 59c14-6 29-2 42 4M30 35c7-3 16-2 23 1M43 51c5 0 9 1 14 3"/><path class="warm" d="M78 31c4 3 5 7 3 11M84 27c4 3 6 8 5 13M12 44c-3 4-3 8-1 12"/>
+</svg>

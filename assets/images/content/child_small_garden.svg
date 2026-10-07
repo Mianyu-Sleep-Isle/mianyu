@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="240" height="320" fill="url(#g)"/>
+    <rect width="240" height="320" fill="#3a5d3e"/>
+    <circle cx="168" cy="64" r="24" fill="#f8c98a"/>
+    <circle cx="60" cy="112" r="8" fill="#ff9aa8"/>
+    <circle cx="96" cy="128" r="6" fill="#ffd28a"/>
+    <circle cx="132" cy="121.6" r="5" fill="#c5a8e4"/>
+    <text x="120" y="146.4" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">小小花园的晚安</text><text x="120" y="194" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">儿童 · 4 分钟</text>
+  </svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="水流声">
+  <title>水流声</title>
+  <style>
+    .blue { fill: none; stroke: #A9C8F0; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+    .warm { fill: none; stroke: #FFB86C; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+    .thin { stroke-width: 2.2; }
+  </style>
+  <path class="blue" d="M50 17c-7 12-18 22-18 35 0 10 7 18 17 18 11 0 18-8 18-18 0-13-10-22-17-35Z"/><path class="blue thin" d="M43 57c1 5 5 7 9 7M17 75c9-4 16-3 25 0 9 4 16 4 25 0 5-2 9-2 13-1M20 83c10-3 16-3 25 0 8 3 16 3 25-1"/><path class="warm thin" d="M73 30c3 3 5 7 4 11M79 49c2 3 2 6 0 8"/>
+</svg>

@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "1.0.0",
+  "note": "Import adapter input, not a frozen DB schema or HTTP response. Upsert by assetId; do not import directly as SQL. Additional policy fields stay in sidecar or approved schema.",
+  "audioAssets": [
+    {
+      "assetId": "e2e2bddf-8c80-59c1-bf81-43a542ee2a54",
+      "soundCode": "A01",
+      "title": "小雨 候选01",
+      "spaceType": "outdoor",
+      "durationSec": 90.024,
+      "resourceKey": "audio/A01/A01-01_小雨.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "7647df7e-aba4-589e-bd9f-7e56c3c3e8d3",
+      "soundCode": "A01",
+      "title": "小雨 候选02",
+      "spaceType": "outdoor",
+      "durationSec": 530.616,
+      "resourceKey": "audio/A01/A01-02_小雨.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "29374e78-ef05-5b96-9076-37b377ba8d1d",
+      "soundCode": "A01",
+      "title": "小雨 候选03",
+      "spaceType": "outdoor",
+      "durationSec": 310.08,
+      "resourceKey": "audio/A01/A01-03_小雨.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "8f7f5ee7-ac98-5cda-be07-702039bd0b89",
+      "soundCode": "A02",
+      "title": "雨打窗户 候选01",
+      "spaceType": "indoor",
+      "durationSec": 146.856,
+      "resourceKey": "audio/A02/A02-01_雨打窗户.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "69c3bf44-715d-5a1f-aec7-8ae9dd18ce60",
+      "soundCode": "A02",
+      "title": "雨打窗户 候选02",
+      "spaceType": "indoor",
+      "durationSec": 760.344,
+      "resourceKey": "audio/A02/A02-02_雨打窗户.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "251f9f6c-1d3b-5449-8077-1268b1d59740",
+      "soundCode": "A02",
+      "title": "雨打窗户 候选03",
+      "spaceType": "indoor",
+      "durationSec": 254.544,
+      "resourceKey": "audio/A02/A02-03_雨打窗户.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "42c9fd86-88e6-5e0f-a807-916067649415",
+      "soundCode": "A05",
+      "title": "微风或窗外风 候选01",
+      "spaceType": "outdoor",
+      "durationSec": 124.68,
+      "resourceKey": "audio/A05/A05-01_微风.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "wind"
+      ]
+    },
+    {
+      "assetId": "6560943e-c02a-5bd1-979f-0da9611381de",
+      "soundCode": "A05",
+      "title": "微风或窗外风 候选02",
+      "spaceType": "outdoor",
+      "durationSec": 8.045714,
+      "resourceKey": "audio/A05/A05-02_微风.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "wind"
+      ]
+    },
+    {
+      "assetId": "570439f5-283b-5cee-a431-8ed37501071f",
+      "soundCode": "A05",
+      "title": "微风或窗外风 候选03",
+      "spaceType": "outdoor",
+      "durationSec": 22.073469,
+      "resourceKey": "audio/A05/A05-03_微风.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "wind"
+      ]
+    },
+    {
+      "assetId": "ed1f1439-227a-5795-ba39-d873f6295e6e",
+      "soundCode": "A06",
+      "title": "溪流或轻水声 候选01",
+      "spaceType": "outdoor",
+      "durationSec": 555.0,
+      "resourceKey": "audio/A06/A06-01_溪流.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "water",
+        "stream"
+      ]
+    },
+    {
+      "assetId": "8100669e-990f-51c6-b06c-27ae7823c4e0",
+      "soundCode": "A06",
+      "title": "溪流或轻水声 候选02",
+      "spaceType": "outdoor",
+      "durationSec": 176.496,
+      "resourceKey": "audio/A06/A06-02_溪流.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "water",
+        "stream"
+      ]
+    },
+    {
+      "assetId": "e25aed0a-9a4c-5727-b83b-4a4b1542d3ed",
+      "soundCode": "A06",
+      "title": "溪流或轻水声 候选03",
+      "spaceType": "outdoor",
+      "durationSec": 720.024,
+      "resourceKey": "audio/A06/A06-03_溪流.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "water",
+        "stream"
+      ]
+    },
+    {
+      "assetId": "72042dc4-70ef-56dc-a042-07380fd96de1",
+      "soundCode": "A09",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选01",
+      "spaceType": "outdoor",
+      "durationSec": 899.160816,
+      "resourceKey": "audio/A09/A09-01_森林夜晚_雨声与虫鸣.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "forest",
+        "insects",
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "0a752371-afef-50f2-b41b-93ec548d7d8e",
+      "soundCode": "A09",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选02",
+      "spaceType": "outdoor",
+      "durationSec": 816.984,
+      "resourceKey": "audio/A09/A09-02_森林夜晚_蛙声与虫鸣.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "forest",
+        "insects",
+        "frogs"
+      ]
+    },
+    {
+      "assetId": "95eac1aa-68ec-5d1b-9b32-2f4bc039b35a",
+      "soundCode": "A09",
+      "title": "森林夜晚（轻虫鸣/树叶） 候选03",
+      "spaceType": "outdoor",
+      "durationSec": 82.08,
+      "resourceKey": "audio/A09/A09-03_森林夜晚_虫鸣.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "forest",
+        "insects"
+      ]
+    },
+    {
+      "assetId": "97be8a83-b66a-513c-93d8-8a16f90de99a",
+      "soundCode": "A12",
+      "title": "远雷 候选01",
+      "spaceType": "outdoor",
+      "durationSec": 89.928,
+      "resourceKey": "audio/A12/A12-01_远雷_伴随雨声_仅排除测试.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "thunder",
+        "rain",
+        "water"
+      ]
+    },
+    {
+      "assetId": "fd64a44f-2a3d-5594-8a2e-8ffaebfaafae",
+      "soundCode": "A12",
+      "title": "远雷 候选02",
+      "spaceType": "outdoor",
+      "durationSec": 40.698776,
+      "resourceKey": "audio/A12/A12-02_远雷_仅排除测试.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "thunder"
+      ]
+    },
+    {
+      "assetId": "c1e98903-e381-5e69-9f8c-ae01532e7015",
+      "soundCode": "A12",
+      "title": "远雷 候选03",
+      "spaceType": "outdoor",
+      "durationSec": 1116.238367,
+      "resourceKey": "audio/A12/A12-03_远雷_持续雷声_仅排除测试.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "thunder"
+      ]
+    },
+    {
+      "assetId": "a6a3a150-e1e8-592c-8be1-55084dfcf733",
+      "soundCode": "A12",
+      "title": "远雷 候选04",
+      "spaceType": "outdoor",
+      "durationSec": 427.392,
+      "resourceKey": "audio/A12/A12-04_远雷_仅排除测试.mp3",
+      "copyrightStatus": "pending_review",
+      "enabled": false,
+      "tags": [
+        "thunder"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>眠屿诊断</title>
+</head>
+<body>
+  <h1>眠屿诊断 - 验证 user_id 自动建立</h1>
+  <pre id="log" style="background:#000;color:#0f0;padding:20px;font-size:14px;line-height:1.6"></pre>
+  <script>
+    const log = (msg) => { document.getElementById('log').textContent += msg + '\n'; console.log(msg); };
+    log('加载 core.js: ' + (window.MianyuApi ? '已就绪' : '未挂载'));
+  </script>
+  <script src="frontend-api/core.js?v=diag1"></script>
+  <script>
+    log('core.js 加载完。HttpClient: ' + (window.MianyuApi.HttpClient ? 'OK' : 'MISSING'));
+    log('ensureUser 存在: ' + (window.MianyuApi.HttpClient.prototype.ensureUser ? 'YES' : 'NO'));
+  </script>
+  <script src="frontend-api/mock-adapters.js?v=diag1"></script>
+  <script src="frontend-api/http-adapters.js?v=diag1"></script>
+  <script src="frontend-api/mianyu-ports.js?v=diag1"></script>
+  <script>
+    log('全部 adapter 加载完。transports: ' + JSON.stringify(window.MianyuPorts.config.transports));
+    log('localStorage.mianyu_user_id (起始): ' + (localStorage.getItem('mianyu_user_id') || '(空)'));
+    (async () => {
+      try {
+        log('--- 测试 1: 直接调 auth.currentUser() ---');
+        const u = await window.MianyuPorts.auth.currentUser();
+        log('返回: ' + JSON.stringify(u));
+        log('localStorage.mianyu_user_id (之后): ' + (localStorage.getItem('mianyu_user_id') || '(空)'));
+        log('--- 测试 2: 调 growth.feedback.pending() ---');
+        const f = await window.MianyuPorts.feedback.pending();
+        log('返回: ' + JSON.stringify(f));
+        log('--- 测试 3: 调 catalog.list() ---');
+        const c = await window.MianyuPorts.catalog.list('声音', 'adult');
+        log('返回 ' + (Array.isArray(c) ? c.length : '?') + ' 条');
+        log('--- 全部测试通过！---');
+      } catch (e) {
+        log('!! 错误: ' + e.code + ' - ' + e.message);
+        log('!! 状态: ' + e.status);
+      }
+    })();
+  </script>
+</body>
+</html>

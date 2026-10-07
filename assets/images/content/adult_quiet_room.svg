@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="240" height="320" fill="url(#g)"/>
+    <rect width="240" height="320" fill="#102a52"/>
+    <rect x="0" y="208" width="240" height="112" fill="#0b1f3f"/>
+    <circle cx="72" cy="96" r="19.2" fill="#f8c98a" opacity="0.8"/>
+    <text x="120" y="146.4" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">静室入夜</text><text x="120" y="194" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="34" text-anchor="middle" font-weight="500">成人 · 9 分钟</text>
+  </svg>

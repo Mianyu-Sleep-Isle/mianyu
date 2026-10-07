@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>清缓存并重新进入</title>
+  <style>body{font-family:system-ui;padding:40px;max-width:600px;margin:auto;background:#0a1530;color:#fff}h1{font-size:20px;margin-bottom:20px}button{padding:14px 28px;font-size:16px;border:0;border-radius:12px;background:linear-gradient(135deg,#5575ff,#3655d9);color:#fff;cursor:pointer}#log{background:#000;color:#0f0;padding:20px;font-family:monospace;font-size:13px;white-space:pre;line-height:1.6;margin-top:20px;border-radius:8px}</style>
+</head>
+<body>
+  <h1>清缓存并重新进入眠屿</h1>
+  <p>点击下方按钮清空本机身份缓存并进入眠屿。</p>
+  <button onclick="resetAndGo()">清缓存并进入</button>
+  <pre id="log"></pre>
+  <script>
+    const log = (m) => { document.getElementById('log').textContent += m + '\n'; };
+    async function resetAndGo() {
+      log('1. 清空 mianyu_user_id 与 mianyu_growth_user_id');
+      localStorage.removeItem('mianyu_user_id');
+      localStorage.removeItem('mianyu_growth_user_id');
+      log('2. 当前 localStorage.mianyu_user_id: ' + (localStorage.getItem('mianyu_user_id') || 'null'));
+      log('3. 3 秒后跳转 http://127.0.0.1:8787/');
+      setTimeout(() => { location.href = 'http://127.0.0.1:8787/'; }, 3000);
+    }
+  </script>
+</body>
+</html>

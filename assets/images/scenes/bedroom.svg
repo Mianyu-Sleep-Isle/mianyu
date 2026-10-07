@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1a3a72"/><stop offset="1" stop-color="#0b1f3f"/></linearGradient></defs><rect width="390" height="844" fill="url(#g)"/>
+    <rect width="390" height="844" fill="#0b1f3f"/>
+    <rect x="0" y="506.4" width="390" height="337.6" fill="#102a52" opacity="0.7"/>
+    <rect x="39" y="464.20000000000005" width="312" height="211" fill="#1a3a72" opacity="0.8"/>
+    <circle cx="292.5" cy="211" r="46.8" fill="#f8c98a" opacity="0.6"/>
+    <rect x="117" y="590.8" width="156" height="42.2" fill="#f8c98a" opacity="0.4"/>
+    <text x="195" y="438.8" fill="#cbd6ed" font-family="system-ui, -apple-system, sans-serif" font-size="56" text-anchor="middle" font-weight="500">我的睡前小屋</text>
+  </svg>

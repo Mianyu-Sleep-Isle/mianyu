@@ -1,0 +1,32 @@
+node_modules/
+# OS / 编辑器临时文件
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+# 顶层日志（backend 自身的日志由 backend/.gitignore 覆盖）
+*.log
+# 录屏 / 截图缓存
+*.mov
+*.mp4
+*.avi
+*.webm
+*.screenrecording
+screencasts/
+screenshots/
+# Dart/Flutter 工具链产物
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+# 临时文件
+*.tmp
+*.bak
+*.swp
