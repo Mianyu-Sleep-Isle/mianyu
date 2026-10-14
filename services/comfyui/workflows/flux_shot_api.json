@@ -1,0 +1,32 @@
+{
+  "1": {
+    "inputs": { "text": "" },
+    "_meta": { "title": "positive" },
+    "class_type": "CLIPTextEncode"
+  },
+  "2": {
+    "inputs": { "text": "" },
+    "_meta": { "title": "negative" },
+    "class_type": "CLIPTextEncode"
+  },
+  "3": {
+    "inputs": { "seed": 1, "steps": 20, "cfg": 1, "sampler_name": "euler", "scheduler": "simple", "denoise": 1 },
+    "_meta": { "title": "sampler" },
+    "class_type": "KSampler"
+  },
+  "4": {
+    "inputs": { "width": 768, "height": 1344, "batch_size": 1 },
+    "_meta": { "title": "latent" },
+    "class_type": "EmptyLatentImage"
+  },
+  "5": {
+    "inputs": { "guidance": 3.5 },
+    "_meta": { "title": "guidance" },
+    "class_type": "FluxGuidance"
+  },
+  "6": {
+    "inputs": { "filename_prefix": "drama" },
+    "_meta": { "title": "save" },
+    "class_type": "SaveImage"
+  }
+}

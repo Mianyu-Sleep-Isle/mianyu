@@ -1,0 +1,17 @@
+{
+  "job_id": "showcase-01",
+  "title": "灯塔里的雨声",
+  "summary": "小橘猫南瓜在灯塔顶层听着细雨，慢慢睡着了。",
+  "narration": "灯塔里的雨声。",
+  "story_source": "template",
+  "duration_sec": 12,
+  "size_bytes": 28,
+  "created_at": "2026-10-08T00:00:00.000Z",
+  "shots": [
+    {
+      "order": 1,
+      "narration_text": "灯塔里的雨声。",
+      "duration_sec": 12
+    }
+  ]
+}

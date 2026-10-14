@@ -28,6 +28,7 @@ import { SleepSessionRepository } from './modules/session/repository.ts';
 import { createSessionRouter, sessionErrorTranslator } from './modules/session/routes.ts';
 import { SleepSessionService } from './modules/session/service.ts';
 import type { Clock } from './modules/session/types.ts';
+import { createDramaModule, type DramaModuleOptions } from './modules/drama/module.ts';
 import { openDatabase, runMigrations } from './shared/database.ts';
 import { ApiError, createErrorHandler, notFoundHandler, type ErrorTranslator } from './shared/http.ts';
 
@@ -42,6 +43,8 @@ export interface AppOptions {
   // 可选注入：自定义 LLM provider（如测试用 mock）。省略时按 DASHSCOPE_API_KEY 自动选 LLM/规则引擎。
   // 显式传 null 强制走规则引擎；显式传 mock 函数即用 mock。
   llmProvider?: LlmProvider | null;
+  // 短片测试默认 fake，并且不读取 DRAMA_PROVIDERS，避免测试打到真实模型。
+  drama?: Omit<DramaModuleOptions, 'database'>;
 }
 
 const allowedOrigins = new Set(['https://liuzilin94.github.io', 'https://mianyu-sleep-isle.github.io']);
@@ -99,12 +102,14 @@ export function createApp(options: AppOptions = {}) {
     repository: new SleepSessionRepository(database),
   });
   sessionFacts ??= sessionFactsForGrowth(sessions);
+  const drama = createDramaModule({ database, isolate: true, ...options.drama }, users);
   erasers.push(
     { module: 'content', erase: (userId) => catalog.eraseUserData(userId) },
     { module: 'planning', erase: (userId) => planning.eraseUserData(userId) },
     { module: 'scene', erase: (userId) => scenes.eraseUserData(userId) },
     { module: 'session', erase: (userId) => sessions.eraseUserData(userId) },
     { module: 'growth', erase: (userId) => growth.eraseUserData(userId) },
+    { module: 'drama', erase: (userId) => drama.service.eraseUser(userId) },
   );
 
   const app = express();
@@ -138,8 +143,9 @@ export function createApp(options: AppOptions = {}) {
   app.use('/api/v1', createSceneRouter(scenes, { assets: sceneAssetDirectory(catalog) }));
   app.use('/api/v1', createSessionRouter(sessions, sessionTargets(planning, scenes), sessionLifecycle(planning)));
   app.use('/api/v1', createGrowthRouter(growth, users));
+  app.use('/api/v1', drama.router);
   app.use(notFoundHandler);
   app.use(createErrorHandler(translators));
 
-  return { app, database, migrations, service: planning, services: { users, catalog, planning, scenes, sessions, growth } };
+  return { app, database, migrations, service: planning, services: { users, catalog, planning, scenes, sessions, growth, drama } };
 }

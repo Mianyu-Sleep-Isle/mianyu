@@ -56,7 +56,7 @@ test('OpenAPI 中的每条路径和方法都已由统一后端实现', async () 
   }
   assert.ok(operations.length >= 35, `只解析到 ${operations.length} 个操作`);
   const userId = String((await call('POST', '/users/anonymous', undefined, {})).body.data.user_id);
-  const sample: Record<string, string> = { assetId: 'A03', planId: '00000000-0000-4000-8000-000000000000', sceneId: '00000000-0000-4000-8000-000000000000', sessionId: '00000000-0000-4000-8000-000000000000' };
+  const sample: Record<string, string> = { assetId: 'A03', planId: '00000000-0000-4000-8000-000000000000', sceneId: '00000000-0000-4000-8000-000000000000', sessionId: '00000000-0000-4000-8000-000000000000', jobId: '00000000-0000-4000-8000-000000000000', order: '1', fileName: 'final.mp4' };
   for (const operation of operations) {
     const path = operation.path.replace(/\{(\w+)\}/g, (_match, name: string) => sample[name] ?? name)
       + (operation.path === '/content' ? '?category=%E5%A3%B0%E9%9F%B3&age_mode=adult' : operation.path === '/archive' ? '?period=7d' : '');
@@ -68,7 +68,7 @@ test('OpenAPI 中的每条路径和方法都已由统一后端实现', async () 
 });
 
 test('迁移按模块号顺序执行且可重复运行', () => {
-  assert.deepEqual(built.migrations.map((item) => item.version), [10, 11, 100, 200, 300, 400, 500]);
+  assert.deepEqual(built.migrations.map((item) => item.version), [10, 11, 100, 200, 300, 400, 500, 600]);
   const again = createApp({ database: built.database });
   assert.deepEqual(again.migrations, []);
   assert.deepEqual(built.database.prepare('PRAGMA foreign_key_check').all(), []);

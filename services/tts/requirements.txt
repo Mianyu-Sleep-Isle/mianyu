@@ -1,0 +1,2 @@
+# CosyVoice is installed on the GPU machine from its own repository.
+# This process stays on the standard library until that package is present.

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Mianyu MVP HTTP API
-  version: 1.1.0
+  version: 1.2.0
   description: >-
     五模块唯一 HTTP 契约，由 backend/ 统一后端实现。除匿名注册和健康检查外，请求均携带 X-User-Id
     （兼容旧的 X-Mianyu-User-Id）；写请求携带 Idempotency-Key。成功响应为 { data }，失败响应为
@@ -15,6 +15,7 @@ tags:
   - { name: Module3-Scene }
   - { name: Module4-Session }
   - { name: Module5-Growth }
+  - { name: Drama }
 paths:
   /health:
     get:
@@ -139,6 +140,82 @@ paths:
       operationId: archive
       parameters: [{ $ref: '#/components/parameters/UserId' }, { name: period, in: query, required: true, schema: { type: string, enum: [7d, 30d] } }]
       responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/capabilities:
+    get:
+      tags: [Drama]
+      operationId: dramaCapabilities
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/chat:
+    post:
+      tags: [Drama]
+      operationId: dramaChat
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' }, '400': { $ref: '#/components/responses/Error' } }
+  /drama/brief:
+    post:
+      tags: [Drama]
+      operationId: dramaBrief
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' }, '400': { $ref: '#/components/responses/Error' } }
+  /drama/jobs:
+    get:
+      tags: [Drama]
+      operationId: listDramaJobs
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+    post:
+      tags: [Drama]
+      operationId: createDramaJob
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/IdempotencyKey' }]
+      responses: { '202': { $ref: '#/components/responses/Success' }, '400': { $ref: '#/components/responses/Error' } }
+  /drama/showcase:
+    get:
+      tags: [Drama]
+      operationId: dramaShowcase
+      parameters: [{ $ref: '#/components/parameters/UserId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/jobs/{jobId}:
+    get:
+      tags: [Drama]
+      operationId: getDramaJob
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' }, '404': { $ref: '#/components/responses/Error' } }
+    delete:
+      tags: [Drama]
+      operationId: deleteDramaJob
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/jobs/{jobId}/cancel:
+    post:
+      tags: [Drama]
+      operationId: cancelDramaJob
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/jobs/{jobId}/retry:
+    post:
+      tags: [Drama]
+      operationId: retryDramaJob
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/jobs/{jobId}/result:
+    get:
+      tags: [Drama]
+      operationId: dramaJobResult
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { $ref: '#/components/responses/Success' } }
+  /drama/jobs/{jobId}/shots/{order}/regenerate:
+    post:
+      tags: [Drama]
+      operationId: regenerateDramaShot
+      parameters: [{ $ref: '#/components/parameters/UserId' }, { $ref: '#/components/parameters/JobId' }]
+      responses: { '501': { $ref: '#/components/responses/Error' } }
+  /drama/media/{jobId}/{fileName}:
+    get:
+      tags: [Drama]
+      operationId: dramaMedia
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses: { '200': { description: media }, '403': { $ref: '#/components/responses/Error' } }
 components:
   parameters:
     UserId: { name: X-User-Id, in: header, required: true, schema: { type: string, minLength: 1, maxLength: 100 } }
@@ -147,6 +224,7 @@ components:
     SceneId: { name: sceneId, in: path, required: true, schema: { type: string, format: uuid } }
     SessionId: { name: sessionId, in: path, required: true, schema: { type: string } }
     IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 100 } }
+    JobId: { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }
   responses:
     Success: { description: Success, content: { application/json: { schema: { $ref: '#/components/schemas/Envelope' } } } }
     Error: { description: Error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
