@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+skinparam shadowing false
+actor "用户" as User
+rectangle "成员1：眠境探索与内容中心" {
+  usecase "浏览岛屿首页入口" as Home
+  usecase "浏览内容分类\n声音/故事/呼吸/预设" as Browse
+  usecase "查看收藏内容" as Favorites
+  usecase "试听声音" as Preview
+  usecase "收藏或取消收藏内容" as Toggle
+  usecase "按年龄模式过滤内容" as Age
+  usecase "校验可播放资源" as Check
+}
+User --> Home
+User --> Browse
+User --> Favorites
+User --> Preview
+User --> Toggle
+Browse ..> Age : <<include>>
+Preview ..> Check : <<include>>
+note right of Browse
+  对应 GET /api/v1/content?category=...
+  分类：声音、故事、呼吸、预设、收藏
+end note
+note bottom of Toggle
+  PUT /api/v1/content/:assetId/favorite
+  请求体 favorite=true/false
+end note
+@enduml

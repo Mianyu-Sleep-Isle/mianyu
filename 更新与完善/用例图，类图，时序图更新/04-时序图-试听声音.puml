@@ -1,0 +1,27 @@
+@startuml
+actor "用户" as User
+participant "内容中心页面" as UI
+participant "前端 catalog 适配器" as Adapter
+participant "内容路由" as Route
+participant "ContentCatalog" as Catalog
+participant "浏览器音频引擎" as Audio
+User -> UI : 点击声音“试听”
+UI -> Adapter : resolve(contentId)
+Adapter -> Route : GET /api/v1/content/:assetId/playable?age_mode=...
+Route -> Catalog : playable(idOrAssetId, ageMode)
+Catalog -> Catalog : 检查内容存在、年龄、儿童限制
+Catalog -> Catalog : 检查 enabled、audioPath、版权状态
+alt 可播放
+  Catalog --> Route : url, duration_sec, loop, playable=true
+  Route --> Adapter : {data: 播放资源结果}
+  Adapter --> UI : 可用资源
+  UI -> Audio : preview(contentId)
+  Audio --> UI : 开始试听或播放器错误
+  UI --> User : 显示真实试听状态
+else 年龄受限或资源不可用
+  Catalog --> Route : 403 或 playable=false、url为空
+  Route --> Adapter : 拒绝原因或不可用结果
+  Adapter --> UI : 不启动播放器
+  UI --> User : 提示不可试听
+end
+@enduml

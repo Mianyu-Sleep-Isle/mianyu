@@ -1,0 +1,30 @@
+@startuml
+actor "用户" as User
+participant "内容中心页面" as UI
+participant "前端 catalog 适配器" as Adapter
+participant "内容路由" as Route
+participant "ContentCatalog" as Catalog
+database "SQLite content_favorite" as DB
+User -> UI : 收藏声音或故事
+UI -> Adapter : setFavorite(assetId, true)
+Adapter -> Route : PUT /api/v1/content/:assetId/favorite\n{favorite:true}
+Route -> Catalog : setFavorite(userId, assetId, true)
+Catalog -> DB : INSERT OR IGNORE(user_id, content_id, created_at)
+DB --> Catalog : 写入结果
+Catalog --> Route : favorite=true
+Route --> UI : {data: 收藏结果}
+UI --> User : 显示已收藏
+User -> UI : 打开“收藏”分类
+UI -> Adapter : list("收藏", ageMode)
+Adapter -> Route : GET /api/v1/content?category=收藏&age_mode=...
+Route -> Catalog : list("收藏", userId, ageMode)
+Catalog -> DB : SELECT content_id WHERE user_id=?
+DB --> Catalog : 当前用户收藏编号
+Catalog --> Route : 对应声音/故事/呼吸卡片
+Route --> UI : {data: 收藏列表}
+UI --> User : 展示收藏内容
+note right of Catalog
+  取消收藏传 favorite=false，执行 DELETE；
+  当前接口收藏的是内容，不是场景配置。
+end note
+@enduml

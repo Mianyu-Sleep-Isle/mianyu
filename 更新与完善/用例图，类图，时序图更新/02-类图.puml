@@ -1,0 +1,63 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+class "内容中心页面" as UI {
+  +切换分类(category)
+  +请求试听(contentId)
+  +切换收藏(assetId, favorite)
+}
+class "内容路由 createContentRouter" as Route {
+  +GET /content(category, age_mode)
+  +GET /content/:assetId/playable(age_mode)
+  +PUT /content/:assetId/favorite(favorite)
+}
+class "内容目录 ContentCatalog" as Catalog {
+  +list(category, userId, ageMode)
+  +playable(idOrAssetId, ageMode)
+  +setFavorite(userId, idOrAssetId, favorite)
+  +isPlayable(entry, ageMode)
+  +eraseUserData(userId)
+}
+class "内容条目 ContentEntry" as Entry {
+  +contentId: string
+  +assetId: string
+  +kind: audio/story/breath
+  +name: string
+  +tags: string[]
+  +ageMode: all/adult/child
+  +durationSec: number|null
+  +audioPath: string|null
+  +copyrightStatus: CopyrightStatus
+  +enabled: boolean
+  +childRestricted: boolean
+}
+class "预设条目 PresetEntry" as Preset {
+  +contentId: string
+  +name: string
+  +memberIds: string[]
+}
+class "内容收藏 content_favorite" as Favorite {
+  +user_id: string
+  +content_id: string
+  +created_at: UTC string
+  PK(user_id, content_id)
+}
+class "播放资源结果" as Resolved {
+  +asset_id: string
+  +content_id: string
+  +url: string
+  +playable: boolean
+  +duration_sec: number|null
+  +loop: boolean
+}
+UI --> Route
+Route --> Catalog
+Catalog o-- Entry : 代码清单
+Catalog o-- Preset : 代码清单
+Catalog --> Favorite : SQLite读写
+Catalog --> Resolved : 解析结果
+note bottom of Catalog
+  当前项目的内容条目和预设存在 manifest.ts；
+  SQLite 仅持久化内容收藏。
+end note
+@enduml

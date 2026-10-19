@@ -1,0 +1,23 @@
+@startuml
+actor "用户" as User
+participant "内容中心页面" as UI
+participant "前端 catalog 适配器" as Adapter
+participant "内容路由" as Route
+participant "ContentCatalog" as Catalog
+collections "presetManifest" as Presets
+User -> UI : 打开内容中心，切换“预设”
+UI -> Adapter : list("预设", ageMode)
+Adapter -> Route : GET /api/v1/content?category=预设&age_mode=...
+Route -> Catalog : list("预设", userId, ageMode)
+Catalog -> Presets : 读取预设条目和 memberIds
+Catalog -> Catalog : 儿童模式过滤受限成员
+Catalog -> Catalog : 检查成员素材可用性
+Catalog --> Route : 预设卡片列表
+Route --> Adapter : {data: [...]} 
+Adapter --> UI : 显示标题、简介和启用状态
+UI --> User : 浏览并选择预设入口
+note over UI,Catalog
+  PR01/PR02 是目录预设；当前模块1不保存场景快照。
+  后续场景创建与编辑由成员3负责。
+end note
+@enduml
